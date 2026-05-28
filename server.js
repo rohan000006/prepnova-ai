@@ -249,9 +249,13 @@ function streamFallbackReply(ws, sessionId, userText) {
 }
 
 // Serve REST Server
-server.listen(PORT, () => {
-    console.log(`====================================================`);
-    console.log(`PrepNova Full-Stack Server active on http://localhost:${PORT}`);
-    console.log(`Secure JWT Tunnel active. Persistent database loaded.`);
-    console.log(`====================================================`);
-});
+if (process.env.NODE_ENV !== 'test') {
+    server.listen(PORT, () => {
+        console.log(`====================================================`);
+        console.log(`PrepNova Full-Stack Server active on http://localhost:${PORT}`);
+        console.log(`Secure JWT Tunnel active. Persistent database loaded.`);
+        console.log(`====================================================`);
+    });
+}
+
+module.exports = app;
