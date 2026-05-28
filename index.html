@@ -1,0 +1,2521 @@
+<!DOCTYPE html>
+<html class="dark" lang="en">
+<head>
+    <meta charset="utf-8"/>
+    <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+    <title>PrepNova AI | Elite Simulation Command Center</title>
+    
+    <!-- External CSS / CDNs -->
+    <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Geist:wght@100..900&family=Inter:wght@100..900&display=swap" rel="stylesheet"/>
+    <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet"/>
+    
+    <!-- Tailwind Configuration -->
+    <script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        surface: "#131313",
+                        background: "#000000",
+                        "surface-container-lowest": "#0e0e0e",
+                        "surface-container-low": "#1b1b1b",
+                        "surface-container": "#1f1f1f",
+                        "surface-container-high": "#2a2a2a",
+                        "surface-container-highest": "#353535",
+                        primary: "#d2bbff",
+                        "primary-container": "#7c3aed",
+                        secondary: "#4cd7f6",
+                        "secondary-container": "#03b5d3",
+                        "on-surface": "#e2e2e2",
+                        "on-surface-variant": "#ccc3d8",
+                        "outline-variant": "#4a4455"
+                    },
+                    borderRadius: {
+                        DEFAULT: "0.25rem",
+                        lg: "0.5rem",
+                        xl: "0.75rem",
+                        "2xl": "1rem",
+                        full: "9999px"
+                    },
+                    spacing: {
+                        "margin-mobile": "20px",
+                        "margin-desktop": "64px",
+                        gutter: "24px",
+                        unit: "4px",
+                        "container-max": "1440px"
+                    },
+                    fontFamily: {
+                        display: ["Geist", "sans-serif"],
+                        headline: ["Geist", "sans-serif"],
+                        body: ["Inter", "sans-serif"]
+                    }
+                }
+            }
+        }
+    </script>
+
+    <!-- Custom CSS Base -->
+    <style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+            vertical-align: middle;
+        }
+        body {
+            background-color: #000000;
+            color: #e2e2e2;
+            font-family: 'Inter', sans-serif;
+            overflow-x: hidden;
+        }
+        .glass-card {
+            background: rgba(10, 10, 11, 0.6);
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(31, 31, 35, 1);
+        }
+        .glass-panel {
+            background: rgba(10, 10, 11, 0.8);
+            border: 1px solid #1F1F23;
+            backdrop-filter: blur(20px);
+        }
+        .inner-glow {
+            box-shadow: inset 1px 1px 0px 0px rgba(76, 215, 246, 0.1);
+        }
+        .cyan-glow-hover:hover {
+            box-shadow: 0 0 20px rgba(76, 215, 246, 0.15);
+            border-color: #4cd7f6;
+        }
+        .hologram-effect {
+            position: relative;
+            overflow: hidden;
+        }
+        .hologram-effect::after {
+            content: "";
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: linear-gradient(0deg, transparent 0%, rgba(210, 187, 255, 0.05) 50%, transparent 100%);
+            animation: scanline 8s linear infinite;
+            pointer-events: none;
+        }
+        @keyframes scanline {
+            0% { transform: translateY(-100%); }
+            100% { transform: translateY(100%); }
+        }
+        .pulse-cyan {
+            animation: pulse-cyan 2s infinite;
+        }
+        @keyframes pulse-cyan {
+            0%, 100% { opacity: 0.8; filter: drop-shadow(0 0 5px #4cd7f6); }
+            50% { opacity: 1; filter: drop-shadow(0 0 15px #4cd7f6); }
+        }
+        .pulse-accent {
+            animation: pulse-accent 2s infinite ease-in-out;
+        }
+        @keyframes pulse-accent {
+            0%, 100% { opacity: 0.8; filter: blur(2px); }
+            50% { opacity: 1; filter: blur(4px); }
+        }
+        body::-webkit-scrollbar { width: 6px; }
+        body::-webkit-scrollbar-track { background: #131313; }
+        body::-webkit-scrollbar-thumb { background: #353535; border-radius: 10px; }
+
+        /* Custom spring cursor styling */
+        .custom-cursor {
+            width: 6px;
+            height: 6px;
+            background-color: #4cd7f6;
+            border-radius: 50%;
+            position: fixed;
+            pointer-events: none;
+            z-index: 10000;
+            transform: translate(-50%, -50%);
+            box-shadow: 0 0 10px #4cd7f6;
+            transition: width 0.15s, height 0.15s, background-color 0.15s;
+        }
+        .custom-cursor-follower {
+            width: 28px;
+            height: 28px;
+            border: 1.5px solid rgba(76, 215, 246, 0.35);
+            border-radius: 50%;
+            position: fixed;
+            pointer-events: none;
+            z-index: 9999;
+            transform: translate(-50%, -50%);
+            transition: width 0.2s, height 0.2s, border-color 0.2s;
+        }
+        .cursor-hover .custom-cursor {
+            width: 10px;
+            height: 10px;
+            background-color: #d2bbff;
+            box-shadow: 0 0 15px #d2bbff;
+        }
+        .cursor-hover .custom-cursor-follower {
+            width: 36px;
+            height: 36px;
+            border-color: rgba(210, 187, 255, 0.6);
+        }
+        .cursor-click .custom-cursor {
+            width: 4px;
+            height: 4px;
+        }
+        .cursor-click .custom-cursor-follower {
+            width: 18px;
+            height: 18px;
+        }
+
+        /* 3D tilt adjustments */
+        .tilt-card {
+            transition: transform 0.1s ease-out;
+            transform-style: preserve-3d;
+        }
+
+        /* View routing animations */
+        .app-view {
+            display: none;
+            opacity: 0;
+            transform: translateY(10px);
+            transition: opacity 0.4s cubic-bezier(0.4, 0, 0.2, 1), transform 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        .app-view.active-view {
+            display: block;
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        /* Nav active item */
+        .nav-active {
+            color: #4cd7f6 !important;
+            border-left: 4px solid #4cd7f6;
+            background: rgba(3, 181, 211, 0.08);
+            font-weight: bold;
+        }
+
+        /* Timeline vertical line */
+        .timeline-line::after {
+            content: '';
+            position: absolute;
+            top: 8px;
+            bottom: 8px;
+            left: 7px;
+            width: 2px;
+            background: rgba(74, 68, 85, 0.3);
+        }
+    </style>
+</head>
+<body class="bg-black text-on-surface font-body select-none">
+
+    <!-- Backlight/Spotlight overlay -->
+    <div class="fixed inset-0 pointer-events-none z-[-1] overflow-hidden bg-black">
+        <div id="bg-spotlight" class="absolute w-[900px] h-[900px] rounded-full opacity-20 blur-[130px] transition-all duration-500 pointer-events-none" style="background: radial-gradient(circle, rgba(6, 182, 212, 0.18) 0%, rgba(124, 58, 237, 0.06) 60%, transparent 100%); transform: translate(-50%, -50%); top: 50%; left: 50%;"></div>
+    </div>
+
+    <!-- Custom Cursor follow elements -->
+    <div class="custom-cursor hidden md:block"></div>
+    <div class="custom-cursor-follower hidden md:block"></div>
+
+    <!-- Edit Parameters Modal -->
+    <div id="edit-params-modal" class="fixed inset-0 bg-black/70 backdrop-blur-md z-50 flex items-center justify-center opacity-0 pointer-events-none transition-all duration-300">
+        <div class="glass-card inner-glow rounded-xl p-8 max-w-md w-full mx-4 border border-outline-variant/20 shadow-2xl scale-95 transition-all duration-300" id="edit-params-card">
+            <div class="flex justify-between items-center mb-6">
+                <div class="flex items-center gap-2">
+                    <span class="material-symbols-outlined text-secondary text-lg">edit_square</span>
+                    <h3 class="font-headline text-lg text-white font-extrabold">Calibration Parameters</h3>
+                </div>
+                <button class="text-on-surface-variant hover:text-white transition-colors cursor-pointer" onclick="closeEditParametersModal()">
+                    <span class="material-symbols-outlined">close</span>
+                </button>
+            </div>
+            
+            <form id="edit-params-form" class="space-y-4" onsubmit="saveEditParameters(event)">
+                <div class="space-y-1.5">
+                    <label class="text-[10px] text-on-surface-variant uppercase tracking-wider font-bold">Candidate Name</label>
+                    <input id="edit-param-name" class="w-full bg-surface-container border border-outline-variant/30 rounded-lg px-4 py-2.5 text-xs text-on-surface focus:outline-none focus:border-secondary transition-all" type="text" oninput="handleRealtimeParamChange()"/>
+                </div>
+                <div class="space-y-1.5">
+                    <label class="text-[10px] text-on-surface-variant uppercase tracking-wider font-bold">Specialty / Career Focus</label>
+                    <input id="edit-param-focus" class="w-full bg-surface-container border border-outline-variant/30 rounded-lg px-4 py-2.5 text-xs text-on-surface focus:outline-none focus:border-secondary transition-all" type="text" oninput="handleRealtimeParamChange()"/>
+                </div>
+                <div class="pt-4 flex gap-3 justify-end">
+                    <button type="button" class="px-5 py-2.5 border border-outline-variant/30 text-on-surface-variant hover:text-white hover:bg-surface-container-high/40 rounded-lg text-xs font-bold transition-all cursor-pointer" onclick="closeEditParametersModal()">
+                        Cancel
+                    </button>
+                    <button type="submit" class="px-6 py-2.5 bg-gradient-to-r from-primary-container to-secondary text-white font-bold rounded-lg text-xs hover:scale-105 active:scale-95 transition-all shadow-lg cursor-pointer">
+                        Sync Profile Core
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- UI Simulator Console / Loader Diagnostics -->
+    <div id="simulation-loader" class="fixed inset-0 z-[9999] bg-black/95 backdrop-blur-md hidden flex-col items-center justify-center p-8">
+        <div class="max-w-md w-full glass-card inner-glow p-8 rounded-xl relative overflow-hidden flex flex-col gap-6 text-center border-secondary/20 border">
+            <div class="scanline absolute w-full h-[2px] bg-secondary/25 left-0 top-0" style="animation: scan 3s linear infinite;"></div>
+            <div class="relative w-24 h-24 mx-auto hologram-effect">
+                <div class="absolute inset-0 rounded-full border-2 border-primary/20 animate-spin" style="animation-duration: 4s;"></div>
+                <div class="absolute inset-2 rounded-full border border-secondary/30 animate-pulse"></div>
+                <span class="material-symbols-outlined text-secondary text-5xl absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2">smart_toy</span>
+            </div>
+            <div>
+                <h3 class="font-headline text-2xl text-white font-extrabold" id="loader-title">CALIBRATING NEURAL CORE</h3>
+                <p class="text-on-surface-variant font-mono text-xs mt-2" id="loader-subtitle">Loading simulation buffers...</p>
+            </div>
+            <div class="h-1.5 w-full bg-surface-container rounded-full overflow-hidden">
+                <div id="loader-progress" class="h-full bg-gradient-to-r from-primary to-secondary w-0 transition-all duration-300"></div>
+            </div>
+            <div id="loader-console" class="font-mono text-[10px] text-secondary/60 text-left bg-black/50 p-3 rounded border border-outline-variant/20 h-24 overflow-y-auto space-y-1">
+                <div>> INITIALIZING PREPNOVA AI DIAGNOSTICS v4.0</div>
+            </div>
+        </div>
+    </div>
+
+    <!-- MAIN SHELL WRAPPER -->
+    <div id="app-shell" class="hidden min-h-screen">
+        <!-- Sidebar Navigation (Desktop) -->
+        <aside class="h-screen w-64 fixed left-0 top-0 border-r border-outline-variant/20 bg-surface-container-lowest/80 backdrop-blur-2xl shadow-[10px_0_30px_rgba(0,0,0,0.5)] z-40 flex flex-col py-8 hidden lg:flex">
+            <div class="px-6 mb-8 flex items-center gap-3">
+                <div class="w-8 h-8 rounded-lg bg-gradient-to-br from-primary-container to-secondary overflow-hidden flex items-center justify-center shadow-lg shadow-primary-container/20">
+                    <img src="/prepnova_logo.png" class="w-full h-full object-cover animate-pulse" alt="PrepNova Logo"/>
+                </div>
+                <div>
+                    <h1 class="font-headline text-xl font-bold bg-gradient-to-r from-primary to-secondary bg-clip-text text-transparent">PrepNova AI</h1>
+                    <p class="text-[9px] uppercase tracking-widest text-secondary font-bold font-headline mt-0.5">Simulation Center</p>
+                </div>
+            </div>
+            <nav class="flex-grow space-y-0.5">
+                <a class="flex items-center gap-3.5 px-6 py-3.5 text-on-surface-variant hover:text-on-surface hover:bg-surface-container-high/40 transition-all cursor-pointer group" onclick="switchView('dashboard')">
+                    <span class="material-symbols-outlined text-xl group-hover:text-secondary">dashboard</span>
+                    <span class="font-headline text-label-md">Dashboard</span>
+                </a>
+                <a class="flex items-center gap-3.5 px-6 py-3.5 text-on-surface-variant hover:text-on-surface hover:bg-surface-container-high/40 transition-all cursor-pointer group" onclick="switchView('coach')">
+                    <span class="material-symbols-outlined text-xl group-hover:text-secondary">smart_toy</span>
+                    <span class="font-headline text-label-md">AI Coach</span>
+                </a>
+                <a class="flex items-center gap-3.5 px-6 py-3.5 text-on-surface-variant hover:text-on-surface hover:bg-surface-container-high/40 transition-all cursor-pointer group" onclick="switchView('library')">
+                    <span class="material-symbols-outlined text-xl group-hover:text-secondary">folder_open</span>
+                    <span class="font-headline text-label-md">Library</span>
+                </a>
+                <a class="flex items-center gap-3.5 px-6 py-3.5 text-on-surface-variant hover:text-on-surface hover:bg-surface-container-high/40 transition-all cursor-pointer group" onclick="switchView('analytics')">
+                    <span class="material-symbols-outlined text-xl group-hover:text-secondary">insights</span>
+                    <span class="font-headline text-label-md">Analytics</span>
+                </a>
+                <a class="flex items-center gap-3.5 px-6 py-3.5 text-on-surface-variant hover:text-on-surface hover:bg-surface-container-high/40 transition-all cursor-pointer group" onclick="switchView('history')">
+                    <span class="material-symbols-outlined text-xl group-hover:text-secondary">history</span>
+                    <span class="font-headline text-label-md">History</span>
+                </a>
+                <a class="flex items-center gap-3.5 px-6 py-3.5 text-on-surface-variant hover:text-on-surface hover:bg-surface-container-high/40 transition-all cursor-pointer group" onclick="switchView('profile')">
+                    <span class="material-symbols-outlined text-xl group-hover:text-secondary">person</span>
+                    <span class="font-headline text-label-md">Profile</span>
+                </a>
+                <a class="flex items-center gap-3.5 px-6 py-3.5 text-on-surface-variant hover:text-on-surface hover:bg-surface-container-high/40 transition-all cursor-pointer group" onclick="switchView('settings')">
+                    <span class="material-symbols-outlined text-xl group-hover:text-secondary">settings</span>
+                    <span class="font-headline text-label-md">Settings</span>
+                </a>
+                <a class="flex items-center gap-3.5 px-6 py-3.5 text-on-surface-variant hover:text-red-400 hover:bg-red-500/10 transition-all cursor-pointer group" onclick="handleLogout()">
+                    <span class="material-symbols-outlined text-xl group-hover:text-red-400">logout</span>
+                    <span class="font-headline text-label-md">Logout</span>
+                </a>
+            </nav>
+            <div class="px-5 mt-auto">
+                <div class="bg-surface-container/50 rounded-xl p-4 flex flex-col gap-3.5 border border-outline-variant/15">
+                    <div class="flex items-center gap-3 cursor-pointer" onclick="switchView('profile')">
+                        <div class="w-10 h-10 rounded-full border-2 border-secondary overflow-hidden shrink-0">
+                            <img id="sidebar-avatar" class="w-full h-full object-cover" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBFsASffPJ3Ohg3un7CUeMRMv66_W328wGEItt_DBzVRVhwFRRzsOn1ujj1olwCCclnmkFd_IKaOWcubI4sMsNYfumhWkYagS0fK0symXRfrM4cX9w9m4dZzAASKnZ0SSLbQC-R8km7J4Ue-cLBZ0CIRaLLVwKy8YEuAa9OgHq1bjYkWieJVJftCCGXR1xTGCKQlIgzsSzpNZCbTGsdUTQon1lohXkC93e3gc71-yqzVrphyQF1vEUmF750QhbMEbIjPwVLKG2u9ms"/>
+                        </div>
+                        <div class="overflow-hidden">
+                            <p id="sidebar-name" class="font-headline text-label-md text-on-surface truncate font-bold">Alexander Sterling</p>
+                            <p class="text-[9px] text-secondary font-bold uppercase tracking-widest truncate">APEX LEVEL 42</p>
+                        </div>
+                    </div>
+                    <button class="w-full py-2.5 bg-gradient-to-r from-primary-container to-secondary-container text-white font-bold rounded-lg text-xs flex items-center justify-center gap-1.5 active:scale-95 transition-all shadow-[0_0_15px_rgba(124,58,237,0.3)] hover:shadow-[0_0_20px_rgba(76,215,246,0.35)]" onclick="triggerSimulation()">
+                        <span class="material-symbols-outlined text-sm">bolt</span>
+                        Start Simulation
+                    </button>
+                </div>
+            </div>
+        </aside>
+
+        <!-- Top AppBar Header -->
+        <header class="w-full sticky top-0 bg-surface/60 backdrop-blur-xl border-b border-outline-variant/20 shadow-2xl shadow-black/40 z-35 lg:pl-64">
+            <div class="flex justify-between items-center px-6 md:px-margin-desktop py-4 max-w-container-max mx-auto">
+                <div class="flex items-center gap-4 lg:hidden">
+                    <div class="w-8 h-8 rounded-lg bg-gradient-to-br from-primary-container to-secondary overflow-hidden flex items-center justify-center">
+                        <img src="/prepnova_logo.png" class="w-full h-full object-cover" alt="PrepNova Logo"/>
+                    </div>
+                    <h1 class="font-headline text-lg font-bold text-white">PrepNova AI</h1>
+                </div>
+                
+                <!-- Search bar wrapper -->
+                <div class="relative max-w-md w-full hidden sm:block">
+                    <span class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-on-surface-variant/60 text-sm">search</span>
+                    <input id="global-search" class="w-full bg-surface-container-low/75 border border-outline-variant/30 rounded-full py-1.5 pl-10 pr-4 text-xs focus:outline-none focus:border-secondary focus:ring-1 focus:ring-secondary/30 transition-all text-on-surface" placeholder="Search simulations, recordings, settings..." type="text" onkeyup="handleGlobalSearch(this.value)"/>
+                </div>
+
+                <div class="flex items-center gap-5">
+                    <button class="text-on-surface-variant hover:text-primary transition-colors relative" onclick="switchView('notifications')">
+                        <span class="material-symbols-outlined text-2xl">notifications</span>
+                        <span class="absolute top-0 right-0 w-2 h-2 bg-secondary rounded-full border border-black animate-pulse"></span>
+                    </button>
+                    <button class="text-on-surface-variant hover:text-red-400 transition-colors relative" onclick="handleLogout()" title="Logout">
+                        <span class="material-symbols-outlined text-2xl">logout</span>
+                    </button>
+                    <div class="flex items-center gap-3 pl-4 border-l border-outline-variant/20 cursor-pointer" onclick="switchView('profile')">
+                        <div class="text-right hidden sm:block">
+                            <p id="topbar-name" class="font-headline text-xs text-on-surface font-bold">Alexander Sterling</p>
+                            <p class="text-[9px] text-secondary font-bold uppercase tracking-widest">Apex Lvl 42</p>
+                        </div>
+                        <div class="w-9 h-9 rounded-full border border-secondary/40 overflow-hidden">
+                            <img id="topbar-avatar" class="w-full h-full object-cover" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBFsASffPJ3Ohg3un7CUeMRMv66_W328wGEItt_DBzVRVhwFRRzsOn1ujj1olwCCclnmkFd_IKaOWcubI4sMsNYfumhWkYagS0fK0symXRfrM4cX9w9m4dZzAASKnZ0SSLbQC-R8km7J4Ue-cLBZ0CIRaLLVwKy8YEuAa9OgHq1bjYkWieJVJftCCGXR1xTGCKQlIgzsSzpNZCbTGsdUTQon1lohXkC93e3gc71-yqzVrphyQF1vEUmF750QhbMEbIjPwVLKG2u9ms"/>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </header>
+
+        <!-- Dynamic Main Canvas -->
+        <main class="lg:pl-64 min-h-[calc(100vh-73px)] pb-24">
+            <div class="max-w-container-max mx-auto px-6 md:px-margin-desktop py-8 md:py-12">
+
+                <!-- 1. DASHBOARD VIEW -->
+                <div id="view-dashboard" class="app-view space-y-gutter">
+                    <section class="grid grid-cols-1 lg:grid-cols-12 gap-gutter">
+                        <!-- Welcome Board -->
+                        <div class="lg:col-span-8 glass-card inner-glow p-8 rounded-xl flex flex-col md:flex-row items-center justify-between gap-6 relative overflow-hidden">
+                            <div class="absolute -right-20 -bottom-20 w-64 h-64 bg-primary/10 rounded-full blur-[100px] pointer-events-none"></div>
+                            <div class="space-y-3 relative z-10">
+                                <span class="text-xs uppercase tracking-[0.25em] text-secondary font-bold font-headline">COMMAND INTERFACES ONLINE</span>
+                                <h2 class="font-headline text-3xl font-extrabold text-white leading-tight">Welcome back, <span id="dash-welcome-name" class="text-primary">Alexander</span>.</h2>
+                                <p class="text-on-surface-variant text-sm max-w-md">Simulation protocol v4.0 is fully synced. Coach Nova-1 is waiting for your distributed systems feedback drill.</p>
+                            </div>
+                            <button class="px-8 py-3 bg-white text-black font-bold rounded-lg hover:scale-105 active:scale-95 transition-all text-sm shrink-0 shadow-lg shadow-white/10" onclick="triggerSimulation()">
+                                Resume Simulation
+                            </button>
+                        </div>
+                        
+                        <!-- Mini STAT Card -->
+                        <div class="lg:col-span-4 rounded-xl overflow-hidden relative group shadow-2xl glass-card inner-glow p-6 flex flex-col items-center justify-center text-center">
+                            <img alt="Performance Gradient" class="absolute inset-0 w-full h-full object-cover opacity-15 transition-transform duration-700 group-hover:scale-110 pointer-events-none" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBR_vzhSSDBmdiw7lCCX96YV96WUK8KR2KsXrpXM6s407qaqPxEd-vzsCPHTX1zvQ7MD77MIDlAtSG-Xm0BGSjq5DIPydvSt7DuzR5ZXYJL-ClpFxprwHcGtnd3KYrhDKkTtVg5ulGTNF8t5PW1kYjH9jQkI6ugztei0Lv1yZ-rW7GU1P8G9c2FyUIK2nS-q0ndpa3nEGxrTGQyoAWgKVVx2bJSvUyOussYTPcHoj69bEM0MaWKrj9QH1_ahZIq0w9RXViHnvswxzk"/>
+                            <p class="font-headline text-[10px] text-secondary uppercase tracking-[0.2em] mb-1">Apex Simulation Rank</p>
+                            <h4 class="font-headline text-2xl text-white font-extrabold mb-3">Global Standings</h4>
+                            <div class="w-16 h-16 rounded-full border-2 border-secondary flex items-center justify-center mb-3">
+                                <span class="text-xl font-headline font-black text-white">#42</span>
+                            </div>
+                            <p class="text-xs text-on-surface-variant leading-relaxed">You are currently in the top 5% of candidates preparing for Principal Architect roles.</p>
+                        </div>
+                    </section>
+
+                    <!-- Core Dashboard Grid -->
+                    <section class="grid grid-cols-1 lg:grid-cols-12 gap-gutter">
+                        
+                        <!-- Left side items: Hologram AI & Skill specs -->
+                        <div class="lg:col-span-8 space-y-gutter">
+                            <!-- Live Coach Widget -->
+                            <div class="glass-card inner-glow rounded-xl p-6 flex flex-col md:flex-row items-center gap-8 relative overflow-hidden tilt-card shadow-lg hover:border-secondary/40 transition-colors">
+                                <div class="relative w-40 h-40 hologram-effect shrink-0">
+                                    <div class="absolute inset-0 rounded-full border-2 border-primary/20 animate-spin" style="animation-duration: 8s;"></div>
+                                    <div class="absolute inset-2 rounded-full border border-secondary/30 animate-pulse"></div>
+                                    <img alt="AI Avatar" class="w-full h-full object-cover rounded-full mix-blend-screen opacity-90 blur-[0.5px]" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAu5PsfywrFZ17knTcKPRsnw6oH6heZJtAmsjkKJgD7mof41OWI5HN_i0AjjY_SkkGM6WiJTEZN4XJRzxFhGMdr0OvHMHwzMKXyCpOhvCc9CdgrecCNh6bxyF6IBnzEwKQjL9tqTG56ZgNUbKyhxxYEyJOML1eaffXolerWOAyOVJ88OaZ2alE9xyqxS8zl08KLpxJ1th4SrOibnDTLJ8fVyiNSboaSbw23gRYMN9APupDdM0rmtWPoneho9NheanIzVlylvXl_ouU"/>
+                                </div>
+                                <div class="flex-grow space-y-3">
+                                    <div class="flex items-center gap-3">
+                                        <span class="text-xs font-bold text-secondary uppercase font-headline tracking-widest">Active Coach Engine</span>
+                                        <span id="dash-coach-personality" class="px-2.5 py-0.5 bg-secondary-container/10 border border-secondary/30 text-secondary text-[9px] font-bold rounded-full uppercase tracking-wider">Ruthless Efficiency (85%)</span>
+                                    </div>
+                                    <h3 class="font-headline text-xl text-white font-extrabold">Nova-1 Feedback Stream</h3>
+                                    <p class="text-on-surface-variant text-sm italic">"Your architectural decomposition of consistent hashing virtual nodes was precise, but let's practice explaining consistent hashing under partition conditions."</p>
+                                    <button class="px-5 py-2 rounded-lg bg-secondary text-on-secondary font-bold text-xs shadow-md shadow-secondary/15 flex items-center gap-1 hover:brightness-110 active:scale-95 transition-all" onclick="switchView('coach')">
+                                        <span class="material-symbols-outlined text-sm">forum</span> Join Deep Dive Chat
+                                    </button>
+                                </div>
+                            </div>
+
+                            <!-- Skills Spectrum breakdown -->
+                            <div class="glass-card inner-glow rounded-xl p-6">
+                                <h3 class="font-headline text-lg text-white font-bold mb-6">Simulation Target Metrics</h3>
+                                <div class="grid grid-cols-1 md:grid-cols-2 gap-x-8 gap-y-5">
+                                    <div class="space-y-2">
+                                        <div class="flex justify-between text-xs font-headline">
+                                            <span class="text-on-surface font-bold">System Design</span>
+                                            <span class="text-secondary font-bold">88%</span>
+                                        </div>
+                                        <div class="h-1.5 w-full bg-surface-container-high rounded-full overflow-hidden">
+                                            <div class="h-full bg-gradient-to-r from-primary to-secondary w-[88%] relative"></div>
+                                        </div>
+                                    </div>
+                                    <div class="space-y-2">
+                                        <div class="flex justify-between text-xs font-headline">
+                                            <span class="text-on-surface font-bold">Technical Precision</span>
+                                            <span class="text-secondary font-bold">94%</span>
+                                        </div>
+                                        <div class="h-1.5 w-full bg-surface-container-high rounded-full overflow-hidden">
+                                            <div class="h-full bg-gradient-to-r from-primary to-secondary w-[94%] relative"></div>
+                                        </div>
+                                    </div>
+                                    <div class="space-y-2">
+                                        <div class="flex justify-between text-xs font-headline">
+                                            <span class="text-on-surface font-bold">Behavioral Fluency</span>
+                                            <span class="text-secondary font-bold">72%</span>
+                                        </div>
+                                        <div class="h-1.5 w-full bg-surface-container-high rounded-full overflow-hidden">
+                                            <div class="h-full bg-gradient-to-r from-primary to-secondary w-[72%] relative"></div>
+                                        </div>
+                                    </div>
+                                    <div class="space-y-2">
+                                        <div class="flex justify-between text-xs font-headline">
+                                            <span class="text-on-surface font-bold">Clarity of Logic</span>
+                                            <span class="text-secondary font-bold">65%</span>
+                                        </div>
+                                        <div class="h-1.5 w-full bg-surface-container-high rounded-full overflow-hidden">
+                                            <div class="h-full bg-gradient-to-r from-primary to-secondary w-[65%] relative"></div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Right side items: Goals & Radar visual -->
+                        <div class="lg:col-span-4 space-y-gutter">
+                            <!-- Actionable Goals list -->
+                            <div class="glass-card inner-glow rounded-xl p-6">
+                                <h3 class="font-headline text-lg text-white font-bold mb-4">Actionable Objectives</h3>
+                                <div class="space-y-3.5">
+                                    <div class="group flex items-start gap-3 p-3 rounded-lg hover:bg-surface-container-high/40 border border-transparent hover:border-outline-variant/20 transition-all cursor-pointer">
+                                        <div class="w-5 h-5 rounded border border-secondary/45 flex items-center justify-center shrink-0 mt-0.5 group-hover:bg-secondary/10">
+                                            <span class="material-symbols-outlined text-[10px] text-secondary scale-0 group-hover:scale-100 transition-transform">check</span>
+                                        </div>
+                                        <div>
+                                            <h4 class="text-xs font-bold text-on-surface">Explain CAP Theorem in 60s</h4>
+                                            <p class="text-[10px] text-on-surface-variant mt-0.5">Focus on high-availability and network partitions tradeoffs.</p>
+                                        </div>
+                                    </div>
+                                    <div class="group flex items-start gap-3 p-3 rounded-lg hover:bg-surface-container-high/40 border border-transparent hover:border-outline-variant/20 transition-all cursor-pointer">
+                                        <div class="w-5 h-5 rounded border border-secondary/45 flex items-center justify-center shrink-0 mt-0.5 group-hover:bg-secondary/10">
+                                            <span class="material-symbols-outlined text-[10px] text-secondary scale-0 group-hover:scale-100 transition-transform">check</span>
+                                        </div>
+                                        <div>
+                                            <h4 class="text-xs font-bold text-on-surface">Consistent Hashing Verbalization</h4>
+                                            <p class="text-[10px] text-on-surface-variant mt-0.5">Articulate Virtual Node configurations for balanced sharding.</p>
+                                        </div>
+                                    </div>
+                                    <div class="group flex items-start gap-3 p-3 rounded-lg hover:bg-surface-container-high/40 border border-transparent hover:border-outline-variant/20 transition-all cursor-pointer">
+                                        <div class="w-5 h-5 rounded border border-secondary/45 flex items-center justify-center shrink-0 mt-0.5 group-hover:bg-secondary/10">
+                                            <span class="material-symbols-outlined text-[10px] text-secondary scale-0 group-hover:scale-100 transition-transform">check</span>
+                                        </div>
+                                        <div>
+                                            <h4 class="text-xs font-bold text-on-surface">STAR Framework behavioral conflict</h4>
+                                            <p class="text-[10px] text-on-surface-variant mt-0.5">Describe a constructive engineering disagreement resolution.</p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Insight notification banner -->
+                            <div class="flex items-center gap-4 p-4 rounded-xl bg-primary-container/5 border border-primary/15 relative overflow-hidden">
+                                <span class="material-symbols-outlined text-primary text-3xl">psychology</span>
+                                <div>
+                                    <p class="text-[10px] font-headline font-bold text-primary uppercase tracking-widest">Expert System Insight</p>
+                                    <p class="text-xs text-on-surface mt-1 font-medium">Prioritize explaining 'Why' before 'How' during latency drill.</p>
+                                </div>
+                            </div>
+                        </div>
+
+                    </section>
+                </div>
+
+                <!-- 2. AI COACH VIEW -->
+                <div id="view-coach" class="app-view space-y-gutter">
+                    <section class="grid grid-cols-1 lg:grid-cols-12 gap-gutter">
+                        <!-- Holographic Feedback Header -->
+                        <div class="col-span-12 lg:col-span-8 flex flex-col gap-gutter">
+                            <div class="glass-panel inner-glow rounded-xl p-8 relative overflow-hidden h-[340px] flex items-center justify-center shadow-lg">
+                                <div class="absolute inset-0 bg-gradient-to-tr from-primary/10 via-transparent to-secondary/10 opacity-30"></div>
+                                <div class="relative z-10 flex flex-col items-center">
+                                    <div class="w-48 h-48 relative hologram-effect">
+                                        <div class="absolute inset-0 rounded-full border-2 border-primary/20 animate-spin" style="animation-duration: 20s;"></div>
+                                        <div class="absolute inset-4 rounded-full border border-secondary/30 animate-reverse-spin" style="animation-duration: 25s;"></div>
+                                        <img alt="AI Avatar" class="w-full h-full object-cover rounded-full mix-blend-screen opacity-90 blur-[0.5px]" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAu5PsfywrFZ17knTcKPRsnw6oH6heZJtAmsjkKJgD7mof41OWI5HN_i0AjjY_SkkGM6WiJTEZN4XJRzxFhGMdr0OvHMHwzMKXyCpOhvCc9CdgrecCNh6bxyF6IBnzEwKQjL9tqTG56ZgNUbKyhxxYEyJOML1eaffXolerWOAyOVJ88OaZ2alE9xyqxS8zl08KLpxJ1th4SrOibnDTLJ8fVyiNSboaSbw23gRYMN9APupDdM0rmtWPoneho9NheanIzVlylvXl_ouU"/>
+                                        <div class="absolute bottom-2 left-1/2 -translate-x-1/2 flex gap-1">
+                                            <div class="w-1.5 h-1.5 rounded-full bg-secondary pulse-cyan"></div>
+                                            <div class="w-1.5 h-1.5 rounded-full bg-secondary pulse-cyan" style="animation-delay: 0.2s"></div>
+                                            <div class="w-1.5 h-1.5 rounded-full bg-secondary pulse-cyan" style="animation-delay: 0.4s"></div>
+                                        </div>
+                                    </div>
+                                    <div class="mt-5 text-center">
+                                        <h2 class="font-headline text-2xl text-white font-extrabold">Nova-1 Interactive Core</h2>
+                                        <p id="coach-active-indicator" class="font-mono text-[10px] text-secondary mt-1.5 tracking-wider uppercase font-bold">> CONNECTED / STANDBY DEEP-DIVE PROTOCALS</p>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Interactive Voice/Text chat Panel -->
+                            <div class="glass-card inner-glow rounded-xl flex flex-col h-[480px] shadow-2xl">
+                                <div class="p-4 border-b border-outline-variant/30 flex justify-between items-center bg-surface-container-lowest/40">
+                                    <div class="flex items-center gap-3">
+                                        <span class="material-symbols-outlined text-primary">forum</span>
+                                        <h2 class="font-headline text-sm font-bold text-white">Live Simulation Transcript</h2>
+                                    </div>
+                                    <span class="text-[9px] font-headline font-bold text-on-surface-variant px-3 py-1 bg-surface-container rounded-full uppercase tracking-widest">Active Simulator Shell</span>
+                                </div>
+                                
+                                <!-- Scroll container -->
+                                <div id="chat-messages-container" class="flex-grow overflow-y-auto p-6 space-y-5">
+                                    <!-- AI Message -->
+                                    <div class="flex gap-4 max-w-[85%]">
+                                        <div class="w-8 h-8 rounded-full bg-primary-container/20 flex items-center justify-center shrink-0 border border-primary/20">
+                                            <span class="material-symbols-outlined text-primary text-md">smart_toy</span>
+                                        </div>
+                                        <div class="bg-surface-container-high/60 rounded-xl p-4 rounded-tl-none border border-outline-variant/20">
+                                            <p class="text-xs text-on-surface-variant font-bold font-headline mb-1">Nova-1 (Coach)</p>
+                                            <p class="text-sm text-on-surface leading-relaxed">Welcome to the distributed systems calibration. What specific tradeoffs would you like to explore? We can review load balancing policies or consistent hashing Virtual Node implementations.</p>
+                                            <span class="text-[9px] text-on-surface-variant/50 mt-2 block">System Clock Ready</span>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <!-- Typing Indicator (Hidden by default) -->
+                                <div id="chat-typing-loader" class="px-6 py-2 flex items-center gap-3 hidden">
+                                    <div class="w-6 h-6 rounded-full bg-primary-container/20 flex items-center justify-center border border-primary/20">
+                                        <span class="material-symbols-outlined text-primary text-xs animate-spin">sync</span>
+                                    </div>
+                                    <span class="text-[10px] font-mono text-secondary/60">Nova-1 is formulating design feedback...</span>
+                                </div>
+
+                                <!-- Message input -->
+                                <div class="p-4 border-t border-outline-variant/30 bg-surface-container-lowest/30">
+                                    <form id="coach-message-form" class="relative" onsubmit="handleCoachSubmit(event)">
+                                        <input id="coach-chat-input" class="w-full bg-surface-container-low border border-outline-variant/30 rounded-xl py-3 pl-5 pr-14 focus:border-secondary focus:ring-1 focus:ring-secondary/40 outline-none transition-all text-sm text-on-surface" placeholder="Discuss sharding, CAP, load balancers, virtual nodes..." type="text"/>
+                                        <button class="absolute right-2.5 top-1/2 -translate-y-1/2 w-9 h-9 bg-secondary text-on-secondary rounded-lg flex items-center justify-center hover:brightness-110 active:scale-95 transition-all" type="submit">
+                                            <span class="material-symbols-outlined text-md">send</span>
+                                        </button>
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Mini Panel right side -->
+                        <div class="col-span-12 lg:col-span-4 flex flex-col gap-gutter">
+                            <!-- Persona Calibration card -->
+                            <div class="glass-card inner-glow rounded-xl p-6">
+                                <h3 class="font-headline text-md text-white font-bold mb-4">Coach AI Persona Parameters</h3>
+                                <div class="space-y-4">
+                                    <div class="space-y-1.5">
+                                        <div class="flex justify-between text-xs font-headline">
+                                            <span class="text-on-surface-variant">Assertiveness Rating</span>
+                                            <span id="coach-param-assertive" class="text-secondary font-bold">85%</span>
+                                        </div>
+                                        <div class="h-1 bg-surface-container-high rounded-full overflow-hidden">
+                                            <div id="coach-bar-assertive" class="h-full bg-secondary w-[85%]"></div>
+                                        </div>
+                                    </div>
+                                    <div class="space-y-1.5">
+                                        <div class="flex justify-between text-xs font-headline">
+                                            <span class="text-on-surface-variant">Depth Threshold</span>
+                                            <span id="coach-param-depth" class="text-secondary font-bold">92%</span>
+                                        </div>
+                                        <div class="h-1 bg-surface-container-high rounded-full overflow-hidden">
+                                            <div id="coach-bar-depth" class="h-full bg-secondary w-[92%]"></div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="mt-6 p-4 rounded-lg bg-surface-container/50 border border-outline-variant/15 text-xs text-on-surface-variant leading-relaxed">
+                                    To adjust Nova-1's behavioral strictness or feedback analysis parameters, visit the <a class="text-secondary hover:underline cursor-pointer" onclick="switchView('settings')">Settings Center</a>.
+                                </div>
+                            </div>
+                        </div>
+                    </section>
+                </div>
+
+                <!-- 3. LIBRARY VIEW -->
+                <div id="view-library" class="app-view space-y-gutter">
+                    <section class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 border-b border-outline-variant/20 pb-6">
+                        <div class="flex gap-2 overflow-x-auto pb-1 no-scrollbar w-full sm:w-auto">
+                            <button id="lib-filter-all" class="px-5 py-1.5 rounded-full border border-secondary text-secondary bg-secondary/10 font-headline text-xs font-bold shrink-0" onclick="filterLibrary('all')">All Assets</button>
+                            <button id="lib-filter-recordings" class="px-5 py-1.5 rounded-full border border-outline-variant/30 text-on-surface-variant hover:border-primary hover:text-primary transition-all font-headline text-xs shrink-0" onclick="filterLibrary('recordings')">Recordings</button>
+                            <button id="lib-filter-modules" class="px-5 py-1.5 rounded-full border border-outline-variant/30 text-on-surface-variant hover:border-primary hover:text-primary transition-all font-headline text-xs shrink-0" onclick="filterLibrary('modules')">Practice Modules</button>
+                            <button id="lib-filter-tips" class="px-5 py-1.5 rounded-full border border-outline-variant/30 text-on-surface-variant hover:border-primary hover:text-primary transition-all font-headline text-xs shrink-0" onclick="filterLibrary('tips')">Saved Tips</button>
+                        </div>
+                    </section>
+
+                    <!-- Bento Library Layout -->
+                    <div class="grid grid-cols-12 gap-gutter">
+                        <!-- Featured Course Card (Modules) -->
+                        <div class="col-span-12 lg:col-span-8 group relative overflow-hidden rounded-xl bg-surface-container-lowest border border-outline-variant/20 hover:scale-[1.01] hover:border-secondary/40 transition-all h-[360px] shadow-lg lib-card" data-category="modules">
+                            <img class="absolute inset-0 w-full h-full object-cover opacity-35 group-hover:scale-105 transition-transform duration-700 pointer-events-none" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAOmHpHa1Kli8ZuPrLasEIpv4qVUdowyyB4eJAyqa3H-TvLe3wWFsmO4Vx4xALF5VDREAnYLhulkiwx-NqdSTXx6t4QbaUt8dK7Ueoz51ZdTZYFvJm4SM4cmLHKpu6-nv46ArbWYH8wIWW_a6fWn9-pgBl6bLEHIKTp4OCwYjTw3JuPNrMBLdsh_oUozOLSaZHOFu_MBaT3tFdoqL1g-5eYwfY4bqON9fcA9fb6bxGtccaLCeCkZNcR-W7UkfRdVIZ3TZJUPxVvgPw"/>
+                            <div class="absolute inset-0 bg-gradient-to-t from-black via-black/35 to-transparent"></div>
+                            <div class="absolute bottom-0 left-0 p-8 w-full">
+                                <div class="flex items-center gap-2 mb-3">
+                                    <span class="bg-secondary text-on-secondary px-3 py-0.5 rounded text-[9px] font-bold uppercase tracking-widest font-headline">In Progress</span>
+                                    <span class="text-on-surface-variant text-[11px]">Sync completed 2h ago</span>
+                                </div>
+                                <h3 class="font-headline text-2xl text-white font-black mb-3">FAANG System Architect Simulator</h3>
+                                <p class="text-on-surface-variant text-sm max-w-md mb-5">Calibrate scaling parameters and microservice partition strategies with Coach Nova-1.</p>
+                                <div class="flex items-center gap-6">
+                                    <button class="px-6 py-2.5 bg-white text-black font-bold rounded-lg text-xs hover:bg-secondary hover:text-on-secondary transition-all flex items-center gap-1.5 shadow-md active:scale-95" onclick="triggerSimulation()">
+                                        <span class="material-symbols-outlined text-sm font-black">play_arrow</span> Resume Training
+                                    </button>
+                                    <div class="flex-grow max-w-[200px] hidden sm:block">
+                                        <div class="flex justify-between text-[10px] mb-1">
+                                            <span>Session Progress</span>
+                                            <span class="font-bold">45%</span>
+                                        </div>
+                                        <div class="h-1.5 w-full bg-surface-container rounded-full overflow-hidden">
+                                            <div class="h-full bg-gradient-to-r from-primary to-secondary w-[45%]"></div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Live Nuggets Tips -->
+                        <div class="col-span-12 lg:col-span-4 bg-surface-container rounded-xl p-6 border border-outline-variant/20 flex flex-col gap-5 glass-panel hover:scale-[1.01] hover:border-secondary/40 transition-all lib-card" data-category="tips">
+                            <div class="flex items-center justify-between">
+                                <h4 class="font-headline text-xs text-primary uppercase tracking-widest font-bold">Saved Intelligence Nuggets</h4>
+                                <span class="material-symbols-outlined text-on-surface-variant text-md">auto_awesome</span>
+                            </div>
+                            <div class="space-y-3.5 overflow-y-auto max-h-[220px] pr-1">
+                                <div class="p-3.5 rounded-lg bg-surface-container-low border border-outline-variant/10 hover:border-secondary/30 transition-colors">
+                                    <span class="text-[10px] text-secondary font-bold tracking-widest font-headline block mb-1">BEHAVIORAL STRATEGY</span>
+                                    <p class="text-xs text-on-surface italic">"Verbalize specific architectural tradeoffs (latency vs storage capacity) before writing sharding formulas."</p>
+                                </div>
+                                <div class="p-3.5 rounded-lg bg-surface-container-low border border-outline-variant/10 hover:border-secondary/30 transition-colors">
+                                    <span class="text-[10px] text-secondary font-bold tracking-widest font-headline block mb-1">TECHNICAL ALGORITHMS</span>
+                                    <p class="text-xs text-on-surface italic">"Consistent hashing maps both servers and keys as 32-bit values onto a single circular 360-degree ring."</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Recordings Section -->
+                    <div class="space-y-6 mt-6">
+                        <h3 class="font-headline text-lg text-white font-bold">Archived Mock Recordings</h3>
+                        <div id="lib-recordings-grid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-gutter">
+                            <!-- Recording 1 -->
+                            <div class="flex flex-col gap-3 group cursor-pointer lib-card" data-category="recordings" onclick="triggerSimulation()">
+                                <div class="relative aspect-video rounded-xl overflow-hidden bg-surface-container-highest border border-outline-variant/20 hover:border-secondary/40 transition-colors">
+                                    <img class="w-full h-full object-cover opacity-60 group-hover:scale-102 transition-transform duration-500 pointer-events-none" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCEP1DETkVPFai5-SEl3mZx6DPj0B1YMUOVqul71fJFAO5Ih8ZWuiKZreGgkAjOHmWYkrMsfqeVoQEf0Zj4K0yquOlY0G4SLh-ALj1uzhlUicmTD3CJ2xgXTDhruYur0t4T5MM3pxjZjM67RAtz7hZtzhjApqWSluMFNLhW7Bu3_2kUoKtd3TZBgIEqc54U-MRKOY3onwUm8ueWGg6SN3e25S3QWCRaaYfEsRVHpMc1Ws32R5DHl_srWap04Vn0HaBgRRWmfF9Vsfw"/>
+                                    <div class="absolute inset-0 bg-black/30 group-hover:bg-black/10 transition-colors flex items-center justify-center">
+                                        <span class="material-symbols-outlined text-white text-4xl group-hover:scale-110 transition-transform">play_circle</span>
+                                    </div>
+                                    <div class="absolute bottom-2 right-2 px-1.5 py-0.5 bg-black/80 rounded text-[9px] font-mono">14:22</div>
+                                </div>
+                                <div>
+                                    <h5 class="text-xs font-bold text-on-surface mb-1 group-hover:text-secondary transition-colors">Mock Session: Meta Principal SWE</h5>
+                                    <div class="flex items-center justify-between text-[10px] text-on-surface-variant">
+                                        <span>May 12, 2026</span>
+                                        <span class="text-secondary font-bold font-headline">82 Score</span>
+                                    </div>
+                                </div>
+                            </div>
+                            <!-- Recording 2 -->
+                            <div class="flex flex-col gap-3 group cursor-pointer lib-card" data-category="recordings" onclick="triggerSimulation()">
+                                <div class="relative aspect-video rounded-xl overflow-hidden bg-surface-container-highest border border-outline-variant/20 hover:border-secondary/40 transition-colors">
+                                    <img class="w-full h-full object-cover opacity-60 group-hover:scale-102 transition-transform duration-500 pointer-events-none" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDufEzsthC5RW-b1G07kFecVgrrvQqs3IoQfQhRROAHF9R4iPP_TkDKZr9UihYkRhRtEgH4RMkx005uIe9LPuyMUkLwhzVK-aMWUI762v4uI5GR1rf1pwYToWE5pM20uSZtRGG7d6GugYSgg0fINuCN3Y-7VZpRYtFfpIhSLFgHe9djtjnV9ZC7E1LY5eRYW3PJdYmVeiYO7CUVdjruycs7VBGybHCU52qTO64ciQV3rAaDbs--gerCD15Ue-QWER5-42eope5QlKE"/>
+                                    <div class="absolute inset-0 bg-black/30 group-hover:bg-black/10 transition-colors flex items-center justify-center">
+                                        <span class="material-symbols-outlined text-white text-4xl group-hover:scale-110 transition-transform">play_circle</span>
+                                    </div>
+                                    <div class="absolute bottom-2 right-2 px-1.5 py-0.5 bg-black/80 rounded text-[9px] font-mono">08:45</div>
+                                </div>
+                                <div>
+                                    <h5 class="text-xs font-bold text-on-surface mb-1 group-hover:text-secondary transition-colors">Behavioral: Team Resolution</h5>
+                                    <div class="flex items-center justify-between text-[10px] text-on-surface-variant">
+                                        <span>May 10, 2026</span>
+                                        <span class="text-secondary font-bold font-headline">94 Score</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 4. ANALYTICS VIEW -->
+                <div id="view-analytics" class="app-view space-y-gutter">
+                    <!-- Hero Widget -->
+                    <section class="grid grid-cols-1 lg:grid-cols-12 gap-gutter">
+                        <!-- Score panel -->
+                        <div class="lg:col-span-5 glass-panel rounded-xl p-8 inner-glow flex flex-col items-center justify-center relative overflow-hidden group">
+                            <div class="absolute top-0 right-0 p-4 opacity-35">
+                                <span class="material-symbols-outlined text-secondary">auto_awesome</span>
+                            </div>
+                            <div class="relative w-56 h-56 mb-5">
+                                <svg class="w-full h-full" viewBox="0 0 100 100">
+                                    <circle class="text-surface-container-highest stroke-current" cx="50" cy="50" fill="transparent" r="42" stroke-width="5.5"></circle>
+                                    <circle id="analytics-progress-circle" class="text-secondary stroke-current progress-ring-circle pulse-accent" cx="50" cy="50" fill="transparent" r="42" stroke-linecap="round" stroke-width="5.5" style="stroke-dasharray: 263.89; stroke-dashoffset: 263.89; transition: stroke-dashoffset 1.5s cubic-bezier(0.4, 0, 0.2, 1); transform: rotate(-90deg); transform-origin: 50% 50%;"></circle>
+                                </svg>
+                                <div class="absolute inset-0 flex flex-col items-center justify-center text-center">
+                                    <span id="analytics-score-num" class="font-headline text-5xl font-black text-white" style="text-shadow: 0 0 15px rgba(76, 215, 246, 0.4);">98.2</span>
+                                    <span class="text-[9px] font-headline font-bold text-on-surface-variant uppercase tracking-widest mt-1">AI READINESS</span>
+                                </div>
+                            </div>
+                            <div class="text-center">
+                                <h3 class="font-headline text-lg text-white font-extrabold mb-1">Apex Readiness Score</h3>
+                                <p class="text-xs text-on-surface-variant max-w-xs leading-relaxed">Your distributed scaling calibration probability cleared the Tier-1 tech benchmark by 12% this cycle.</p>
+                            </div>
+                        </div>
+
+                        <!-- Velocity & accuracy stats -->
+                        <div class="lg:col-span-7 grid grid-cols-1 md:grid-cols-2 gap-gutter">
+                            <div class="glass-panel rounded-xl p-6 inner-glow hover:scale-[1.01] transition-all">
+                                <div class="flex justify-between items-start mb-6">
+                                    <div class="p-2.5 bg-primary-container/20 rounded-lg text-primary">
+                                        <span class="material-symbols-outlined text-md">speed</span>
+                                    </div>
+                                    <span class="text-secondary font-headline text-xs font-bold">+4.2ms avg</span>
+                                </div>
+                                <p class="text-[10px] text-on-surface-variant mb-1 uppercase tracking-widest font-bold font-headline">CODING VELOCITY</p>
+                                <h4 class="font-headline text-2xl text-white font-extrabold">142 WPM</h4>
+                                <div class="mt-4 h-1 w-full bg-surface-container-highest rounded-full overflow-hidden">
+                                    <div class="h-full bg-gradient-to-r from-primary to-secondary w-[82%]"></div>
+                                </div>
+                            </div>
+                            <div class="glass-panel rounded-xl p-6 inner-glow hover:scale-[1.01] transition-all">
+                                <div class="flex justify-between items-start mb-6">
+                                    <div class="p-2.5 bg-secondary-container/20 rounded-lg text-secondary">
+                                        <span class="material-symbols-outlined text-md">check_circle</span>
+                                    </div>
+                                    <span class="text-primary font-headline text-xs font-bold">92% accuracy</span>
+                                </div>
+                                <p class="text-[10px] text-on-surface-variant mb-1 uppercase tracking-widest font-bold font-headline">SYSTEM DESIGN PRECISION</p>
+                                <h4 class="font-headline text-2xl text-white font-extrabold">Top 3%</h4>
+                                <div class="mt-4 h-1 w-full bg-surface-container-highest rounded-full overflow-hidden">
+                                    <div class="h-full bg-gradient-to-r from-primary to-secondary w-[92%]"></div>
+                                </div>
+                            </div>
+
+                            <!-- Skill Radar image visual -->
+                            <div class="md:col-span-2 glass-panel rounded-xl p-6 inner-glow flex items-center justify-between overflow-hidden relative">
+                                <div class="space-y-3.5 relative z-10">
+                                    <h5 class="text-[10px] text-on-surface-variant font-bold uppercase tracking-widest font-headline">Visual Skill Spectrum Analysis</h5>
+                                    <div class="space-y-1.5">
+                                        <div class="flex items-center gap-2">
+                                            <span class="w-1.5 h-1.5 rounded-full bg-secondary"></span>
+                                            <span class="text-xs text-on-surface font-medium">Distributed Storage Structures: Elite (94%)</span>
+                                        </div>
+                                        <div class="flex items-center gap-2">
+                                            <span class="w-1.5 h-1.5 rounded-full bg-primary"></span>
+                                            <span class="text-xs text-on-surface font-medium">Communication Strategy: Professional (72%)</span>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="w-32 h-32 opacity-35 hover:opacity-100 transition-opacity">
+                                    <img alt="Skill Radar Chart" class="w-full h-full object-contain pointer-events-none" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBI0IvC7jaUyfhvXyRZACtdYQD4gz47fQrKxn2ZbSr-Uoogzvm3NCoqA4ceZSEPYp0DFRcM1S4lm8ywtg3sJS0rXlo24tBw0tw29lPUD1s_0qmDrlKiLSBGKjKrYCbCXizK31c4mR3FAX-L1--l-FU6JPo7yD_o9Its_schtmR9898hJARHXhZA3pU1uVIGIVUX7Z8WsZFsuY01QgzirhXqzvBPZhzhLi7Ux6NuyNFycwGaqs7LnanZt1tl2-gn0_TR4QCVYPPW9zw"/>
+                                </div>
+                            </div>
+                        </div>
+                    </section>
+
+                    <!-- Interactive heatmaps -->
+                    <section class="grid grid-cols-1 lg:grid-cols-3 gap-gutter">
+                        <div class="lg:col-span-2 glass-panel rounded-xl p-6 inner-glow">
+                            <h3 class="font-headline text-md text-white font-bold mb-6">Historical Score Metrics</h3>
+                            <!-- Timeline CSS graph bars -->
+                            <div class="h-44 flex items-end justify-between gap-1.5 pt-4">
+                                <div class="w-full bg-secondary-container/10 h-[38%] rounded-t hover:bg-secondary/20 transition-all cursor-pointer" title="Session 1 Score: 38"></div>
+                                <div class="w-full bg-secondary-container/10 h-[48%] rounded-t hover:bg-secondary/20 transition-all cursor-pointer" title="Session 2 Score: 48"></div>
+                                <div class="w-full bg-secondary-container/10 h-[42%] rounded-t hover:bg-secondary/20 transition-all cursor-pointer" title="Session 3 Score: 42"></div>
+                                <div class="w-full bg-secondary/15 h-[62%] rounded-t border-t-2 border-secondary hover:bg-secondary/35 transition-all cursor-pointer" title="Session 4 Score: 62"></div>
+                                <div class="w-full bg-secondary-container/10 h-[58%] rounded-t hover:bg-secondary/20 transition-all cursor-pointer" title="Session 5 Score: 58"></div>
+                                <div class="w-full bg-secondary-container/10 h-[68%] rounded-t hover:bg-secondary/20 transition-all cursor-pointer" title="Session 6 Score: 68"></div>
+                                <div class="w-full bg-secondary/20 h-[82%] rounded-t border-t-2 border-secondary hover:bg-secondary/40 transition-all cursor-pointer" title="Session 7 Score: 82"></div>
+                                <div class="w-full bg-secondary-container/10 h-[72%] rounded-t hover:bg-secondary/20 transition-all cursor-pointer" title="Session 8 Score: 72"></div>
+                                <div class="w-full bg-secondary/25 h-[92%] rounded-t border-t-2 border-secondary hover:bg-secondary/45 transition-all cursor-pointer" title="Session 9 Score: 92"></div>
+                            </div>
+                        </div>
+
+                        <!-- Consistency Heatmap Grid -->
+                        <div class="glass-panel rounded-xl p-6 inner-glow flex flex-col justify-between">
+                            <div>
+                                <h4 class="text-[10px] text-on-surface-variant font-bold uppercase tracking-widest font-headline mb-4">Training Consistency</h4>
+                                <div class="grid grid-cols-7 gap-1.5">
+                                    <div class="aspect-square rounded-[2px] bg-secondary hover:ring-1 ring-white cursor-pointer" title="May 20: Peak level"></div>
+                                    <div class="aspect-square rounded-[2px] bg-primary hover:ring-1 ring-white cursor-pointer" title="May 21: High activity"></div>
+                                    <div class="aspect-square rounded-[2px] bg-surface-container-highest hover:ring-1 ring-white cursor-pointer" title="May 22: Rest day"></div>
+                                    <div class="aspect-square rounded-[2px] bg-primary/40 hover:ring-1 ring-white cursor-pointer" title="May 23: Medium activity"></div>
+                                    <div class="aspect-square rounded-[2px] bg-secondary hover:ring-1 ring-white cursor-pointer" title="May 24: Peak level"></div>
+                                    <div class="aspect-square rounded-[2px] bg-secondary/80 hover:ring-1 ring-white cursor-pointer" title="May 25: Peak level"></div>
+                                    <div class="aspect-square rounded-[2px] bg-primary hover:ring-1 ring-white cursor-pointer" title="May 26: High activity"></div>
+                                    <div class="aspect-square rounded-[2px] bg-secondary hover:ring-1 ring-white cursor-pointer" title="May 27: Peak level"></div>
+                                </div>
+                            </div>
+                            <div class="mt-4 pt-4 border-t border-outline-variant/20 flex justify-between text-xs">
+                                <span class="text-on-surface-variant">Current Streak</span>
+                                <span class="text-secondary font-bold font-headline">14 Days</span>
+                            </div>
+                        </div>
+                    </section>
+                </div>
+
+                <!-- 5. HISTORY VIEW -->
+                <div id="view-history" class="app-view space-y-gutter">
+                    <!-- Stat cards -->
+                    <div class="grid grid-cols-2 md:grid-cols-4 gap-gutter">
+                        <div class="glass-card inner-glow p-5 rounded-xl">
+                            <span class="text-[10px] text-on-surface-variant/70 uppercase tracking-widest block font-bold font-headline">Training Sessions</span>
+                            <span class="text-3xl font-headline font-black text-white mt-1.5 block">42 Sessions</span>
+                        </div>
+                        <div class="glass-card inner-glow p-5 rounded-xl">
+                            <span class="text-[10px] text-on-surface-variant/70 uppercase tracking-widest block font-bold font-headline">Mastered Topics</span>
+                            <span class="text-3xl font-headline font-black text-white mt-1.5 block">18 Modules</span>
+                        </div>
+                        <div class="glass-card inner-glow p-5 rounded-xl">
+                            <span class="text-[10px] text-on-surface-variant/70 uppercase tracking-widest block font-bold font-headline">Calibration average</span>
+                            <span class="text-3xl font-headline font-black text-white mt-1.5 block">84%</span>
+                        </div>
+                        <div class="glass-card inner-glow p-5 rounded-xl border-secondary/30">
+                            <span class="text-[10px] text-secondary uppercase tracking-widest block font-bold font-headline">Streak Status</span>
+                            <span class="text-3xl font-headline font-black text-secondary mt-1.5 block">05 Active</span>
+                        </div>
+                    </div>
+
+                    <!-- History Session Table/List -->
+                    <div class="space-y-4" id="history-sessions-container">
+                        <div class="hidden md:grid grid-cols-12 gap-gutter px-6 py-2 text-[10px] text-on-surface-variant/50 uppercase tracking-widest font-bold font-headline border-b border-outline-variant/15">
+                            <div class="col-span-5">Simulation Details</div>
+                            <div class="col-span-2 text-center">Status</div>
+                            <div class="col-span-3">Date / Timestamp</div>
+                            <div class="col-span-2 text-right">Actions</div>
+                        </div>
+
+                        <!-- History Item 1 -->
+                        <div class="glass-card inner-glow rounded-xl overflow-hidden hover:bg-surface-container-high/20 transition-all history-row">
+                            <div class="grid grid-cols-1 md:grid-cols-12 gap-gutter px-6 py-5 items-center">
+                                <div class="col-span-5 flex items-center gap-4">
+                                    <div class="w-10 h-10 rounded-lg bg-surface-container flex items-center justify-center text-primary border border-outline-variant/20 shrink-0">
+                                        <span class="material-symbols-outlined text-md">terminal</span>
+                                    </div>
+                                    <div>
+                                        <h4 class="text-sm font-bold text-white group-hover:text-primary transition-colors">Senior Distributed Architect</h4>
+                                        <p class="text-[10px] text-on-surface-variant font-medium">Consistent Hashing & virtual node mapping</p>
+                                    </div>
+                                </div>
+                                <div class="col-span-2 flex md:justify-center">
+                                    <span class="px-2.5 py-0.5 rounded-full bg-secondary/10 text-secondary border border-secondary/20 text-[9px] font-bold uppercase tracking-wider">Completed (92%)</span>
+                                </div>
+                                <div class="col-span-3 text-xs text-on-surface-variant font-mono">
+                                    Oct 24, 2026 / 14:20 PM
+                                </div>
+                                <div class="col-span-2 flex justify-end gap-2">
+                                    <button class="px-3.5 py-1.5 rounded bg-surface-container text-xs font-bold hover:bg-white hover:text-black transition-all" onclick="triggerSimulation()">Restart</button>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- History Item 2 -->
+                        <div class="glass-card inner-glow rounded-xl overflow-hidden hover:bg-surface-container-high/20 transition-all history-row">
+                            <div class="grid grid-cols-1 md:grid-cols-12 gap-gutter px-6 py-5 items-center">
+                                <div class="col-span-5 flex items-center gap-4">
+                                    <div class="w-10 h-10 rounded-lg bg-surface-container flex items-center justify-center text-secondary border border-outline-variant/20 shrink-0">
+                                        <span class="material-symbols-outlined text-md">data_object</span>
+                                    </div>
+                                    <div>
+                                        <h4 class="text-sm font-bold text-white group-hover:text-primary transition-colors">Frontend Lead React</h4>
+                                        <p class="text-[10px] text-on-surface-variant font-medium">Fiber reconciler and layout invalidations</p>
+                                    </div>
+                                </div>
+                                <div class="col-span-2 flex md:justify-center">
+                                    <span class="px-2.5 py-0.5 rounded-full bg-primary/10 text-primary border border-primary/20 text-[9px] font-bold uppercase tracking-wider animate-pulse">In Progress (45%)</span>
+                                </div>
+                                <div class="col-span-3 text-xs text-on-surface-variant font-mono">
+                                    Oct 26, 2026 / Active Mode
+                                </div>
+                                <div class="col-span-2 flex justify-end gap-2">
+                                    <button class="px-3.5 py-1.5 rounded bg-secondary text-on-secondary font-bold text-xs hover:brightness-110 active:scale-95 shadow-md shadow-secondary/15 transition-all" onclick="triggerSimulation()">Resume</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 6. NOTIFICATIONS VIEW -->
+                <div id="view-notifications" class="app-view space-y-gutter">
+                    <div class="flex gap-2 overflow-x-auto pb-1 no-scrollbar mb-6">
+                        <button class="px-5 py-1.5 rounded-full border border-secondary text-secondary bg-secondary/10 font-headline text-xs font-bold shrink-0">All Alerts</button>
+                        <button class="px-5 py-1.5 rounded-full border border-outline-variant/30 text-on-surface-variant hover:border-primary hover:text-primary transition-all font-headline text-xs shrink-0">Reminders</button>
+                    </div>
+
+                    <div class="space-y-4" id="notifications-list-container">
+                        <!-- Notification 1 -->
+                        <div class="glass-card inner-glow p-5 rounded-xl cursor-pointer hover:border-secondary/40 transition-colors" onclick="toggleNotification(this)">
+                            <div class="flex gap-4">
+                                <div class="w-10 h-10 rounded-lg bg-primary-container/20 flex items-center justify-center shrink-0 border border-primary/20 text-primary">
+                                    <span class="material-symbols-outlined text-md">psychology</span>
+                                </div>
+                                <div class="flex-grow">
+                                    <div class="flex justify-between items-start mb-1">
+                                        <h3 class="text-sm font-bold text-white font-headline">AI Analysis Sync completed</h3>
+                                        <span class="text-[10px] text-on-surface-variant font-mono">2h ago</span>
+                                    </div>
+                                    <p class="text-xs text-on-surface-variant leading-relaxed mb-3">Nova-1 has compiled distributed storage partition drills feedback. Score achieved: 92%.</p>
+                                    
+                                    <!-- Expandable widget -->
+                                    <div class="notification-details hidden pt-4 border-t border-outline-variant/15 mt-3 space-y-3">
+                                        <div class="grid grid-cols-3 gap-3">
+                                            <div class="p-2 bg-surface-container rounded border border-outline-variant/20 text-center">
+                                                <p class="text-[8px] text-on-surface-variant uppercase font-bold">Latency Optimization</p>
+                                                <p class="text-secondary text-xs font-bold mt-0.5">EXCEPTIONAL</p>
+                                            </div>
+                                            <div class="p-2 bg-surface-container rounded border border-outline-variant/20 text-center">
+                                                <p class="text-[8px] text-on-surface-variant uppercase font-bold">Virtual Nodes</p>
+                                                <p class="text-primary text-xs font-bold mt-0.5">PROFICIENT</p>
+                                            </div>
+                                            <div class="p-2 bg-surface-container rounded border border-outline-variant/20 text-center">
+                                                <p class="text-[8px] text-on-surface-variant uppercase font-bold">Consistent Ring</p>
+                                                <p class="text-secondary text-xs font-bold mt-0.5">EXCEPTIONAL</p>
+                                            </div>
+                                        </div>
+                                        <button class="w-full py-2 bg-secondary/10 border border-secondary/20 text-secondary text-xs font-bold rounded-lg hover:bg-secondary/20 transition-colors" onclick="switchView('coach'); event.stopPropagation();">Discuss Feedback with Coach</button>
+                                    </div>
+                                </div>
+                                <span class="material-symbols-outlined text-on-surface-variant/40 shrink-0 text-md transition-transform duration-300 pointer-events-none toggle-icon">expand_more</span>
+                            </div>
+                        </div>
+
+                        <!-- Notification 2 -->
+                        <div class="glass-card inner-glow p-5 rounded-xl cursor-pointer hover:border-secondary/40 transition-colors" onclick="toggleNotification(this)">
+                            <div class="flex gap-4">
+                                <div class="w-10 h-10 rounded-lg bg-secondary-container/20 flex items-center justify-center shrink-0 border border-secondary/20 text-secondary">
+                                    <span class="material-symbols-outlined text-md">schedule</span>
+                                </div>
+                                <div class="flex-grow">
+                                    <div class="flex justify-between items-start mb-1">
+                                        <h3 class="text-sm font-bold text-white font-headline">Scheduled Calibration Simulation</h3>
+                                        <span class="text-[10px] text-on-surface-variant font-mono">4h ago</span>
+                                    </div>
+                                    <p class="text-xs text-on-surface-variant leading-relaxed mb-3">Mock board simulation with AI Lead Agent Sarah commences in 60 minutes.</p>
+                                    
+                                    <!-- Expandable widget -->
+                                    <div class="notification-details hidden pt-4 border-t border-outline-variant/15 mt-3">
+                                        <div class="flex items-center gap-3 p-3 bg-surface-container rounded border border-outline-variant/20">
+                                            <div class="w-10 h-10 rounded-full border border-secondary/30 overflow-hidden shrink-0">
+                                                <img class="w-full h-full object-cover" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAQgsWEMKn4ih0DeNXCQZIUUFG8LFqA_-7UawgC8A_BBqwNIz_vl6VxSXDJrhl-1ytSQSY_k0wAsS_B7iXKlPOQ_QdCDb3OXHCL1hRKc26UX3zp1zPxrmhFoJ8pv-Es2fFPqwsMuno0ReLu_qJ5yWXotPNqO4Sx_UmorCboc8ytgPR_fVT71Vg6KscSbQ_EglP1WMSG3d8l7yiYIbMKt1wnBHyA1nqzPlZzBCrBAjN9FZmMc4MgA1_qE5dyvgCzMaqzlL7MGd9aobE"/>
+                                            </div>
+                                            <div>
+                                                <p class="text-xs font-bold text-white font-headline">Interviewer: Sarah (AI Lead)</p>
+                                                <p class="text-[9px] text-on-surface-variant uppercase font-bold tracking-wider">Calibration: Strategic Architecture Focus</p>
+                                            </div>
+                                            <button class="ml-auto px-4 py-1.5 bg-secondary text-on-secondary font-bold text-xs rounded-full hover:brightness-110 active:scale-95" onclick="triggerSimulation(); event.stopPropagation();">Simulate Now</button>
+                                        </div>
+                                    </div>
+                                </div>
+                                <span class="material-symbols-outlined text-on-surface-variant/40 shrink-0 text-md transition-transform duration-300 pointer-events-none toggle-icon">expand_more</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 7. PROFILE VIEW -->
+                <div id="view-profile" class="app-view space-y-gutter">
+                    <!-- Profile Card -->
+                    <section class="glass-panel inner-glow p-8 rounded-xl flex flex-col md:flex-row items-center gap-8 relative overflow-hidden">
+                        <div class="absolute -right-20 -bottom-20 w-64 h-64 bg-primary/10 rounded-full blur-[120px] pointer-events-none"></div>
+                        <div class="relative group shrink-0">
+                            <div class="absolute -inset-1 bg-gradient-to-r from-primary to-secondary rounded-full blur opacity-20 group-hover:opacity-60 transition duration-1000"></div>
+                            <div class="relative w-36 h-36 rounded-full border-4 border-surface-container overflow-hidden">
+                                <img id="profile-picture" class="w-full h-full object-cover" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBFsASffPJ3Ohg3un7CUeMRMv66_W328wGEItt_DBzVRVhwFRRzsOn1ujj1olwCCclnmkFd_IKaOWcubI4sMsNYfumhWkYagS0fK0symXRfrM4cX9w9m4dZzAASKnZ0SSLbQC-R8km7J4Ue-cLBZ0CIRaLLVwKy8YEuAa9OgHq1bjYkWieJVJftCCGXR1xTGCKQlIgzsSzpNZCbTGsdUTQon1lohXkC93e3gc71-yqzVrphyQF1vEUmF750QhbMEbIjPwVLKG2u9ms"/>
+                            </div>
+                            <div class="absolute -bottom-2.5 left-1/2 -translate-x-1/2 bg-secondary text-on-secondary px-3 py-0.5 rounded-full text-[9px] font-black tracking-widest uppercase shadow-lg font-headline">
+                                APEX RANK
+                            </div>
+                        </div>
+                        <div class="flex-grow text-center md:text-left space-y-2">
+                            <div class="flex items-center justify-center md:justify-start gap-3">
+                                <h2 id="profile-name" class="font-headline text-3xl font-black text-white">Alexander Sterling</h2>
+                                <span class="material-symbols-outlined text-secondary" style="font-variation-settings: 'FILL' 1;">verified</span>
+                            </div>
+                            <p id="profile-focus" class="text-sm font-headline text-on-surface-variant font-bold max-w-xl leading-relaxed">Principal Systems Architect & Performance Lead. Mastering the intersection of Distributed Infrastructure and Artificial Intelligence through high-stakes simulation protocols.</p>
+                            <div class="flex flex-wrap gap-3.5 pt-3 justify-center md:justify-start">
+                                <div class="px-3.5 py-1.5 bg-surface-container-high/40 rounded-lg border border-outline-variant/15 flex items-center gap-2">
+                                    <span class="material-symbols-outlined text-primary text-sm">location_on</span>
+                                    <span class="text-xs text-on-surface font-medium">San Francisco, CA</span>
+                                </div>
+                                <div class="px-3.5 py-1.5 bg-surface-container-high/40 rounded-lg border border-outline-variant/15 flex items-center gap-2">
+                                    <span class="material-symbols-outlined text-secondary text-sm">workspace_premium</span>
+                                    <span class="text-xs text-on-surface font-medium">Top 0.1% PrepNova ranking</span>
+                                </div>
+                            </div>
+                        </div>
+                        <button class="px-6 py-2.5 bg-white text-black font-bold rounded-lg text-xs hover:scale-105 active:scale-95 transition-all shadow-md shrink-0 self-center md:self-end cursor-pointer" onclick="openEditParametersModal()">
+                            Edit Parameters
+                        </button>
+                    </section>
+
+                    <!-- Stats section -->
+                    <section class="grid grid-cols-1 md:grid-cols-3 gap-gutter">
+                        <div class="glass-panel inner-glow p-6 rounded-xl">
+                            <p class="text-[10px] text-on-surface-variant uppercase tracking-widest font-bold font-headline mb-1">Total Training Hours</p>
+                            <div class="flex items-end gap-2 mt-1">
+                                <span class="font-headline text-3xl font-black text-white">1,284 Hrs</span>
+                                <span class="text-xs text-secondary font-bold font-headline mb-1">+12.4% MoM</span>
+                            </div>
+                        </div>
+                        <div class="glass-panel inner-glow p-6 rounded-xl">
+                            <p class="text-[10px] text-on-surface-variant uppercase tracking-widest font-bold font-headline mb-1">Readiness Average</p>
+                            <div class="flex items-end gap-1 mt-1">
+                                <span class="font-headline text-3xl font-black text-white">98.2 / 100</span>
+                            </div>
+                        </div>
+                        <div class="glass-panel inner-glow p-6 rounded-xl">
+                            <p class="text-[10px] text-on-surface-variant uppercase tracking-widest font-bold font-headline mb-1">Calibration Runs</p>
+                            <div class="flex items-end gap-2 mt-1">
+                                <span class="font-headline text-3xl font-black text-white">412 Sessions</span>
+                            </div>
+                        </div>
+                    </section>
+
+                    <!-- Skill details -->
+                    <div class="grid grid-cols-1 lg:grid-cols-12 gap-gutter">
+                        <div class="lg:col-span-8 glass-panel inner-glow p-6 rounded-xl space-y-6">
+                            <h3 class="font-headline text-lg text-white font-bold mb-4">Technical Portfolios</h3>
+                            <div class="grid grid-cols-1 md:grid-cols-2 gap-5">
+                                <div class="p-4 bg-surface-container-low/40 border border-outline-variant/15 rounded-xl">
+                                    <div class="flex justify-between items-center mb-2 text-xs font-headline">
+                                        <span class="text-on-surface font-bold">Distributed Systems</span>
+                                        <span class="text-secondary font-bold">94%</span>
+                                    </div>
+                                    <div class="h-1.5 w-full bg-surface-container-highest rounded-full overflow-hidden">
+                                        <div class="h-full bg-gradient-to-r from-primary to-secondary w-[94%]"></div>
+                                    </div>
+                                </div>
+                                <div class="p-4 bg-surface-container-low/40 border border-outline-variant/15 rounded-xl">
+                                    <div class="flex justify-between items-center mb-2 text-xs font-headline">
+                                        <span class="text-on-surface font-bold">Cloud Architecture</span>
+                                        <span class="text-secondary font-bold">88%</span>
+                                    </div>
+                                    <div class="h-1.5 w-full bg-surface-container-highest rounded-full overflow-hidden">
+                                        <div class="h-full bg-gradient-to-r from-primary to-secondary w-[88%]"></div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Timeline trajectory -->
+                        <div class="lg:col-span-4 glass-panel inner-glow p-6 rounded-xl">
+                            <h3 class="font-headline text-lg text-white font-bold mb-6">Career Trajectory</h3>
+                            <div class="relative pl-8 space-y-8 timeline-line">
+                                <div class="relative">
+                                    <div class="absolute -left-[27px] top-1 w-3 h-3 rounded-full bg-secondary ring-4 ring-secondary/20 z-10"></div>
+                                    <div>
+                                        <p class="text-[9px] font-bold text-secondary uppercase font-headline">CURRENT PROTOCOL</p>
+                                        <h4 class="text-xs font-bold text-on-surface">Staff Software Engineer</h4>
+                                        <p class="text-[10px] text-on-surface-variant font-medium">Tier-1 Platform Hub</p>
+                                    </div>
+                                </div>
+                                <div class="relative">
+                                    <div class="absolute -left-[27px] top-1 w-3 h-3 rounded-full bg-primary/40 z-10"></div>
+                                    <div>
+                                        <p class="text-[9px] font-bold text-on-surface-variant uppercase font-headline">TARGET GOAL</p>
+                                        <h4 class="text-xs font-bold text-on-surface">Principal Architect</h4>
+                                        <p class="text-[10px] text-on-surface-variant font-medium">Global Infrastructure Strategy</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 8. SETTINGS VIEW -->
+                <div id="view-settings" class="app-view space-y-gutter">
+                    <div class="mb-8">
+                        <h2 class="font-display text-3xl font-extrabold text-white">Settings</h2>
+                        <p class="text-on-surface-variant text-sm mt-1 leading-relaxed">Refine your elite simulation parameters and personal command profiles.</p>
+                    </div>
+
+                    <!-- Config Bento Grid -->
+                    <div class="grid grid-cols-1 xl:grid-cols-12 gap-gutter">
+                        
+                        <!-- Account profile edit (Bento Card) -->
+                        <section class="xl:col-span-8 glass-card inner-glow p-8 rounded-xl space-y-6">
+                            <div class="flex items-center justify-between border-b border-outline-variant/15 pb-4">
+                                <h3 class="font-headline text-lg text-primary font-bold flex items-center gap-2">
+                                    <span class="material-symbols-outlined text-xl">person</span> Profile parameters
+                                </h3>
+                                <span class="text-[9px] text-on-surface-variant uppercase font-bold tracking-widest font-headline">IDENTITY BUFFER</span>
+                            </div>
+                            
+                            <form id="settings-profile-form" class="grid grid-cols-1 md:grid-cols-2 gap-6" onsubmit="handleSettingsSave(event)">
+                                <div class="space-y-2">
+                                    <label class="text-[10px] text-on-surface-variant uppercase tracking-wider font-bold">Full Name</label>
+                                    <input id="settings-name" class="w-full bg-surface-container border border-outline-variant/30 rounded-lg px-4 py-2.5 text-xs text-on-surface focus:outline-none focus:border-secondary transition-all" type="text" value="Alexander Sterling"/>
+                                </div>
+                                <div class="space-y-2">
+                                    <label class="text-[10px] text-on-surface-variant uppercase tracking-wider font-bold">Email Address</label>
+                                    <input id="settings-email" class="w-full bg-surface-container border border-outline-variant/30 rounded-lg px-4 py-2.5 text-xs text-on-surface focus:outline-none focus:border-secondary transition-all" type="email" value="alex.sterling@vanguard.io"/>
+                                </div>
+                                <div class="md:col-span-2 space-y-2">
+                                    <label class="text-[10px] text-on-surface-variant uppercase tracking-wider font-bold">Career Focus / Bio</label>
+                                    <input id="settings-focus" class="w-full bg-surface-container border border-outline-variant/30 rounded-lg px-4 py-2.5 text-xs text-on-surface focus:outline-none focus:border-secondary transition-all" type="text" value="Principal Systems Architect & Performance Lead. Mastering Distributed Infrastructure and AI."/>
+                                </div>
+                                <div class="md:col-span-2 flex justify-end">
+                                    <button class="px-6 py-2 bg-secondary text-on-secondary font-bold text-xs rounded-lg hover:brightness-110 active:scale-95 shadow-md shadow-secondary/15 transition-all" type="submit">
+                                        Save Credentials
+                                    </button>
+                                </div>
+                            </form>
+                        </section>
+
+                        <!-- AI personality parameters slider -->
+                        <section class="xl:col-span-4 glass-card inner-glow p-8 rounded-xl border border-secondary/20 bg-gradient-to-br from-surface-container-low to-black flex flex-col justify-between">
+                            <div class="space-y-5">
+                                <div class="flex items-center justify-between border-b border-outline-variant/15 pb-4">
+                                    <h3 class="font-headline text-lg text-secondary font-bold">Coach Calibrations</h3>
+                                    <span class="material-symbols-outlined text-secondary" style="font-variation-settings: 'FILL' 1;">psychology</span>
+                                </div>
+                                <p class="text-xs text-on-surface-variant">Active Coach Personality: <span id="settings-active-personality-lbl" class="text-secondary font-bold">Ruthless Efficiency</span></p>
+                                
+                                <div class="space-y-4">
+                                    <div class="space-y-1.5">
+                                        <div class="flex justify-between text-xs font-headline">
+                                            <span class="text-on-surface-variant">Assertiveness Slider</span>
+                                            <span id="settings-slider-val-assertive" class="text-secondary font-bold">85%</span>
+                                        </div>
+                                        <input id="settings-slider-assertive" class="w-full h-1 bg-surface-container rounded-lg appearance-none cursor-pointer accent-secondary" max="100" min="0" type="range" value="85" oninput="updateCoachSliders()"/>
+                                    </div>
+                                    <div class="space-y-1.5">
+                                        <div class="flex justify-between text-xs font-headline">
+                                            <span class="text-on-surface-variant">Feedback Depth</span>
+                                            <span id="settings-slider-val-depth" class="text-secondary font-bold">92%</span>
+                                        </div>
+                                        <input id="settings-slider-depth" class="w-full h-1 bg-surface-container rounded-lg appearance-none cursor-pointer accent-secondary" max="100" min="0" type="range" value="92" oninput="updateCoachSliders()"/>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <button class="mt-6 w-full py-2 bg-secondary/15 text-secondary border border-secondary/35 rounded-lg text-xs font-bold font-headline uppercase tracking-widest hover:bg-secondary/25 transition-all" onclick="toggleCoachMode()">
+                                Switch to Supportive Mentor
+                            </button>
+                        </section>
+
+                        <!-- Privacy parameters switches -->
+                        <section class="xl:col-span-5 glass-card inner-glow p-8 rounded-xl space-y-6">
+                            <h3 class="font-headline text-lg text-white font-bold mb-4">Workspace Preferences</h3>
+                            <div class="space-y-5">
+                                <div class="flex items-center justify-between">
+                                    <div>
+                                        <h4 class="text-xs font-bold text-on-surface">Ghost Mode Protection</h4>
+                                        <p class="text-[10px] text-on-surface-variant mt-0.5">Encrypt and hide simulation metrics from global leaderboards.</p>
+                                    </div>
+                                    <label class="relative inline-flex items-center cursor-pointer">
+                                        <input id="settings-switch-ghost" class="sr-only peer" type="checkbox" checked onchange="handleGhostModeToggle(this.checked)"/>
+                                        <div class="w-9 h-5 bg-surface-container-highest rounded-full peer peer-checked:bg-secondary/30 transition-all after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-outline-variant peer-checked:after:bg-secondary after:rounded-full after:h-4 after:w-4 after:transition-all peer-checked:after:translate-x-4"></div>
+                                    </label>
+                                </div>
+                                <div class="flex items-center justify-between">
+                                    <div>
+                                        <h4 class="text-xs font-bold text-on-surface">Simulated Environmental Pressure</h4>
+                                        <p class="text-[10px] text-on-surface-variant mt-0.5">Allow virtual background interruptions and strict session timers.</p>
+                                    </div>
+                                    <label class="relative inline-flex items-center cursor-pointer">
+                                        <input class="sr-only peer" type="checkbox"/>
+                                        <div class="w-9 h-5 bg-surface-container-highest rounded-full peer peer-checked:bg-secondary/30 transition-all after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-outline-variant peer-checked:after:bg-secondary after:rounded-full after:h-4 after:w-4 after:transition-all peer-checked:after:translate-x-4"></div>
+                                    </label>
+                                </div>
+                            </div>
+                        </section>
+
+                        <!-- API keys display -->
+                        <section class="xl:col-span-7 glass-card inner-glow p-8 rounded-xl space-y-6">
+                            <div class="flex items-center justify-between">
+                                <div>
+                                    <h3 class="font-headline text-lg text-primary font-bold">API Developer integrations</h3>
+                                    <p class="text-[10px] text-on-surface-variant mt-0.5">Secure Simulation Gateway access credentials</p>
+                                </div>
+                                <img class="h-10 w-10 rounded-lg object-cover border border-outline-variant/30" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDudN69u7-PrXp52iR670XVLELV_gsduvBhYj14CGCMaLrbvA97NLrpkVtINl3OzAUVWUxtv79aEhYX40QKzY3_s85oPdhl7joEi_RrbsMsNca1G_CkcSKsw9QWOHCGSHYoBePGt4W1RdGF9o_p6AEZmZUI6NKU190N-J9MfDnimo22QxEPkQWCFpdFOEA-tmEzFK45LDb9moD5_JSsTrG3JeSJV5h9P76Im0LN_k8JRJeWIEeEBiSlt3ZJVXwPiYoOIhLJ6rbp7jQ"/>
+                            </div>
+                            <div class="space-y-4">
+                                <div class="flex flex-col gap-2">
+                                    <label class="text-[10px] text-on-surface-variant uppercase tracking-wider font-bold">Simulation Master Token Key</label>
+                                    <div class="flex gap-2">
+                                        <input class="flex-grow bg-surface-container-lowest border border-outline-variant/30 rounded-lg px-4 py-2 text-xs font-mono text-on-surface focus:outline-none" readonly="" type="password" value="pk_live_************************4f2a"/>
+                                        <button class="p-2 bg-surface-container-high rounded-lg text-on-surface hover:text-secondary transition-colors" onclick="alert('Simulation API key copied to credentials buffers.')">
+                                            <span class="material-symbols-outlined text-sm">content_copy</span>
+                                        </button>
+                                    </div>
+                                </div>
+                                <div class="p-3 bg-surface-container-low rounded-lg border border-outline-variant/15 flex items-start gap-3">
+                                    <span class="material-symbols-outlined text-secondary text-md mt-0.5">info</span>
+                                    <p class="text-[10px] text-on-surface-variant leading-relaxed">This secure API master token grants integrations directly to the PrepNova mock evaluation compilers. Maintain confidentiality.</p>
+                                </div>
+                            </div>
+                        </section>
+
+                        <!-- Danger Zone -->
+                        <section class="xl:col-span-12 p-6 rounded-xl border border-error-container/30 bg-error-container/5">
+                            <div class="flex flex-col md:flex-row md:items-center justify-between gap-4">
+                                <div>
+                                    <h3 class="text-sm font-bold text-red-400 font-headline">Danger Zone: Purge Records</h3>
+                                    <p class="text-xs text-on-surface-variant mt-0.5">Permanently delete your entire training archives history and settings files.</p>
+                                </div>
+                                <button class="px-6 py-2.5 border border-red-500/50 text-red-400 rounded-lg text-xs font-bold font-headline uppercase tracking-widest hover:bg-red-500/10 transition-all" onclick="confirm('Confirm permanent purge of all PrepNova training history logs?')">
+                                    Purge Records
+                                </button>
+                            </div>
+                        </section>
+                    </div>
+                </main>
+
+                <!-- Mobile Bottom navigation (Visible on smaller devices) -->
+                <nav class="lg:hidden fixed bottom-0 left-0 right-0 bg-surface-container-lowest/90 backdrop-blur-xl border-t border-outline-variant/20 flex justify-around items-center py-3.5 px-2 z-40 shadow-[0_-5px_20px_rgba(0,0,0,0.5)]">
+                    <a class="flex flex-col items-center gap-1 text-on-surface-variant/70 cursor-pointer" onclick="switchView('dashboard')">
+                        <span class="material-symbols-outlined text-xl">dashboard</span>
+                        <span class="text-[9px] uppercase tracking-wider font-bold">Home</span>
+                    </a>
+                    <a class="flex flex-col items-center gap-1 text-on-surface-variant/70 cursor-pointer" onclick="switchView('coach')">
+                        <span class="material-symbols-outlined text-xl">smart_toy</span>
+                        <span class="text-[9px] uppercase tracking-wider font-bold">Coach</span>
+                    </a>
+                    <a class="flex flex-col items-center gap-1 text-on-surface-variant/70 cursor-pointer" onclick="switchView('library')">
+                        <span class="material-symbols-outlined text-xl">folder_open</span>
+                        <span class="text-[9px] uppercase tracking-wider font-bold">Library</span>
+                    </a>
+                    <a class="flex flex-col items-center gap-1 text-on-surface-variant/70 cursor-pointer" onclick="switchView('settings')">
+                        <span class="material-symbols-outlined text-xl">settings</span>
+                        <span class="text-[9px] uppercase tracking-wider font-bold">Config</span>
+                    </a>
+                </nav>
+            </div>
+        </main>
+    </div>
+
+    <!-- 9. AUTHVIEW WRAPPER (Shown initially) -->
+    <div id="auth-shell" class="min-h-screen flex">
+        <!-- Left panel branding -->
+        <section class="hidden lg:flex lg:w-1/2 relative flex-col justify-between p-16 overflow-hidden">
+            <div class="absolute inset-0 bg-surface-container-lowest z-0">
+                <img class="absolute inset-0 w-full h-full object-cover opacity-20 mix-blend-overlay" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDardUxhXU8JNCfZHMBgiTIJS_OGhK9RK1C9kcvlf7NwERqu-IIEcF4DlLClMHuzZmM0sl68hwRdZuQpqWsTdHpZUCuyvzlzN4TVSZrw8OWPc5f3TDB3NxBD-gP2G7EYPWBkD0S31n5aSs_8BT340N2wonE-dhST_v7T-k6xoMpdM8vGME5TophIvqUUJkwN1jOoZ2Wx1GwRlSeWkO9HEIXreZuQs7kZL3oGP6M76NBsOsA-6hTs2CLgvsH-nwytguIuWGQifN7zA"/>
+                <div class="absolute inset-0 opacity-40 pointer-events-none" style="background: radial-gradient(circle at 20% 30%, rgba(124, 58, 237, 0.15) 0%, transparent 50%), radial-gradient(circle at 80% 70%, rgba(76, 215, 246, 0.1) 0%, transparent 50%);"></div>
+                <div class="absolute w-full h-[2px] bg-secondary/10 top-0 left-0 animate-pulse" style="animation: scan 4s linear infinite;"></div>
+            </div>
+            
+            <div class="relative z-10 flex items-center gap-3">
+                <div class="w-10 h-10 rounded-lg bg-gradient-to-br from-primary-container to-secondary overflow-hidden flex items-center justify-center shadow-lg shadow-primary-container/20">
+                    <img src="/prepnova_logo.png" class="w-full h-full object-cover" alt="PrepNova Logo"/>
+                </div>
+                <h1 class="font-headline text-2xl font-black bg-clip-text text-transparent bg-gradient-to-r from-primary to-secondary">PrepNova AI</h1>
+            </div>
+            
+            <div class="relative z-10 max-w-xl space-y-4">
+                <span class="font-headline text-xs font-black uppercase tracking-[0.3em] text-secondary">Simulation Protocol v4.0</span>
+                <h2 class="font-headline text-5xl font-black text-white leading-tight">Practice Like Your <span class="text-primary">Dream Job</span> Depends On It.</h2>
+                <p class="text-on-surface-variant text-sm max-w-md">Experience the world's most advanced AI-driven systems design calibration. High-stakes precision drills for high-ambition software professionals.</p>
+            </div>
+
+            <div class="relative z-10 flex gap-8">
+                <div>
+                    <span class="font-headline text-2xl font-black text-white">98%</span>
+                    <p class="text-[9px] uppercase tracking-wider text-on-surface-variant mt-0.5 font-bold">Success Rate</p>
+                </div>
+                <div class="w-[1px] h-10 bg-outline-variant/35"></div>
+                <div>
+                    <span class="font-headline text-2xl font-black text-white">10k+</span>
+                    <p class="text-[9px] uppercase tracking-wider text-on-surface-variant mt-0.5 font-bold">Simulations Completed</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- Right panel form -->
+        <main class="w-full lg:w-1/2 flex items-center justify-center p-6 sm:p-12 relative">
+            <div class="lg:hidden absolute inset-0 bg-surface-container-lowest -z-10">
+                <div class="absolute inset-0 opacity-20 pointer-events-none" style="background: radial-gradient(circle at 20% 30%, rgba(124, 58, 237, 0.15) 0%, transparent 50%), radial-gradient(circle at 80% 70%, rgba(76, 215, 246, 0.1) 0%, transparent 50%);"></div>
+            </div>
+            
+            <div class="w-full max-w-md relative min-h-[580px]">
+                <!-- LOGIN CARD -->
+                <div class="glass-card inner-glow rounded-xl p-8 sm:p-10 relative overflow-hidden shadow-2xl transition-all duration-500 transform opacity-100 scale-100" id="login-container">
+                    <div class="lg:hidden flex flex-col items-center mb-8 gap-1.5">
+                        <div class="w-12 h-12 rounded-full border border-secondary/40 overflow-hidden mb-2">
+                            <img src="/prepnova_logo.png" class="w-full h-full object-cover" alt="PrepNova Logo"/>
+                        </div>
+                        <h1 class="font-headline text-2xl font-black bg-clip-text text-transparent bg-gradient-to-r from-primary to-secondary">PrepNova AI</h1>
+                        <p class="text-[9px] uppercase tracking-widest text-secondary font-bold">AI Calibration Core</p>
+                    </div>
+
+                    <div class="text-center mb-8">
+                        <h3 class="font-headline text-2xl text-white font-extrabold mb-1.5">Access System Core</h3>
+                        <p class="text-xs text-on-surface-variant">Initialize secure simulation proxy session</p>
+                    </div>
+
+                    <div class="space-y-6">
+                        <div class="grid grid-cols-2 gap-4">
+                            <button class="flex items-center justify-center gap-2 py-2.5 px-4 rounded-lg bg-surface-container-high border border-outline-variant/30 hover:border-white transition-all duration-300 text-xs text-white cursor-pointer" onclick="simulateSocialLogin('Google')">
+                                <svg class="w-4 h-4 shrink-0" viewBox="0 0 24 24">
+                                    <path d="M12.48 10.92v3.28h7.84c-.24 1.84-.9 3.16-1.76 4.04-1.12 1.12-2.84 2.32-6.08 2.32-5.12 0-9.12-4.12-9.12-9.28s4-9.28 9.12-9.28c2.8 0 4.92 1.08 6.64 2.72l2.32-2.32C19.12 1.36 16.32 0 12.48 0 5.68 0 0 5.68 0 12.48s5.68 12.48 12.48 12.48c3.68 0 6.48-1.2 8.64-3.48 2.24-2.24 2.96-5.36 2.96-7.84 0-.56-.04-1.08-.12-1.72h-11.48z" fill="#EA4335"></path>
+                                </svg>
+                                <span>Google Auth</span>
+                            </button>
+                            <button class="flex items-center justify-center gap-2 py-2.5 px-4 rounded-lg bg-surface-container-high border border-outline-variant/30 hover:border-white transition-all duration-300 text-xs text-white cursor-pointer" onclick="simulateSocialLogin('GitHub')">
+                                <svg class="w-4 h-4 shrink-0" viewBox="0 0 24 24" fill="currentColor">
+                                    <path d="M12 2C6.477 2 2 6.477 2 12c0 4.418 2.865 8.166 6.839 9.489.5.092.682-.217.682-.482 0-.237-.008-.866-.013-1.7-2.782.603-3.369-1.34-3.369-1.34-.454-1.156-1.11-1.463-1.11-1.463-.908-.62.069-.608.069-.608 1.003.07 1.531 1.03 1.531 1.03.892 1.529 2.341 1.087 2.91.832.092-.647.35-1.088.636-1.338-2.22-.253-4.555-1.11-4.555-4.943 0-1.091.39-1.984 1.029-2.683-.103-.253-.446-1.27.098-2.647 0 0 .84-.269 2.75 1.025A9.564 9.564 0 0112 6.844c.85.004 1.705.115 2.504.337 1.909-1.294 2.747-1.025 2.747-1.025.546 1.377.203 2.394.1 2.647.64.699 1.028 1.592 1.028 2.683 0 3.842-2.339 4.687-4.566 4.935.359.309.678.92.678 1.855 0 1.338-.012 2.419-.012 2.747 0 .268.18.58.688.482C19.138 20.161 22 16.416 22 12c0-5.523-4.477-10-10-10z"></path>
+                                </svg>
+                                <span>GitHub Auth</span>
+                            </button>
+                        </div>
+                        <div class="flex items-center gap-4">
+                            <div class="flex-grow h-px bg-outline-variant/20"></div>
+                            <span class="text-[9px] font-bold text-on-surface-variant/40 uppercase tracking-widest">Or access with email</span>
+                            <div class="flex-grow h-px bg-outline-variant/20"></div>
+                        </div>
+
+                        <form id="login-form" class="space-y-4" onsubmit="handleLoginSubmit(event)">
+                            <div class="relative">
+                                <span class="material-symbols-outlined absolute left-4 top-1/2 -translate-y-1/2 text-on-surface-variant/60 text-sm">mail</span>
+                                <input id="login-email" class="w-full bg-surface-container border border-outline-variant/30 rounded-lg py-2.5 pl-12 pr-4 text-xs text-white focus:outline-none focus:border-secondary transition-all" placeholder="Core Email Address" required type="email" value="alex.sterling@vanguard.io"/>
+                            </div>
+                            <div class="relative">
+                                <span class="material-symbols-outlined absolute left-4 top-1/2 -translate-y-1/2 text-on-surface-variant/60 text-sm">lock</span>
+                                <input id="login-password" class="w-full bg-surface-container border border-outline-variant/30 rounded-lg py-2.5 pl-12 pr-4 text-xs text-white focus:outline-none focus:border-secondary transition-all" placeholder="Secure Password Key" required type="password" value="password123"/>
+                            </div>
+                            <div class="flex items-center justify-between">
+                                <label class="flex items-center gap-2 cursor-pointer">
+                                    <input class="w-3.5 h-3.5 rounded border-outline-variant/30 bg-surface-container text-primary focus:ring-primary/50" type="checkbox" checked/>
+                                    <span class="text-[10px] text-on-surface-variant uppercase font-bold tracking-wider">Remember system proxy</span>
+                                </label>
+                                <a class="text-[10px] text-secondary font-bold uppercase hover:underline" href="#" onclick="alert('Demo reset key simulation completed.')">Reset key?</a>
+                            </div>
+                            <button id="login-submit-btn" class="w-full py-3.5 rounded-lg bg-gradient-to-r from-primary-container to-secondary text-white text-xs uppercase tracking-wider font-extrabold shadow-lg shadow-primary-container/20 hover:scale-[1.02] active:scale-[0.98] transition-all flex items-center justify-center gap-1.5 cursor-pointer" type="submit">
+                                <span>Initialize Session</span>
+                                <span class="material-symbols-outlined text-sm font-bold">arrow_forward</span>
+                            </button>
+                        </form>
+                    </div>
+
+                    <div class="mt-8 pt-6 border-t border-outline-variant/20 text-center">
+                        <p class="text-xs text-on-surface-variant font-medium">
+                            <span>New to the protocol?</span>
+                            <button class="text-secondary font-extrabold hover:underline ml-1 cursor-pointer" onclick="showSignupCard()">Create Account</button>
+                        </p>
+                    </div>
+                </div>
+
+                <!-- SIGNUP CARD -->
+                <div class="glass-card inner-glow rounded-xl p-8 sm:p-10 absolute inset-0 w-full h-full overflow-hidden shadow-2xl transition-all duration-500 transform opacity-0 scale-95 pointer-events-none" id="signup-container">
+                    <div class="lg:hidden flex flex-col items-center mb-6 gap-1.5">
+                        <div class="w-12 h-12 rounded-full border border-secondary/40 overflow-hidden mb-2">
+                            <img src="/prepnova_logo.png" class="w-full h-full object-cover" alt="PrepNova Logo"/>
+                        </div>
+                        <h1 class="font-headline text-2xl font-black bg-clip-text text-transparent bg-gradient-to-r from-primary to-secondary">PrepNova AI</h1>
+                        <p class="text-[9px] uppercase tracking-widest text-secondary font-bold">AI Calibration Core</p>
+                    </div>
+
+                    <div class="text-center mb-6">
+                        <h3 class="font-headline text-2xl text-white font-extrabold mb-1.5">Enlist Identity</h3>
+                        <p class="text-xs text-on-surface-variant">Begin your high-stakes calibration</p>
+                    </div>
+
+                    <div class="space-y-5">
+                        <form id="signup-form" class="space-y-4" onsubmit="handleSignupSubmit(event)">
+                            <div class="relative">
+                                <span class="material-symbols-outlined absolute left-4 top-1/2 -translate-y-1/2 text-on-surface-variant/60 text-sm">person</span>
+                                <input id="signup-fullname" class="w-full bg-surface-container border border-outline-variant/30 rounded-lg py-2.5 pl-12 pr-4 text-xs text-white focus:outline-none focus:border-secondary transition-all" placeholder="Full Candidate Name" required type="text"/>
+                            </div>
+                            <div class="relative">
+                                <span class="material-symbols-outlined absolute left-4 top-1/2 -translate-y-1/2 text-on-surface-variant/60 text-sm">mail</span>
+                                <input id="signup-email" class="w-full bg-surface-container border border-outline-variant/30 rounded-lg py-2.5 pl-12 pr-4 text-xs text-white focus:outline-none focus:border-secondary transition-all" placeholder="Core Email Address" required type="email"/>
+                            </div>
+                            <div class="relative">
+                                <span class="material-symbols-outlined absolute left-4 top-1/2 -translate-y-1/2 text-on-surface-variant/60 text-sm">work</span>
+                                <input id="signup-focus" class="w-full bg-surface-container border border-outline-variant/30 rounded-lg py-2.5 pl-12 pr-4 text-xs text-white focus:outline-none focus:border-secondary transition-all" placeholder="Career Focus (e.g., Staff Engineer)" required type="text"/>
+                            </div>
+                            <div class="relative">
+                                <span class="material-symbols-outlined absolute left-4 top-1/2 -translate-y-1/2 text-on-surface-variant/60 text-sm">lock</span>
+                                <input id="signup-password" class="w-full bg-surface-container border border-outline-variant/30 rounded-lg py-2.5 pl-12 pr-4 text-xs text-white focus:outline-none focus:border-secondary transition-all" placeholder="Choose Secure Password Key" required type="password"/>
+                            </div>
+                            <div class="flex items-center gap-2 cursor-pointer py-1">
+                                <input class="w-3.5 h-3.5 rounded border-outline-variant/30 bg-surface-container text-primary focus:ring-primary/50" type="checkbox" required checked/>
+                                <span class="text-[10px] text-on-surface-variant uppercase font-bold tracking-wider">I agree to calibration security terms</span>
+                            </div>
+                            <button id="signup-submit-btn" class="w-full py-3.5 rounded-lg bg-gradient-to-r from-primary-container to-secondary text-white text-xs uppercase tracking-wider font-extrabold shadow-lg shadow-primary-container/20 hover:scale-[1.02] active:scale-[0.98] transition-all flex items-center justify-center gap-1.5 cursor-pointer" type="submit">
+                                <span>Register Securely</span>
+                                <span class="material-symbols-outlined text-sm font-bold">arrow_forward</span>
+                            </button>
+                        </form>
+                    </div>
+
+                    <div class="mt-6 pt-5 border-t border-outline-variant/20 text-center">
+                        <p class="text-xs text-on-surface-variant font-medium">
+                            <span>Already in the registry?</span>
+                            <button class="text-secondary font-extrabold hover:underline ml-1 cursor-pointer" onclick="showLoginCard()">Sign In</button>
+                        </p>
+                    </div>
+                </div>
+            </div>
+            <p class="text-center mt-6 text-[10px] text-on-surface-variant/40 font-mono">
+                © 2026 PREPNOVA AI. SECURE SYSTEM PROXY ENCRYPTED.
+            </p>
+        </main>
+    </div>
+    <!-- Interactive Layer / Single Page App Controller -->
+    <script>
+        // API and WebSocket Base URLs
+        const API_BASE = window.location.origin;
+        const WS_BASE = (window.location.protocol === 'https:' ? 'wss://' : 'ws://') + window.location.host;
+
+        // Global State (synchronized with SQLite / database.json persistently)
+        let state = {
+            userName: "Alexander Sterling",
+            userEmail: "alex.sterling@vanguard.io",
+            userFocus: "Principal Systems Architect & Performance Lead. Mastering Distributed Infrastructure.",
+            coachAssertiveness: 85,
+            coachDepth: 92,
+            coachSupportive: false,
+            ghostMode: true
+        };
+
+        let currentSessionId = "session_architect"; // Default/active mock session
+        let socket = null;
+        let token = localStorage.getItem('token');
+        let activeViewId = 'dashboard';
+
+        // Spring custom cursor physics trailing logic
+        let mouse = { x: window.innerWidth / 2, y: window.innerHeight / 2 };
+        let cursorDot = { x: window.innerWidth / 2, y: window.innerHeight / 2 };
+        let cursorFollower = { x: window.innerWidth / 2, y: window.innerHeight / 2 };
+
+        document.addEventListener('mousemove', (e) => {
+            mouse.x = e.clientX;
+            mouse.y = e.clientY;
+            
+            // Background volumetric spotlight gradient shifts coordinates
+            const spotlight = document.getElementById('bg-spotlight');
+            if (spotlight) {
+                spotlight.style.left = `${e.clientX}px`;
+                spotlight.style.top = `${e.clientY}px`;
+            }
+        });
+
+        // Spring damping interpolation loop for custom cursor trail
+        function animateCursor() {
+            cursorDot.x += (mouse.x - cursorDot.x) * 0.28;
+            cursorDot.y += (mouse.y - cursorDot.y) * 0.28;
+            
+            cursorFollower.x += (mouse.x - cursorFollower.x) * 0.14;
+            cursorFollower.y += (mouse.y - cursorFollower.y) * 0.14;
+            
+            const dotEl = document.querySelector('.custom-cursor');
+            const followerEl = document.querySelector('.custom-cursor-follower');
+            
+            if (dotEl) {
+                dotEl.style.left = `${cursorDot.x}px`;
+                dotEl.style.top = `${cursorDot.y}px`;
+            }
+            if (followerEl) {
+                followerEl.style.left = `${cursorFollower.x}px`;
+                followerEl.style.top = `${cursorFollower.y}px`;
+            }
+            requestAnimationFrame(animateCursor);
+        }
+        requestAnimationFrame(animateCursor);
+
+        // Bind custom cursor hover states dynamically
+        function initCursorHoverEvents() {
+            const clickables = document.querySelectorAll('a, button, input, [onclick], select');
+            clickables.forEach(el => {
+                el.addEventListener('mouseenter', () => document.body.classList.add('cursor-hover'));
+                el.addEventListener('mouseleave', () => document.body.classList.remove('cursor-hover'));
+            });
+        }
+
+        document.addEventListener('mousedown', () => document.body.classList.add('cursor-click'));
+        document.addEventListener('mouseup', () => document.body.classList.remove('cursor-click'));
+
+        // --- AUTHENTICATION FLOW CONTROLLER ---
+
+        function showSignupCard() {
+            const loginCard = document.getElementById('login-container');
+            const signupCard = document.getElementById('signup-container');
+            
+            loginCard.classList.remove('opacity-100', 'scale-100');
+            loginCard.classList.add('opacity-0', 'scale-95', 'pointer-events-none');
+            
+            signupCard.classList.remove('opacity-0', 'scale-95', 'pointer-events-none');
+            signupCard.classList.add('opacity-100', 'scale-100');
+        }
+
+        function showLoginCard() {
+            const loginCard = document.getElementById('login-container');
+            const signupCard = document.getElementById('signup-container');
+            
+            signupCard.classList.remove('opacity-100', 'scale-100');
+            signupCard.classList.add('opacity-0', 'scale-95', 'pointer-events-none');
+            
+            loginCard.classList.remove('opacity-0', 'scale-95', 'pointer-events-none');
+            loginCard.classList.add('opacity-100', 'scale-100');
+        }
+
+        // Dedicated Login Handler
+        async function handleLoginSubmit(e) {
+            e.preventDefault();
+            const btn = document.getElementById('login-submit-btn');
+            const email = document.getElementById('login-email').value.trim();
+            const password = document.getElementById('login-password').value.trim();
+
+            btn.innerHTML = `
+                <svg class="animate-spin h-4 w-4 text-white shrink-0" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                    <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+                    <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                </svg>
+                <span>Authenticating System...</span>
+            `;
+
+            try {
+                const response = await fetch(API_BASE + '/api/auth/login', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ email, password })
+                });
+
+                const data = await response.json();
+                if (!response.ok) throw new Error(data.error || "Authentication failed");
+
+                localStorage.setItem('token', data.token);
+                token = data.token;
+
+                btn.innerHTML = `
+                    <span class="material-symbols-outlined text-sm font-bold animate-ping">check_circle</span>
+                    <span>System Connected</span>
+                `;
+
+                setTimeout(() => {
+                    triggerNeuralCalibrate(() => {
+                        checkAuth();
+                    });
+                }, 800);
+
+            } catch (err) {
+                alert(err.message);
+                btn.innerHTML = `
+                    <span>Initialize Session</span>
+                    <span class="material-symbols-outlined text-sm font-bold">arrow_forward</span>
+                `;
+            }
+        }
+
+        // Dedicated Create Account Handler
+        async function handleSignupSubmit(e) {
+            e.preventDefault();
+            const btn = document.getElementById('signup-submit-btn');
+            const name = document.getElementById('signup-fullname').value.trim();
+            const email = document.getElementById('signup-email').value.trim();
+            const careerFocus = document.getElementById('signup-focus').value.trim();
+            const password = document.getElementById('signup-password').value.trim();
+
+            btn.innerHTML = `
+                <svg class="animate-spin h-4 w-4 text-white shrink-0" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                    <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+                    <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                </svg>
+                <span>Enlisting Identity...</span>
+            `;
+
+            try {
+                const response = await fetch(API_BASE + '/api/auth/register', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ name, email, password, careerFocus })
+                });
+
+                const data = await response.json();
+                if (!response.ok) throw new Error(data.error || "Registration failed");
+
+                localStorage.setItem('token', data.token);
+                token = data.token;
+
+                btn.innerHTML = `
+                    <span class="material-symbols-outlined text-sm font-bold animate-ping">verified</span>
+                    <span>Identity Registered!</span>
+                `;
+
+                setTimeout(() => {
+                    triggerNeuralCalibrate(() => {
+                        checkAuth();
+                    });
+                }, 800);
+
+            } catch (err) {
+                alert(err.message);
+                btn.innerHTML = `
+                    <span>Register Securely</span>
+                    <span class="material-symbols-outlined text-sm font-bold">arrow_forward</span>
+                `;
+            }
+        }
+
+        // Mock social logins hitting simulated profiles
+        async function simulateSocialLogin(provider) {
+            document.getElementById('login-email').value = `${provider.toLowerCase()}.candidate@vanguard.io`;
+            document.getElementById('login-password').value = `password123`;
+            const fakeEvent = { preventDefault: () => {} };
+            await handleLoginSubmit(fakeEvent);
+        }
+
+        // Logout handler to revoke credentials and reset dashboard context
+        function handleLogout() {
+            localStorage.removeItem('token');
+            token = null;
+            if (socket) {
+                try {
+                    socket.close();
+                } catch (e) {}
+                socket = null;
+            }
+            document.getElementById('auth-shell').classList.remove('hidden');
+            document.getElementById('app-shell').classList.add('hidden');
+            
+            // Clear inputs in both forms
+            document.getElementById('login-email').value = '';
+            document.getElementById('login-password').value = '';
+            document.getElementById('signup-fullname').value = '';
+            document.getElementById('signup-email').value = '';
+            document.getElementById('signup-focus').value = '';
+            document.getElementById('signup-password').value = '';
+
+            // Restore submit buttons states
+            const loginBtn = document.getElementById('login-submit-btn');
+            if (loginBtn) {
+                loginBtn.innerHTML = `
+                    <span>Initialize Session</span>
+                    <span class="material-symbols-outlined text-sm font-bold">arrow_forward</span>
+                `;
+            }
+            const signupBtn = document.getElementById('signup-submit-btn');
+            if (signupBtn) {
+                signupBtn.innerHTML = `
+                    <span>Register Securely</span>
+                    <span class="material-symbols-outlined text-sm font-bold">arrow_forward</span>
+                `;
+            }
+            showLoginCard();
+        }
+
+        // Verify active JWT and load session
+        async function checkAuth() {
+            if (!token) {
+                document.getElementById('auth-shell').classList.remove('hidden');
+                document.getElementById('app-shell').classList.add('hidden');
+                return;
+            }
+
+            try {
+                const response = await fetch(API_BASE + '/api/auth/me', {
+                    headers: { 'Authorization': `Bearer ${token}` }
+                });
+
+                if (!response.ok) throw new Error("Invalid session token");
+
+                const user = await response.json();
+                
+                // Set global state
+                state.userName = user.name;
+                state.userEmail = user.email;
+                state.userFocus = user.careerFocus;
+                
+                // Show core app shells
+                document.getElementById('auth-shell').classList.add('hidden');
+                document.getElementById('app-shell').classList.remove('hidden');
+                
+                syncGlobalStates();
+                connectWebSocket();
+                
+                // Load persistent db variables
+                await loadHistory();
+                await loadNotifications();
+                switchView(activeViewId);
+
+            } catch (err) {
+                console.error("Auth verification failed:", err);
+                localStorage.removeItem('token');
+                token = null;
+                document.getElementById('auth-shell').classList.remove('hidden');
+                document.getElementById('app-shell').classList.add('hidden');
+            }
+        }
+
+        // --- REAL-TIME WEBSOCKET BRIDGE ---
+
+        function connectWebSocket() {
+            if (socket && socket.readyState === WebSocket.OPEN) return;
+
+            console.log("Establishing WebSocket telemetry tunnel...");
+            socket = new WebSocket(WS_BASE);
+
+            socket.onopen = () => {
+                console.log("WebSocket secure telemetry tunnel active.");
+            };
+
+            socket.onmessage = (event) => {
+                try {
+                    const payload = JSON.parse(event.data);
+                    
+                    if (payload.type === 'ai_token') {
+                        const chatContainer = document.getElementById('chat-messages-container');
+                        const loader = document.getElementById('chat-typing-loader');
+                        
+                        // Check if active streaming message bubble exists
+                        let activeBubble = document.querySelector('.streaming-ai-message');
+                        
+                        if (!activeBubble) {
+                            // Hide typing loader loader
+                            loader.classList.add('hidden');
+
+                            // Build a fresh streaming text bubble
+                            const newBubbleContainer = document.createElement('div');
+                            newBubbleContainer.className = "flex gap-4 max-w-[85%] animate-in fade-in duration-300";
+                            newBubbleContainer.innerHTML = `
+                                <div class="w-8 h-8 rounded-full bg-primary-container/20 flex items-center justify-center shrink-0 border border-primary/20">
+                                    <span class="material-symbols-outlined text-primary text-md">smart_toy</span>
+                                </div>
+                                <div class="bg-surface-container-high/60 rounded-xl p-4 rounded-tl-none border border-outline-variant/20">
+                                    <p class="text-xs text-on-surface-variant font-bold font-headline mb-1">Nova-1 (Coach)</p>
+                                    <p class="text-sm text-on-surface leading-relaxed streaming-ai-message"></p>
+                                    <span class="text-[9px] text-on-surface-variant/50 mt-2 block">Streaming Live AI Feedback</span>
+                                </div>
+                            `;
+                            chatContainer.appendChild(newBubbleContainer);
+                            activeBubble = newBubbleContainer.querySelector('.streaming-ai-message');
+                        }
+
+                        // Append text token
+                        activeBubble.textContent += payload.text;
+                        chatContainer.scrollTop = chatContainer.scrollHeight;
+                    }
+
+                    if (payload.type === 'ai_complete') {
+                        // De-class the active streaming bubble so future streams start fresh
+                        const activeBubble = document.querySelector('.streaming-ai-message');
+                        if (activeBubble) {
+                            activeBubble.classList.remove('streaming-ai-message');
+                            const indicator = activeBubble.nextElementSibling;
+                            if (indicator) indicator.textContent = "System Clock Response Verified";
+                        }
+                        
+                        // Enable controls
+                        document.getElementById('chat-typing-loader').classList.add('hidden');
+                        document.getElementById('coach-chat-input').disabled = false;
+                        document.getElementById('coach-message-form').querySelector('button').disabled = false;
+                        loadHistory();
+                    }
+
+                } catch (err) {
+                    console.error("Error handling WebSocket incoming payload:", err);
+                }
+            };
+
+            socket.onclose = () => {
+                console.warn("WebSocket tunnel closed. Attempting auto reconnection in 3 seconds...");
+                setTimeout(connectWebSocket, 3000);
+            };
+        }
+
+        // --- REAL-TIME DATABASE APIS SYNC ---
+
+        // Load Persistent Mock Sessions History
+        async function loadHistory() {
+            try {
+                const response = await fetch(API_BASE + '/api/sessions', {
+                    headers: { 'Authorization': `Bearer ${token}` }
+                });
+                const sessions = await response.json();
+                
+                const container = document.getElementById('history-sessions-container');
+                // Keep the header row
+                const headerRow = container.querySelector('.hidden.md\\:grid');
+                container.innerHTML = "";
+                if (headerRow) container.appendChild(headerRow);
+
+                sessions.forEach(session => {
+                    const row = document.createElement('div');
+                    row.className = "glass-card inner-glow rounded-xl overflow-hidden hover:bg-surface-container-high/20 transition-all history-row";
+                    
+                    const isCompleted = session.status === 'Completed';
+                    const badgeClass = isCompleted 
+                        ? "bg-secondary/10 text-secondary border-secondary/20"
+                        : "bg-primary/10 text-primary border-primary/20 animate-pulse";
+
+                    const barColor = isCompleted ? "from-primary to-secondary" : "from-secondary to-primary";
+                    const actionBtn = isCompleted
+                        ? `<button class="px-3.5 py-1.5 rounded bg-surface-container text-xs font-bold hover:bg-white hover:text-black transition-all" onclick="resumeActiveSession('${session.id}')">Restart</button>`
+                        : `<button class="px-3.5 py-1.5 rounded bg-secondary text-on-secondary font-bold text-xs hover:brightness-110 active:scale-95 shadow-md shadow-secondary/15 transition-all" onclick="resumeActiveSession('${session.id}')">Resume</button>`;
+
+                    const dateStr = new Date(session.timestamp).toLocaleDateString(undefined, { month: 'short', day: 'numeric', year: 'numeric' });
+                    const timeStr = new Date(session.timestamp).toLocaleTimeString(undefined, { hour: '2-digit', minute: '2-digit' });
+
+                    row.innerHTML = `
+                        <div class="grid grid-cols-1 md:grid-cols-12 gap-gutter px-6 py-5 items-center">
+                            <div class="col-span-5 flex items-center gap-4">
+                                <div class="w-10 h-10 rounded-lg bg-surface-container flex items-center justify-center text-primary border border-outline-variant/20 shrink-0">
+                                    <span class="material-symbols-outlined text-md">${isCompleted ? 'terminal' : 'data_object'}</span>
+                                </div>
+                                <div>
+                                    <h4 class="text-sm font-bold text-white group-hover:text-primary transition-colors">${escapeHtml(session.title)}</h4>
+                                    <p class="text-[10px] text-on-surface-variant font-medium">${escapeHtml(session.topic)}</p>
+                                </div>
+                            </div>
+                            <div class="col-span-2 flex md:justify-center">
+                                <span class="px-2.5 py-0.5 rounded-full ${badgeClass} border text-[9px] font-bold uppercase tracking-wider">${session.status} (${session.score}%)</span>
+                            </div>
+                            <div class="col-span-3 text-xs text-on-surface-variant font-mono">
+                                ${dateStr} / ${timeStr}
+                            </div>
+                            <div class="col-span-2 flex justify-end gap-2">
+                                ${actionBtn}
+                            </div>
+                        </div>
+                    `;
+                    container.appendChild(row);
+                });
+                initCursorHoverEvents();
+
+            } catch (err) {
+                console.error("Error loading training history:", err);
+            }
+        }
+
+        // Load Persistent Alerts Notifications
+        async function loadNotifications() {
+            try {
+                const response = await fetch(API_BASE + '/api/notifications', {
+                    headers: { 'Authorization': `Bearer ${token}` }
+                });
+                const notifies = await response.json();
+                
+                const container = document.getElementById('notifications-list-container');
+                container.innerHTML = "";
+
+                // Update notifications badging in UI
+                const unreadCount = notifies.filter(n => n.status === 'unread').length;
+                const badges = document.querySelectorAll('header button span.bg-secondary, aside button span.bg-secondary');
+                badges.forEach(badge => {
+                    if (unreadCount > 0) {
+                        badge.style.display = 'block';
+                    } else {
+                        badge.style.display = 'none';
+                    }
+                });
+
+                notifies.forEach(notify => {
+                    const card = document.createElement('div');
+                    card.className = `glass-card inner-glow p-5 rounded-xl cursor-pointer hover:border-secondary/40 transition-colors ${notify.status === 'read' ? 'opacity-70' : 'border-secondary/20'}`;
+                    card.onclick = () => {
+                        toggleNotification(card);
+                        toggleNotificationReadPersistent(notify.id);
+                    };
+
+                    const iconColor = notify.type === 'psychology' ? 'text-primary bg-primary-container/20 border-primary/20' : 'text-secondary bg-secondary-container/20 border-secondary/20';
+                    const iconName = notify.type === 'psychology' ? 'psychology' : 'schedule';
+                    const timeAgo = formatTimeAgo(notify.timestamp);
+
+                    let detailsMarkup = "";
+                    if (notify.type === 'psychology') {
+                        detailsMarkup = `
+                            <div class="notification-details hidden pt-4 border-t border-outline-variant/15 mt-3 space-y-3">
+                                <div class="grid grid-cols-3 gap-3">
+                                    <div class="p-2 bg-surface-container rounded border border-outline-variant/20 text-center">
+                                        <p class="text-[8px] text-on-surface-variant uppercase font-bold">Latency Optimization</p>
+                                        <p class="text-secondary text-xs font-bold mt-0.5">EXCEPTIONAL</p>
+                                    </div>
+                                    <div class="p-2 bg-surface-container rounded border border-outline-variant/20 text-center">
+                                        <p class="text-[8px] text-on-surface-variant uppercase font-bold">Virtual Nodes</p>
+                                        <p class="text-primary text-xs font-bold mt-0.5">PROFICIENT</p>
+                                    </div>
+                                    <div class="p-2 bg-surface-container rounded border border-outline-variant/20 text-center">
+                                        <p class="text-[8px] text-on-surface-variant uppercase font-bold">Consistent Ring</p>
+                                        <p class="text-secondary text-xs font-bold mt-0.5">EXCEPTIONAL</p>
+                                    </div>
+                                </div>
+                                <button class="w-full py-2 bg-secondary/10 border border-secondary/20 text-secondary text-xs font-bold rounded-lg hover:bg-secondary/20 transition-colors" onclick="switchView('coach'); event.stopPropagation();">Discuss Feedback with Coach</button>
+                            </div>
+                        `;
+                    } else {
+                        detailsMarkup = `
+                            <div class="notification-details hidden pt-4 border-t border-outline-variant/15 mt-3">
+                                <div class="flex items-center gap-3 p-3 bg-surface-container rounded border border-outline-variant/20">
+                                    <div class="w-10 h-10 rounded-full border border-secondary/30 overflow-hidden shrink-0">
+                                        <img class="w-full h-full object-cover" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAQgsWEMKn4ih0DeNXCQZIUUFG8LFqA_-7UawgC8A_BBqwNIz_vl6VxSXDJrhl-1ytSQSY_k0wAsS_B7iXKlPOQ_QdCDb3OXHCL1hRKc26UX3zp1zPxrmhFoJ8pv-Es2fFPqwsMuno0ReLu_qJ5yWXotPNqO4Sx_UmorCboc8ytgPR_fVT71Vg6KscSbQ_EglP1WMSG3d8l7yiYIbMKt1wnBHyA1nqzPlZzBCrBAjN9FZmMc4MgA1_qE5dyvgCzMaqzlL7MGd9aobE"/>
+                                    </div>
+                                    <div class="flex-grow">
+                                        <p class="text-xs font-bold text-white font-headline">Interviewer: Sarah (AI Lead)</p>
+                                        <p class="text-[9px] text-on-surface-variant uppercase font-bold tracking-wider">Calibration: Strategic Architecture Focus</p>
+                                    </div>
+                                    <button class="px-4 py-1.5 bg-secondary text-on-secondary font-bold text-xs rounded-full hover:brightness-110 active:scale-95 shrink-0" onclick="triggerSimulation(); event.stopPropagation();">Simulate Now</button>
+                                </div>
+                            </div>
+                        `;
+                    }
+
+                    card.innerHTML = `
+                        <div class="flex gap-4">
+                            <div class="w-10 h-10 rounded-lg ${iconColor} flex items-center justify-center shrink-0 border">
+                                <span class="material-symbols-outlined text-md">${iconName}</span>
+                            </div>
+                            <div class="flex-grow">
+                                <div class="flex justify-between items-start mb-1">
+                                    <h3 class="text-sm font-bold text-white font-headline">${escapeHtml(notify.title)}</h3>
+                                    <span class="text-[10px] text-on-surface-variant font-mono">${timeAgo}</span>
+                                </div>
+                                <p class="text-xs text-on-surface-variant leading-relaxed mb-1">${escapeHtml(notify.body)}</p>
+                                ${detailsMarkup}
+                            </div>
+                            <span class="material-symbols-outlined text-on-surface-variant/40 shrink-0 text-md transition-transform duration-300 pointer-events-none toggle-icon">expand_more</span>
+                        </div>
+                    `;
+                    container.appendChild(card);
+                });
+                initCursorHoverEvents();
+
+            } catch (err) {
+                console.error("Error loading notification alerts:", err);
+            }
+        }
+
+        async function toggleNotificationReadPersistent(notifyId) {
+            try {
+                await fetch(`${API_BASE}/api/notifications/${notifyId}/toggle`, {
+                    method: 'POST',
+                    headers: { 'Authorization': `Bearer ${token}` }
+                });
+                // Reload counts silently
+                loadNotifications();
+            } catch (err) {
+                console.error("Error toggling notification persistence:", err);
+            }
+        }
+
+        // Start a brand new simulation session persistently
+        async function startNewSimulationSession(title, topic) {
+            try {
+                const response = await fetch(API_BASE + '/api/sessions', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Authorization': `Bearer ${token}`
+                    },
+                    body: JSON.stringify({ title, topic })
+                });
+                const session = await response.json();
+                currentSessionId = session.id;
+                
+                triggerNeuralCalibrate(() => {
+                    switchView('coach');
+                    loadChatMessagesForSession(session.id);
+                });
+            } catch (err) {
+                console.error("Error starting new training session:", err);
+            }
+        }
+
+        // Resume/Load messages of an existing history session
+        async function resumeActiveSession(sessionId) {
+            currentSessionId = sessionId;
+            triggerNeuralCalibrate(() => {
+                switchView('coach');
+                loadChatMessagesForSession(sessionId);
+            });
+        }
+
+        async function loadChatMessagesForSession(sessionId) {
+            try {
+                const response = await fetch(`${API_BASE}/api/sessions/${sessionId}/messages`, {
+                    headers: { 'Authorization': `Bearer ${token}` }
+                });
+                const messages = await response.json();
+                
+                const container = document.getElementById('chat-messages-container');
+                container.innerHTML = "";
+
+                messages.forEach(msg => {
+                    const bubble = document.createElement('div');
+                    if (msg.sender === 'user') {
+                        bubble.className = "flex gap-4 max-w-[85%] ml-auto flex-row-reverse";
+                        bubble.innerHTML = `
+                            <div class="w-8 h-8 rounded-full bg-secondary-container/20 flex items-center justify-center shrink-0 border border-secondary/20">
+                                <span class="material-symbols-outlined text-white text-md">person</span>
+                            </div>
+                            <div class="bg-primary/10 rounded-xl p-4 rounded-tr-none border border-primary/20">
+                                <p class="text-xs text-secondary font-bold font-headline mb-1">${escapeHtml(state.userName)} (You)</p>
+                                <p class="text-sm text-white leading-relaxed">${escapeHtml(msg.text)}</p>
+                            </div>
+                        `;
+                    } else {
+                        bubble.className = "flex gap-4 max-w-[85%] animate-in fade-in duration-300";
+                        bubble.innerHTML = `
+                            <div class="w-8 h-8 rounded-full bg-primary-container/20 flex items-center justify-center shrink-0 border border-primary/20">
+                                <span class="material-symbols-outlined text-primary text-md">smart_toy</span>
+                            </div>
+                            <div class="bg-surface-container-high/60 rounded-xl p-4 rounded-tl-none border border-outline-variant/20">
+                                <p class="text-xs text-on-surface-variant font-bold font-headline mb-1">Nova-1 (Coach)</p>
+                                <p class="text-sm text-on-surface leading-relaxed">${escapeHtml(msg.text)}</p>
+                                <span class="text-[9px] text-on-surface-variant/50 mt-2 block">System Clock Response Verified</span>
+                            </div>
+                        `;
+                    }
+                    container.appendChild(bubble);
+                });
+
+                document.getElementById('coach-active-indicator').textContent = " Nova-1 Active: Session Resumed";
+                container.scrollTop = container.scrollHeight;
+                initCursorHoverEvents();
+
+            } catch (err) {
+                console.error("Error loading chat messages:", err);
+            }
+        }
+
+        // Submit message via WebSocket
+        function handleCoachSubmit(e) {
+            e.preventDefault();
+            const input = document.getElementById('coach-chat-input');
+            const text = input.value.trim();
+            if (!text) return;
+
+            const chatContainer = document.getElementById('chat-messages-container');
+            const loader = document.getElementById('chat-typing-loader');
+
+            // 1. Render user bubble in UI immediately
+            const bubble = document.createElement('div');
+            bubble.className = "flex gap-4 max-w-[85%] ml-auto flex-row-reverse";
+            bubble.innerHTML = `
+                <div class="w-8 h-8 rounded-full bg-secondary-container/20 flex items-center justify-center shrink-0 border border-secondary/20">
+                    <span class="material-symbols-outlined text-white text-md">person</span>
+                </div>
+                <div class="bg-primary/10 rounded-xl p-4 rounded-tr-none border border-primary/20">
+                    <p class="text-xs text-secondary font-bold font-headline mb-1">${escapeHtml(state.userName)} (You)</p>
+                    <p class="text-sm text-white leading-relaxed">${escapeHtml(text)}</p>
+                </div>
+            `;
+            chatContainer.appendChild(bubble);
+            chatContainer.scrollTop = chatContainer.scrollHeight;
+            input.value = "";
+
+            // 2. Lock UI and show loader typing spinner
+            loader.classList.remove('hidden');
+            chatContainer.scrollTop = chatContainer.scrollHeight;
+            input.disabled = true;
+            document.getElementById('coach-message-form').querySelector('button').disabled = true;
+
+            // 3. Transmit payload over real-time WebSocket tunnel
+            if (socket && socket.readyState === WebSocket.OPEN) {
+                socket.send(JSON.stringify({
+                    type: 'chat_message',
+                    sessionId: currentSessionId,
+                    text: text
+                }));
+            } else {
+                console.error("WebSocket tunnel stand-down. Reconnecting socket.");
+                alert("Connection lost. Telemetry channel stand-down. Attempting reconnection...");
+                loader.classList.add('hidden');
+                input.disabled = false;
+                document.getElementById('coach-message-form').querySelector('button').disabled = false;
+                connectWebSocket();
+            }
+        }
+
+        // Settings updates persistent API
+        async function handleSettingsSave(e) {
+            e.preventDefault();
+            const name = document.getElementById('settings-name').value.trim();
+            const email = document.getElementById('settings-email').value.trim();
+            const careerFocus = document.getElementById('settings-focus').value.trim();
+
+            try {
+                const response = await fetch(API_BASE + '/api/profile', {
+                    method: 'PUT',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Authorization': `Bearer ${token}`
+                    },
+                    body: JSON.stringify({ name, email, careerFocus })
+                });
+
+                const user = await response.json();
+                if (!response.ok) throw new Error(user.error || "Update profile failed");
+
+                state.userName = user.name;
+                state.userEmail = user.email;
+                state.userFocus = user.careerFocus;
+
+                syncGlobalStates();
+                showNotification("Settings saved persistently", "success");
+            } catch (err) {
+                showNotification(err.message, "error");
+            }
+        }
+
+        // Non-intrusive glowing notification toast manager
+        function showNotification(message, type = 'info') {
+            let toastContainer = document.getElementById('toast-container');
+            if (!toastContainer) {
+                toastContainer = document.createElement('div');
+                toastContainer.id = 'toast-container';
+                toastContainer.className = 'fixed top-6 right-6 z-50 flex flex-col gap-3 pointer-events-none';
+                document.body.appendChild(toastContainer);
+            }
+            
+            const toast = document.createElement('div');
+            toast.className = `glass-card inner-glow px-4 py-3 rounded-lg shadow-2xl border flex items-center gap-2.5 translate-x-12 opacity-0 transition-all duration-300 pointer-events-auto ${
+                type === 'error' ? 'border-red-500/30 text-red-200' : 'border-secondary/30 text-secondary'
+            }`;
+            
+            toast.innerHTML = `
+                <span class="material-symbols-outlined text-md ${type === 'error' ? 'text-red-400' : 'text-secondary'}">
+                    ${type === 'error' ? 'error' : 'offline_pin'}
+                </span>
+                <span class="text-xs font-mono font-bold uppercase tracking-wider">${message}</span>
+            `;
+            
+            toastContainer.appendChild(toast);
+            
+            setTimeout(() => {
+                toast.classList.remove('translate-x-12', 'opacity-0');
+                toast.classList.add('translate-x-0', 'opacity-100');
+            }, 10);
+            
+            setTimeout(() => {
+                toast.classList.remove('translate-x-0', 'opacity-100');
+                toast.classList.add('translate-x-12', 'opacity-0');
+                setTimeout(() => {
+                    toast.remove();
+                }, 300);
+            }, 3000);
+        }
+
+        // Real-time Edit Parameters modal toggle and input sync functions
+        function openEditParametersModal() {
+            const modal = document.getElementById('edit-params-modal');
+            const card = document.getElementById('edit-params-card');
+            
+            document.getElementById('edit-param-name').value = state.userName;
+            document.getElementById('edit-param-focus').value = state.userFocus;
+            
+            modal.classList.remove('opacity-0', 'pointer-events-none');
+            card.classList.remove('scale-95');
+            card.classList.add('scale-100');
+            initCursorHoverEvents();
+        }
+
+        function closeEditParametersModal() {
+            const modal = document.getElementById('edit-params-modal');
+            const card = document.getElementById('edit-params-card');
+            
+            modal.classList.add('opacity-0', 'pointer-events-none');
+            card.classList.remove('scale-100');
+            card.classList.add('scale-95');
+            
+            // Revert changes back to persistent server values if cancelled
+            checkAuth();
+        }
+
+        function handleRealtimeParamChange() {
+            const nameVal = document.getElementById('edit-param-name').value.trim();
+            const focusVal = document.getElementById('edit-param-focus').value.trim();
+            
+            if (nameVal) state.userName = nameVal;
+            if (focusVal) state.userFocus = focusVal;
+            
+            // Re-render all header labels, sidebar labels, dashboards, settings page fields, and profile in real-time!
+            syncGlobalStates();
+        }
+
+        async function saveEditParameters(e) {
+            e.preventDefault();
+            const name = document.getElementById('edit-param-name').value.trim();
+            const careerFocus = document.getElementById('edit-param-focus').value.trim();
+            const email = state.userEmail;
+
+            try {
+                const response = await fetch(API_BASE + '/api/profile', {
+                    method: 'PUT',
+                    headers: { 
+                        'Content-Type': 'application/json',
+                        'Authorization': `Bearer ${token}`
+                    },
+                    body: JSON.stringify({ name, email, careerFocus })
+                });
+
+                if (!response.ok) {
+                    const data = await response.json();
+                    throw new Error(data.error || "Profile sync failed");
+                }
+
+                const user = await response.json();
+                state.userName = user.name;
+                state.userFocus = user.careerFocus;
+
+                syncGlobalStates();
+                
+                // Hide modal
+                const modal = document.getElementById('edit-params-modal');
+                const card = document.getElementById('edit-params-card');
+                modal.classList.add('opacity-0', 'pointer-events-none');
+                card.classList.remove('scale-100');
+                card.classList.add('scale-95');
+
+                showNotification("Profile synced with database", "success");
+            } catch (err) {
+                showNotification(err.message, "error");
+            }
+        }
+
+        // Trigger simulation button start session wrapper
+        function triggerSimulation() {
+            startNewSimulationSession("FAANG System Architect Simulator", "Consistent Hashing & Dynamic Sharding Ring Maps");
+        }
+
+        // --- CORE SHELL LAYOUT SYNC CONTROLLERS ---
+
+        function syncGlobalStates() {
+            // Sidebar names
+            document.getElementById('sidebar-name').textContent = state.userName;
+            document.getElementById('topbar-name').textContent = state.userName;
+            document.getElementById('dash-welcome-name').textContent = state.userName.split(' ')[0];
+            document.getElementById('profile-name').textContent = state.userName;
+            document.getElementById('profile-focus').textContent = state.userFocus;
+
+            // Settings values
+            document.getElementById('settings-name').value = state.userName;
+            document.getElementById('settings-email').value = state.userEmail;
+            document.getElementById('settings-focus').value = state.userFocus;
+
+            // Sliders settings updates
+            document.getElementById('settings-slider-assertive').value = state.coachAssertiveness;
+            document.getElementById('settings-slider-depth').value = state.coachDepth;
+            document.getElementById('settings-slider-val-assertive').textContent = `${state.coachAssertiveness}%`;
+            document.getElementById('settings-slider-val-depth').textContent = `${state.coachDepth}%`;
+            
+            // AI Coach page meters
+            document.getElementById('coach-param-assertive').textContent = `${state.coachAssertiveness}%`;
+            document.getElementById('coach-param-depth').textContent = `${state.coachDepth}%`;
+            document.getElementById('coach-bar-assertive').style.width = `${state.coachAssertiveness}%`;
+            document.getElementById('coach-bar-depth').style.width = `${state.coachDepth}%`;
+
+            const coachPersonalityLbl = document.getElementById('dash-coach-personality');
+            const settingsActivePersonalityLbl = document.getElementById('settings-active-personality-lbl');
+            const personalityStr = state.coachSupportive ? "Supportive Mentor" : "Ruthless Efficiency";
+            
+            if (coachPersonalityLbl) {
+                coachPersonalityLbl.textContent = `${personalityStr} (${state.coachAssertiveness}%)`;
+            }
+            if (settingsActivePersonalityLbl) {
+                settingsActivePersonalityLbl.textContent = personalityStr;
+            }
+        }
+
+        function updateCoachSliders() {
+            state.coachAssertiveness = document.getElementById('settings-slider-assertive').value;
+            state.coachDepth = document.getElementById('settings-slider-depth').value;
+            syncGlobalStates();
+        }
+
+        function toggleCoachMode() {
+            state.coachSupportive = !state.coachSupportive;
+            syncGlobalStates();
+        }
+
+        function handleGhostModeToggle(checked) {
+            state.ghostMode = checked;
+            alert(checked ? "Ghost Mode active. Metrics shielded." : "Ghost Mode disabled. Public leaderboard synced.");
+        }
+
+        // Single Page Router
+        function switchView(viewId) {
+            activeViewId = viewId;
+            // Remove active classes
+            document.querySelectorAll('.app-view').forEach(view => {
+                view.classList.remove('active-view');
+            });
+            document.querySelectorAll('aside nav a').forEach(link => {
+                link.classList.remove('nav-active');
+            });
+
+            // Set active
+            const activeView = document.getElementById(`view-${viewId}`);
+            if (activeView) {
+                activeView.classList.add('active-view');
+            }
+
+            // Highlight Sidebar link
+            const sidebarLinks = document.querySelectorAll('aside nav a');
+            sidebarLinks.forEach(link => {
+                const label = link.querySelector('span:not(.material-symbols-outlined)').textContent.trim().toLowerCase();
+                if (label === viewId || (viewId === 'profile' && label === 'profile') || (viewId === 'settings' && label === 'settings')) {
+                    link.classList.add('nav-active');
+                }
+            });
+
+            // Radar circular loading animations on entry
+            if (viewId === 'analytics') {
+                const circle = document.getElementById('analytics-progress-circle');
+                if (circle) {
+                    circle.style.strokeDashoffset = '263.89';
+                    setTimeout(() => {
+                        // 98% progress -> circumference (263.89) - (98.2 / 100 * 263.89)
+                        circle.style.strokeDashoffset = '4.75';
+                    }, 100);
+                }
+            }
+
+            // Smooth scroll top on view change
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+
+        // Calibrating simulator screen loader
+        function triggerNeuralCalibrate(callback) {
+            const loader = document.getElementById('simulation-loader');
+            const progress = document.getElementById('loader-progress');
+            const consoleBox = document.getElementById('loader-console');
+            
+            loader.classList.remove('hidden');
+            progress.style.width = '0%';
+            
+            const consoleLogs = [
+                "> PARSING CORE COGNITIVE INTERFACES...",
+                "> SYNCHRONIZING SYSTEM ARCHITECT PARAMETERS...",
+                "> ESTABLISHING WEBSOCKET TELEMETRY ENCRYPT TUNNEL...",
+                "> LOADING NOVA-1 HEURISTICS CORRELATION DIALOGS...",
+                "> COMPILING DISTRIBUTED SIMULATION PROXIES...",
+                "> TUNING DELTA COGNITIVE FREQUENCY OVERLAYS...",
+                "> SYSTEM TUNING TERMINATED: STATUS 100% OPERATIONAL"
+            ];
+            
+            consoleBox.innerHTML = "> SYSTEM SHIELD LOADED. ENGAGING WEBSOCKET PROXY PROTOCOLS.";
+            
+            let logIndex = 0;
+            const logInterval = setInterval(() => {
+                if (logIndex < consoleLogs.length) {
+                    const logEl = document.createElement('div');
+                    logEl.textContent = consoleLogs[logIndex];
+                    consoleBox.appendChild(logEl);
+                    consoleBox.scrollTop = consoleBox.scrollHeight;
+                    logIndex++;
+                }
+            }, 180);
+
+            let pct = 0;
+            const pctInterval = setInterval(() => {
+                pct += 10;
+                progress.style.width = `${pct}%`;
+                if (pct >= 100) {
+                    clearInterval(pctInterval);
+                    clearInterval(logInterval);
+                    setTimeout(() => {
+                        loader.classList.add('hidden');
+                        if (callback) callback();
+                    }, 400);
+                }
+            }, 100);
+        }
+
+        // Library category filter
+        function filterLibrary(category) {
+            const cards = document.querySelectorAll('.lib-card');
+            
+            const filters = ['all', 'recordings', 'modules', 'tips'];
+            filters.forEach(f => {
+                const btn = document.getElementById(`lib-filter-${f}`);
+                if (btn) {
+                    if (f === category) {
+                        btn.className = "px-5 py-1.5 rounded-full border border-secondary text-secondary bg-secondary/10 font-headline text-xs font-bold shrink-0";
+                    } else {
+                        btn.className = "px-5 py-1.5 rounded-full border border-outline-variant/30 text-on-surface-variant hover:border-primary hover:text-primary transition-all font-headline text-xs shrink-0";
+                    }
+                }
+            });
+
+            cards.forEach(card => {
+                if (category === 'all' || card.getAttribute('data-category') === category) {
+                    card.style.display = '';
+                } else {
+                    card.style.display = 'none';
+                }
+            });
+        }
+
+        // Search engine filter (Global header search)
+        function handleGlobalSearch(query) {
+            const q = query.toLowerCase().trim();
+            
+            const libCards = document.querySelectorAll('.lib-card');
+            libCards.forEach(card => {
+                const title = card.querySelector('h3, h5')?.textContent.toLowerCase() || "";
+                const desc = card.querySelector('p')?.textContent.toLowerCase() || "";
+                if (title.includes(q) || desc.includes(q)) {
+                    card.style.display = '';
+                } else {
+                    card.style.display = 'none';
+                }
+            });
+
+            const rows = document.querySelectorAll('.history-row');
+            rows.forEach(row => {
+                const text = row.textContent.toLowerCase();
+                if (text.includes(q)) {
+                    row.style.display = '';
+                } else {
+                    row.style.display = 'none';
+                }
+            });
+        }
+
+        // Expand/Collapse notifications
+        function toggleNotification(card) {
+            const details = card.querySelector('.notification-details');
+            const icon = card.querySelector('.toggle-icon');
+            
+            if (details.classList.contains('hidden')) {
+                details.classList.remove('hidden');
+                icon.style.transform = 'rotate(180deg)';
+                card.classList.add('border-secondary/40');
+            } else {
+                details.classList.add('hidden');
+                icon.style.transform = 'rotate(0deg)';
+                card.classList.remove('border-secondary/40');
+            }
+        }
+
+        // Helper functions
+        function escapeHtml(text) {
+            const map = { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#039;' };
+            return text.replace(/[&<>"']/g, m => map[m]);
+        }
+
+        function formatTimeAgo(isoString) {
+            const ms = Date.now() - new Date(isoString).getTime();
+            const mins = Math.floor(ms / 60000);
+            if (mins < 1) return 'just now';
+            if (mins < 60) return `${mins}m ago`;
+            const hours = Math.floor(mins / 60);
+            if (hours < 24) return `${hours}h ago`;
+            return new Date(isoString).toLocaleDateString();
+        }
+
+        // 3D card tilt physics effects
+        function initCardTiltEffects() {
+            const cards = document.querySelectorAll('.tilt-card');
+            cards.forEach(card => {
+                card.addEventListener('mousemove', (e) => {
+                    const rect = card.getBoundingClientRect();
+                    const x = e.clientX - rect.left;
+                    const y = e.clientY - rect.top;
+                    const xc = rect.width / 2;
+                    const yc = rect.height / 2;
+                    
+                    const rotateX = -(y - yc) / 25;
+                    const rotateY = (x - xc) / 25;
+                    
+                    card.style.transform = `perspective(1000px) rotateX(${rotateX}deg) rotateY(${rotateY}deg) scale3d(1.008, 1.008, 1.008)`;
+                });
+                card.addEventListener('mouseleave', () => {
+                    card.style.transform = 'perspective(1000px) rotateX(0deg) rotateY(0deg) scale3d(1, 1, 1)';
+                });
+            });
+        }
+
+        // Initialize application and boot checkAuth
+        window.addEventListener('DOMContentLoaded', () => {
+            checkAuth();
+            initCursorHoverEvents();
+            initCardTiltEffects();
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,432 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>AI Coach | PrepNova AI</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Geist:wght@100..900&amp;family=Inter:wght@100..900&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        .glass-card {
+            background: rgba(10, 10, 11, 0.6);
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(31, 31, 35, 1);
+        }
+        .inner-glow {
+            box-shadow: inset 1px 1px 0px rgba(76, 215, 246, 0.1);
+        }
+        .hologram-effect {
+            position: relative;
+            overflow: hidden;
+        }
+        .hologram-effect::after {
+            content: "";
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: linear-gradient(0deg, transparent 0%, rgba(210, 187, 255, 0.05) 50%, transparent 100%);
+            animation: scanline 8s linear infinite;
+            pointer-events: none;
+        }
+        @keyframes scanline {
+            0% { transform: translateY(-100%); }
+            100% { transform: translateY(100%); }
+        }
+        .pulse-cyan {
+            animation: pulse-cyan 2s infinite;
+        }
+        @keyframes pulse-cyan {
+            0%, 100% { opacity: 0.8; filter: drop-shadow(0 0 5px #4cd7f6); }
+            50% { opacity: 1; filter: drop-shadow(0 0 15px #4cd7f6); }
+        }
+        body::-webkit-scrollbar { width: 6px; }
+        body::-webkit-scrollbar-track { background: #131313; }
+        body::-webkit-scrollbar-thumb { background: #353535; border-radius: 10px; }
+    </style>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "surface": "#131313",
+                        "error-container": "#93000a",
+                        "on-primary": "#3f008e",
+                        "surface-bright": "#393939",
+                        "on-secondary": "#003640",
+                        "on-error-container": "#ffdad6",
+                        "surface-tint": "#d2bbff",
+                        "on-error": "#690005",
+                        "surface-container-low": "#1b1b1b",
+                        "on-primary-fixed-variant": "#5a00c6",
+                        "on-primary-container": "#ede0ff",
+                        "secondary-fixed-dim": "#4cd7f6",
+                        "outline": "#958da1",
+                        "on-surface-variant": "#ccc3d8",
+                        "inverse-surface": "#e2e2e2",
+                        "surface-container-highest": "#353535",
+                        "on-primary-fixed": "#25005a",
+                        "outline-variant": "#4a4455",
+                        "tertiary-container": "#676666",
+                        "on-tertiary-fixed-variant": "#474746",
+                        "inverse-on-surface": "#303030",
+                        "tertiary": "#c8c6c5",
+                        "surface-container-lowest": "#0e0e0e",
+                        "secondary-fixed": "#acedff",
+                        "on-secondary-fixed-variant": "#004e5c",
+                        "on-secondary-fixed": "#001f26",
+                        "primary-fixed": "#eaddff",
+                        "surface-container-high": "#2a2a2a",
+                        "on-secondary-container": "#00424e",
+                        "on-tertiary-fixed": "#1b1b1c",
+                        "on-background": "#e2e2e2",
+                        "background": "#131313",
+                        "primary-container": "#7c3aed",
+                        "secondary": "#4cd7f6",
+                        "on-tertiary-container": "#e7e5e4",
+                        "surface-container": "#1f1f1f",
+                        "error": "#ffb4ab",
+                        "secondary-container": "#03b5d3",
+                        "tertiary-fixed-dim": "#c8c6c5",
+                        "primary-fixed-dim": "#d2bbff",
+                        "on-surface": "#e2e2e2",
+                        "primary": "#d2bbff",
+                        "tertiary-fixed": "#e5e2e1",
+                        "inverse-primary": "#732ee4",
+                        "on-tertiary": "#303030",
+                        "surface-variant": "#353535",
+                        "surface-dim": "#131313"
+                    },
+                    "borderRadius": {
+                        "DEFAULT": "0.25rem",
+                        "lg": "0.5rem",
+                        "xl": "0.75rem",
+                        "full": "9999px"
+                    },
+                    "spacing": {
+                        "margin-mobile": "20px",
+                        "container-max": "1440px",
+                        "margin-desktop": "64px",
+                        "unit": "4px",
+                        "gutter": "24px"
+                    },
+                    "fontFamily": {
+                        "headline-lg-mobile": ["Geist"],
+                        "label-md": ["Geist"],
+                        "headline-lg": ["Geist"],
+                        "body-lg": ["Inter"],
+                        "headline-xl": ["Geist"],
+                        "body-md": ["Inter"],
+                        "label-sm": ["Geist"],
+                        "display-lg": ["Geist"]
+                    },
+                    "fontSize": {
+                        "headline-lg-mobile": ["28px", {"lineHeight": "36px", "letterSpacing": "-0.01em", "fontWeight": "600"}],
+                        "label-md": ["14px", {"lineHeight": "20px", "letterSpacing": "0.05em", "fontWeight": "500"}],
+                        "headline-lg": ["32px", {"lineHeight": "40px", "letterSpacing": "-0.02em", "fontWeight": "600"}],
+                        "body-lg": ["18px", {"lineHeight": "28px", "letterSpacing": "0em", "fontWeight": "400"}],
+                        "headline-xl": ["40px", {"lineHeight": "48px", "letterSpacing": "-0.02em", "fontWeight": "600"}],
+                        "body-md": ["16px", {"lineHeight": "24px", "letterSpacing": "0em", "fontWeight": "400"}],
+                        "label-sm": ["12px", {"lineHeight": "16px", "letterSpacing": "0.05em", "fontWeight": "500"}],
+                        "display-lg": ["64px", {"lineHeight": "72px", "letterSpacing": "-0.04em", "fontWeight": "700"}]
+                    }
+                },
+            },
+        }
+    </script>
+</head>
+<body class="bg-background text-on-surface font-body-md overflow-x-hidden">
+<!-- Header / TopAppBar -->
+<nav class="w-full top-0 sticky z-50 bg-surface/60 backdrop-blur-xl border-b border-outline-variant/30 shadow-2xl shadow-black/40">
+<div class="flex justify-between items-center px-margin-desktop py-4 max-w-container-max mx-auto">
+<div class="font-headline-lg text-headline-lg font-bold bg-clip-text text-transparent bg-gradient-to-r from-primary to-secondary">
+                PrepNova AI
+            </div>
+<div class="hidden md:flex items-center gap-8">
+<a class="text-on-surface-variant hover:text-primary transition-colors duration-300 font-label-md text-label-md" href="#">Dashboard</a>
+<a class="text-primary font-bold transition-colors duration-300 font-label-md text-label-md" href="#">AI Coach</a>
+<a class="text-on-surface-variant hover:text-primary transition-colors duration-300 font-label-md text-label-md" href="#">Library</a>
+<a class="text-on-surface-variant hover:text-primary transition-colors duration-300 font-label-md text-label-md" href="#">Analytics</a>
+</div>
+<div class="flex items-center gap-4">
+<button class="material-symbols-outlined text-on-surface-variant hover:text-primary transition-all">notifications</button>
+<div class="w-8 h-8 rounded-full border border-primary/30 overflow-hidden">
+<img alt="User Profile" class="w-full h-full object-cover" data-alt="A high-resolution close-up portrait of a professional male user in his late 20s with a friendly but focused expression. The lighting is dramatic and cinematic, featuring subtle purple and cyan rim lighting that matches the futuristic dark-mode UI. The background is softly blurred with tech-inspired bokeh elements." src="https://lh3.googleusercontent.com/aida-public/AB6AXuCT2kJtWNjMo2FHEcI8lh_bMZ8BIH7PEsYNN6mjyUfqD3ZP1B9AXOR8O8ZGmIZ7LS44vthg_Sj4xlx73R6jQA7mxkc1VWU6oPzXA-H15aMRy7Orbx0KKCia3a_Y7G4K60Swc3O4-OomemuJgsmsYICx4Qxv55GbZqgC-zICS9WeFlHYg2-jafl9FqQpFzsLl5ZokDhARUcE7SQmIc0FUKfP-geMcax6kdMhixA_HRSQTmSaEETarUKHr92ArTbXuAIN7tcThw_8lIw"/>
+</div>
+</div>
+</div>
+</nav>
+<!-- Sidebar / SideNav (Hidden on Mobile) -->
+<aside class="hidden lg:flex flex-col h-screen w-64 fixed left-0 top-0 pt-24 pb-8 px-6 gap-y-6 bg-surface-container-lowest/80 backdrop-blur-2xl border-r border-outline-variant/20 shadow-[10px_0_30px_rgba(0,0,0,0.5)] z-40">
+<div class="space-y-1">
+<p class="font-label-sm text-label-sm text-on-surface-variant uppercase tracking-widest px-2 mb-4">Command Center</p>
+<a class="flex items-center gap-3 px-3 py-2.5 rounded-lg text-on-surface-variant/70 hover:bg-surface-container-high hover:text-on-surface transition-all group" href="#">
+<span class="material-symbols-outlined text-xl group-hover:text-secondary">dashboard</span>
+<span class="font-label-md text-label-md">Dashboard</span>
+</a>
+<a class="flex items-center gap-3 px-3 py-2.5 rounded-lg text-secondary border-r-2 border-secondary bg-secondary-container/10 transition-all group" href="#">
+<span class="material-symbols-outlined text-xl" style="font-variation-settings: 'FILL' 1;">smart_toy</span>
+<span class="font-label-md text-label-md">AI Coach</span>
+</a>
+<a class="flex items-center gap-3 px-3 py-2.5 rounded-lg text-on-surface-variant/70 hover:bg-surface-container-high hover:text-on-surface transition-all group" href="#">
+<span class="material-symbols-outlined text-xl group-hover:text-secondary">folder_open</span>
+<span class="font-label-md text-label-md">Library</span>
+</a>
+<a class="flex items-center gap-3 px-3 py-2.5 rounded-lg text-on-surface-variant/70 hover:bg-surface-container-high hover:text-on-surface transition-all group" href="#">
+<span class="material-symbols-outlined text-xl group-hover:text-secondary">insights</span>
+<span class="font-label-md text-label-md">Analytics</span>
+</a>
+<a class="flex items-center gap-3 px-3 py-2.5 rounded-lg text-on-surface-variant/70 hover:bg-surface-container-high hover:text-on-surface transition-all group" href="#">
+<span class="material-symbols-outlined text-xl group-hover:text-secondary">settings</span>
+<span class="font-label-md text-label-md">Settings</span>
+</a>
+</div>
+<div class="mt-auto">
+<button class="w-full py-3 rounded-lg bg-gradient-to-r from-primary-container to-secondary-container text-white font-label-md text-label-md flex items-center justify-center gap-2 hover:scale-[1.02] active:scale-[0.98] transition-all shadow-[0_0_20px_rgba(124,58,237,0.3)]">
+<span class="material-symbols-outlined">bolt</span>
+                Start Simulation
+            </button>
+</div>
+</aside>
+<!-- Main Content Canvas -->
+<main class="lg:pl-64 min-h-screen pt-8 pb-24">
+<div class="max-w-container-max mx-auto px-margin-mobile md:px-margin-desktop grid grid-cols-12 gap-gutter">
+<!-- Left Column: Holographic Avatar & Feedback -->
+<div class="col-span-12 lg:col-span-8 flex flex-col gap-gutter">
+<!-- AI Coach Hero Visual -->
+<section class="glass-card inner-glow rounded-xl p-8 relative overflow-hidden h-[400px] flex items-center justify-center">
+<div class="absolute inset-0 bg-gradient-to-tr from-primary/10 via-transparent to-secondary/10 opacity-30"></div>
+<div class="relative z-10 flex flex-col items-center">
+<!-- Holographic Avatar Visualization -->
+<div class="w-64 h-64 relative hologram-effect">
+<div class="absolute inset-0 rounded-full border-2 border-primary/20 animate-spin-slow" style="animation-duration: 10s;"></div>
+<div class="absolute inset-4 rounded-full border border-secondary/30 animate-reverse-spin" style="animation-duration: 15s;"></div>
+<img alt="AI Avatar" class="w-full h-full object-cover rounded-full mix-blend-screen opacity-90 blur-[1px]" data-alt="A stylized, ethereal digital human avatar constructed from glowing purple and cyan particle data. The avatar has a futuristic, high-tech aesthetic with translucent features and is surrounded by floating UI data rings. The scene is set in a dark, volumetric space with subtle light rays and a cinematic sense of depth and intelligence." src="https://lh3.googleusercontent.com/aida-public/AB6AXuAu5PsfywrFZ17knTcKPRsnw6oH6heZJtAmsjkKJgD7mof41OWI5HN_i0AjjY_SkkGM6WiJTEZN4XJRzxFhGMdr0OvHMHwzMKXyCpOhvCc9CdgrecCNh6bxyF6IBnzEwKQjL9tqTG56ZgNUbKyhxxYEyJOML1eaffXolerWOAyOVJ88OaZ2alE9xyqxS8zl08KLpxJ1th4SrOibnDTLJ8fVyiNSboaSbw23gRYMN9APupDdM0rmtWPoneho9NheanIzVlylvXl_ouU"/>
+<div class="absolute bottom-4 left-1/2 -translate-x-1/2 flex gap-1">
+<div class="w-1.5 h-1.5 rounded-full bg-secondary pulse-cyan"></div>
+<div class="w-1.5 h-1.5 rounded-full bg-secondary pulse-cyan" style="animation-delay: 0.2s"></div>
+<div class="w-1.5 h-1.5 rounded-full bg-secondary pulse-cyan" style="animation-delay: 0.4s"></div>
+</div>
+</div>
+<div class="mt-8 text-center">
+<h1 class="font-headline-xl text-headline-xl text-on-surface">Nova-1 Feedback Loop</h1>
+<p class="font-body-md text-body-md text-on-surface-variant mt-2 max-w-lg">
+                                "Your technical explanation of load balancers was precise, but let's refine the trade-off analysis between sticky sessions and round-robin."
+                            </p>
+</div>
+</div>
+</section>
+<!-- Deep Dive Chat Interface -->
+<section class="glass-card inner-glow rounded-xl flex flex-col h-[500px]">
+<div class="p-6 border-b border-outline-variant/30 flex justify-between items-center">
+<div class="flex items-center gap-3">
+<span class="material-symbols-outlined text-primary">forum</span>
+<h2 class="font-headline-lg text-headline-lg">Deep Dive Questions</h2>
+</div>
+<span class="text-label-sm font-label-sm text-on-surface-variant px-3 py-1 bg-surface-container-high rounded-full uppercase tracking-widest">Active Session</span>
+</div>
+<div class="flex-grow overflow-y-auto p-6 space-y-6">
+<!-- AI Message -->
+<div class="flex gap-4 max-w-[80%]">
+<div class="w-8 h-8 rounded-full bg-primary-container flex items-center justify-center shrink-0">
+<span class="material-symbols-outlined text-white text-sm">smart_toy</span>
+</div>
+<div class="bg-surface-container-high rounded-xl p-4 rounded-tl-none border border-outline-variant/20">
+<p class="text-body-md">Would you like to simulate a follow-up question on how consistent hashing solves the re-sharding problem in distributed databases?</p>
+<span class="text-[10px] text-on-surface-variant/50 mt-2 block">10:42 AM</span>
+</div>
+</div>
+<!-- User Message -->
+<div class="flex gap-4 max-w-[80%] ml-auto flex-row-reverse">
+<div class="w-8 h-8 rounded-full bg-secondary-container flex items-center justify-center shrink-0">
+<span class="material-symbols-outlined text-white text-sm">person</span>
+</div>
+<div class="bg-primary/10 rounded-xl p-4 rounded-tr-none border border-primary/20">
+<p class="text-body-md">Yes, let's explore that. How does the virtual node concept specifically reduce the variance of key distribution?</p>
+<span class="text-[10px] text-on-surface-variant/50 mt-2 block">10:43 AM</span>
+</div>
+</div>
+<!-- AI Typing -->
+<div class="flex gap-4 items-center">
+<div class="w-8 h-8 rounded-full bg-primary-container flex items-center justify-center shrink-0">
+<span class="material-symbols-outlined text-white text-sm">smart_toy</span>
+</div>
+<div class="flex gap-1">
+<div class="w-2 h-2 rounded-full bg-primary/40 animate-bounce"></div>
+<div class="w-2 h-2 rounded-full bg-primary/40 animate-bounce" style="animation-delay: 0.2s"></div>
+<div class="w-2 h-2 rounded-full bg-primary/40 animate-bounce" style="animation-delay: 0.4s"></div>
+</div>
+</div>
+</div>
+<div class="p-6 border-t border-outline-variant/30">
+<div class="relative">
+<input class="w-full bg-surface-container-lowest border border-outline-variant/30 rounded-xl py-4 pl-6 pr-14 focus:border-secondary focus:ring-1 focus:ring-secondary/50 outline-none transition-all font-body-md text-on-surface" placeholder="Type your deep-dive question here..." type="text"/>
+<button class="absolute right-3 top-1/2 -translate-y-1/2 w-10 h-10 bg-secondary rounded-lg flex items-center justify-center text-on-secondary hover:brightness-110 transition-all">
+<span class="material-symbols-outlined">send</span>
+</button>
+</div>
+</div>
+</section>
+</div>
+<!-- Right Column: Sidebar Stats & Goals -->
+<div class="col-span-12 lg:col-span-4 flex flex-col gap-gutter">
+<!-- Skill Breakdown -->
+<section class="glass-card inner-glow rounded-xl p-6">
+<div class="flex items-center justify-between mb-8">
+<h3 class="font-headline-lg text-headline-lg">Skill Breakdown</h3>
+<span class="material-symbols-outlined text-on-surface-variant">equalizer</span>
+</div>
+<div class="space-y-6">
+<div class="space-y-2">
+<div class="flex justify-between text-label-md font-label-md">
+<span class="text-on-surface">System Design</span>
+<span class="text-secondary">88%</span>
+</div>
+<div class="h-1.5 w-full bg-surface-container-high rounded-full overflow-hidden">
+<div class="h-full bg-gradient-to-r from-primary to-secondary w-[88%] relative">
+<div class="absolute right-0 top-0 h-full w-2 bg-white blur-sm"></div>
+</div>
+</div>
+</div>
+<div class="space-y-2">
+<div class="flex justify-between text-label-md font-label-md">
+<span class="text-on-surface">Behavioral Fluency</span>
+<span class="text-secondary">72%</span>
+</div>
+<div class="h-1.5 w-full bg-surface-container-high rounded-full overflow-hidden">
+<div class="h-full bg-gradient-to-r from-primary to-secondary w-[72%] relative">
+<div class="absolute right-0 top-0 h-full w-2 bg-white blur-sm"></div>
+</div>
+</div>
+</div>
+<div class="space-y-2">
+<div class="flex justify-between text-label-md font-label-md">
+<span class="text-on-surface">Technical Precision</span>
+<span class="text-secondary">94%</span>
+</div>
+<div class="h-1.5 w-full bg-surface-container-high rounded-full overflow-hidden">
+<div class="h-full bg-gradient-to-r from-primary to-secondary w-[94%] relative">
+<div class="absolute right-0 top-0 h-full w-2 bg-white blur-sm"></div>
+</div>
+</div>
+</div>
+<div class="space-y-2">
+<div class="flex justify-between text-label-md font-label-md">
+<span class="text-on-surface">Clarity of Logic</span>
+<span class="text-secondary">65%</span>
+</div>
+<div class="h-1.5 w-full bg-surface-container-high rounded-full overflow-hidden">
+<div class="h-full bg-gradient-to-r from-primary to-secondary w-[65%] relative">
+<div class="absolute right-0 top-0 h-full w-2 bg-white blur-sm"></div>
+</div>
+</div>
+</div>
+</div>
+<div class="mt-8 pt-8 border-t border-outline-variant/20">
+<div class="flex items-center gap-4 p-4 rounded-lg bg-primary/5 border border-primary/10">
+<span class="material-symbols-outlined text-primary text-3xl">psychology</span>
+<div>
+<p class="text-label-sm font-label-sm text-primary uppercase">Expert Insight</p>
+<p class="text-body-md text-on-surface mt-1">Focus on articulating 'Why' over 'How' for the next session.</p>
+</div>
+</div>
+</div>
+</section>
+<!-- Actionable Goals -->
+<section class="glass-card inner-glow rounded-xl p-6">
+<h3 class="font-headline-lg text-headline-lg mb-6">Actionable Goals</h3>
+<div class="space-y-4">
+<div class="group flex items-start gap-4 p-4 rounded-lg hover:bg-surface-container-high transition-all cursor-pointer border border-transparent hover:border-outline-variant/30">
+<div class="w-6 h-6 rounded border border-secondary/50 flex items-center justify-center shrink-0 group-hover:bg-secondary/10">
+<span class="material-symbols-outlined text-sm text-secondary scale-0 group-hover:scale-100 transition-transform">check</span>
+</div>
+<div>
+<h4 class="font-label-md text-label-md text-on-surface">Explain CAP Theorem in 60s</h4>
+<p class="text-label-sm font-label-sm text-on-surface-variant mt-1">Practice distilling complex tradeoffs into concise summaries.</p>
+</div>
+</div>
+<div class="group flex items-start gap-4 p-4 rounded-lg hover:bg-surface-container-high transition-all cursor-pointer border border-transparent hover:border-outline-variant/30">
+<div class="w-6 h-6 rounded border border-secondary/50 flex items-center justify-center shrink-0 group-hover:bg-secondary/10">
+<span class="material-symbols-outlined text-sm text-secondary scale-0 group-hover:scale-100 transition-transform">check</span>
+</div>
+<div>
+<h4 class="font-label-md text-label-md text-on-surface">STAR Method for 'Conflict'</h4>
+<p class="text-label-sm font-label-sm text-on-surface-variant mt-1">Draft 3 specific examples of technical disagreement resolutions.</p>
+</div>
+</div>
+<div class="group flex items-start gap-4 p-4 rounded-lg hover:bg-surface-container-high transition-all cursor-pointer border border-transparent hover:border-outline-variant/30">
+<div class="w-6 h-6 rounded border border-secondary/50 flex items-center justify-center shrink-0 group-hover:bg-secondary/10">
+<span class="material-symbols-outlined text-sm text-secondary scale-0 group-hover:scale-100 transition-transform">check</span>
+</div>
+<div>
+<h4 class="font-label-md text-label-md text-on-surface">Data Partitioning Deep Dive</h4>
+<p class="text-label-sm font-label-sm text-on-surface-variant mt-1">Review consistent hashing and range-based partitioning strategies.</p>
+</div>
+</div>
+</div>
+<button class="w-full mt-6 py-3 rounded-lg border border-outline-variant/30 text-on-surface hover:text-white hover:border-white transition-all font-label-md text-label-md">
+                        View Full Roadmap
+                    </button>
+</section>
+<!-- Performance Card -->
+<section class="rounded-xl overflow-hidden relative group">
+<img alt="Performance Gradient" class="absolute inset-0 w-full h-full object-cover opacity-50 transition-transform duration-700 group-hover:scale-110" data-alt="An abstract, high-contrast digital texture of swirling liquid gradients in deep obsidian, electric purple, and neon cyan. The movement is smooth and cinematic, reminiscent of high-end energy flow simulations. The texture serves as a vibrant background for a dashboard widget, symbolizing data fluidity and peak performance." src="https://lh3.googleusercontent.com/aida-public/AB6AXuBR_vzhSSDBmdiw7lCCX96YV96WUK8KR2KsXrpXM6s407qaqPxEd-vzsCPHTX1zvQ7MD77MIDlAtSG-Xm0BGSjq5DIPydvSt7DuzR5ZXYJL-ClpFxprwHcGtnd3KYrhDKkTtVg5ulGTNF8t5PW1kYjH9jQkI6ugztei0Lv1yZ-rW7GU1P8G9c2FyUIK2nS-q0ndpa3nEGxrTGQyoAWgKVVx2bJSvUyOussYTPcHoj69bEM0MaWKrj9QH1_ahZIq0w9RXViHnvswxzk"/>
+<div class="absolute inset-0 bg-black/60 backdrop-blur-[2px]"></div>
+<div class="relative z-10 p-6 flex flex-col items-center text-center">
+<p class="font-label-sm text-label-sm text-secondary uppercase tracking-[0.2em] mb-2">Tier Achievement</p>
+<h4 class="font-headline-lg text-headline-lg text-white mb-4">Elite Simulation Rank</h4>
+<div class="w-24 h-24 rounded-full border-4 border-secondary flex items-center justify-center mb-4">
+<span class="text-display-lg font-display-lg text-white">#42</span>
+</div>
+<p class="font-body-md text-body-md text-on-surface-variant">You are in the top 5% of all candidates preparing for System Architect roles.</p>
+</div>
+</section>
+</div>
+</div>
+</main>
+<!-- Bottom Navigation (Mobile Only) -->
+<nav class="md:hidden fixed bottom-0 left-0 right-0 bg-surface/80 backdrop-blur-xl border-t border-outline-variant/30 flex justify-around items-center py-4 z-50">
+<button class="flex flex-col items-center gap-1 text-on-surface-variant">
+<span class="material-symbols-outlined">dashboard</span>
+<span class="text-[10px] font-label-sm uppercase">Home</span>
+</button>
+<button class="flex flex-col items-center gap-1 text-primary">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">smart_toy</span>
+<span class="text-[10px] font-label-sm uppercase">Coach</span>
+</button>
+<button class="flex flex-col items-center gap-1 text-on-surface-variant">
+<span class="material-symbols-outlined">insights</span>
+<span class="text-[10px] font-label-sm uppercase">Stats</span>
+</button>
+<button class="flex flex-col items-center gap-1 text-on-surface-variant">
+<span class="material-symbols-outlined">settings</span>
+<span class="text-[10px] font-label-sm uppercase">More</span>
+</button>
+</nav>
+<script>
+        // Micro-interactions for chat and scrolling
+        document.addEventListener('DOMContentLoaded', () => {
+            const chatContainer = document.querySelector('.overflow-y-auto');
+            if (chatContainer) {
+                chatContainer.scrollTop = chatContainer.scrollHeight;
+            }
+
+            // Subtle parallax for the hologram avatar on mouse move
+            const hologram = document.querySelector('.hologram-effect');
+            if (hologram) {
+                document.addEventListener('mousemove', (e) => {
+                    const xAxis = (window.innerWidth / 2 - e.pageX) / 45;
+                    const yAxis = (window.innerHeight / 2 - e.pageY) / 45;
+                    hologram.style.transform = `rotateY(${xAxis}deg) rotateX(${yAxis}deg)`;
+                });
+            }
+        });
+    </script>
+</body></html>

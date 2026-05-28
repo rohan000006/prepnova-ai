@@ -1,0 +1,348 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Settings | PrepNova AI</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Geist:wght@100..900&amp;family=Inter:wght@100..900&amp;family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Geist:wght@100..900&amp;family=Inter:wght@100..900&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "surface": "#131313",
+                        "error-container": "#93000a",
+                        "on-primary": "#3f008e",
+                        "surface-bright": "#393939",
+                        "on-secondary": "#003640",
+                        "on-error-container": "#ffdad6",
+                        "surface-tint": "#d2bbff",
+                        "on-error": "#690005",
+                        "surface-container-low": "#1b1b1b",
+                        "on-primary-fixed-variant": "#5a00c6",
+                        "on-primary-container": "#ede0ff",
+                        "secondary-fixed-dim": "#4cd7f6",
+                        "outline": "#958da1",
+                        "on-surface-variant": "#ccc3d8",
+                        "inverse-surface": "#e2e2e2",
+                        "surface-container-highest": "#353535",
+                        "on-primary-fixed": "#25005a",
+                        "outline-variant": "#4a4455",
+                        "tertiary-container": "#676666",
+                        "on-tertiary-fixed-variant": "#474746",
+                        "inverse-on-surface": "#303030",
+                        "tertiary": "#c8c6c5",
+                        "surface-container-lowest": "#0e0e0e",
+                        "secondary-fixed": "#acedff",
+                        "on-secondary-fixed-variant": "#004e5c",
+                        "on-secondary-fixed": "#001f26",
+                        "primary-fixed": "#eaddff",
+                        "surface-container-high": "#2a2a2a",
+                        "on-secondary-container": "#00424e",
+                        "on-tertiary-fixed": "#1b1b1c",
+                        "on-background": "#e2e2e2",
+                        "background": "#131313",
+                        "primary-container": "#7c3aed",
+                        "secondary": "#4cd7f6",
+                        "on-tertiary-container": "#e7e5e4",
+                        "surface-container": "#1f1f1f",
+                        "error": "#ffb4ab",
+                        "secondary-container": "#03b5d3",
+                        "tertiary-fixed-dim": "#c8c6c5",
+                        "primary-fixed-dim": "#d2bbff",
+                        "on-surface": "#e2e2e2",
+                        "primary": "#d2bbff",
+                        "tertiary-fixed": "#e5e2e1",
+                        "inverse-primary": "#732ee4",
+                        "on-tertiary": "#303030",
+                        "surface-variant": "#353535",
+                        "surface-dim": "#131313"
+                    },
+                    "borderRadius": {
+                        "DEFAULT": "0.25rem",
+                        "lg": "0.5rem",
+                        "xl": "0.75rem",
+                        "full": "9999px"
+                    },
+                    "spacing": {
+                        "margin-mobile": "20px",
+                        "container-max": "1440px",
+                        "margin-desktop": "64px",
+                        "unit": "4px",
+                        "gutter": "24px"
+                    },
+                    "fontFamily": {
+                        "headline-lg-mobile": ["Geist"],
+                        "label-md": ["Geist"],
+                        "headline-lg": ["Geist"],
+                        "body-lg": ["Inter"],
+                        "headline-xl": ["Geist"],
+                        "body-md": ["Inter"],
+                        "label-sm": ["Geist"],
+                        "display-lg": ["Geist"]
+                    },
+                    "fontSize": {
+                        "headline-lg-mobile": ["28px", {"lineHeight": "36px", "letterSpacing": "-0.01em", "fontWeight": "600"}],
+                        "label-md": ["14px", {"lineHeight": "20px", "letterSpacing": "0.05em", "fontWeight": "500"}],
+                        "headline-lg": ["32px", {"lineHeight": "40px", "letterSpacing": "-0.02em", "fontWeight": "600"}],
+                        "body-lg": ["18px", {"lineHeight": "28px", "letterSpacing": "0em", "fontWeight": "400"}],
+                        "headline-xl": ["40px", {"lineHeight": "48px", "letterSpacing": "-0.02em", "fontWeight": "600"}],
+                        "body-md": ["16px", {"lineHeight": "24px", "letterSpacing": "0em", "fontWeight": "400"}],
+                        "label-sm": ["12px", {"lineHeight": "16px", "letterSpacing": "0.05em", "fontWeight": "500"}],
+                        "display-lg": ["64px", {"lineHeight": "72px", "letterSpacing": "-0.04em", "fontWeight": "700"}]
+                    }
+                },
+            },
+        }
+    </script>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        body {
+            background-color: #000000;
+            color: #e2e2e2;
+        }
+        .glass-card {
+            background: rgba(10, 10, 11, 0.8);
+            border: 1px solid #1F1F23;
+            backdrop-filter: blur(20px);
+        }
+        .inner-glow {
+            box-shadow: inset 1px 1px 0px 0px rgba(76, 215, 246, 0.1);
+        }
+        .custom-toggle:checked + .toggle-dot {
+            transform: translateX(100%);
+            background-color: #4cd7f6;
+        }
+        .nav-active {
+            color: #4cd7f6;
+            border-right: 2px solid #4cd7f6;
+            background: rgba(3, 181, 211, 0.1);
+        }
+    </style>
+</head>
+<body class="font-body-md text-body-md overflow-x-hidden">
+<!-- Top Navigation Bar -->
+<header class="w-full top-0 sticky z-50 bg-surface/60 backdrop-blur-xl border-b border-outline-variant/30 shadow-2xl shadow-black/40">
+<div class="flex justify-between items-center px-64 py-4 max-w-[1440px] mx-auto md:px-margin-desktop">
+<div class="font-headline-lg text-headline-lg font-bold bg-clip-text text-transparent bg-gradient-to-r from-primary to-secondary">
+                PrepNova AI
+            </div>
+<div class="flex items-center gap-6">
+<span class="material-symbols-outlined text-on-surface-variant cursor-pointer hover:text-primary transition-colors duration-300">notifications</span>
+<span class="material-symbols-outlined text-on-surface-variant cursor-pointer hover:text-primary transition-colors duration-300">account_circle</span>
+</div>
+</div>
+</header>
+<div class="flex max-w-[1440px] mx-auto">
+<!-- Sidebar Navigation -->
+<aside class="h-[calc(100vh-73px)] w-64 sticky top-[73px] bg-surface-container-lowest/80 backdrop-blur-2xl border-r border-outline-variant/20 shadow-[10px_0_30px_rgba(0,0,0,0.5)] flex flex-col py-8 gap-y-4 hidden md:flex">
+<div class="px-6 mb-4">
+<h2 class="font-headline-lg text-headline-lg font-black text-primary">Command Center</h2>
+<p class="font-label-md text-label-md text-on-surface-variant/70">Elite Status</p>
+</div>
+<nav class="flex-grow">
+<a class="flex items-center px-6 py-3 gap-3 text-on-surface-variant/70 hover:bg-surface-container-high hover:text-on-surface transition-all active:scale-[0.98]" href="#">
+<span class="material-symbols-outlined">dashboard</span>
+<span class="font-label-md">Dashboard</span>
+</a>
+<a class="flex items-center px-6 py-3 gap-3 text-on-surface-variant/70 hover:bg-surface-container-high hover:text-on-surface transition-all active:scale-[0.98]" href="#">
+<span class="material-symbols-outlined">folder_open</span>
+<span class="font-label-md">Library</span>
+</a>
+<a class="flex items-center px-6 py-3 gap-3 text-on-surface-variant/70 hover:bg-surface-container-high hover:text-on-surface transition-all active:scale-[0.98]" href="#">
+<span class="material-symbols-outlined">insights</span>
+<span class="font-label-md">Analytics</span>
+</a>
+<a class="flex items-center px-6 py-3 gap-3 nav-active text-secondary border-r-2 border-secondary bg-secondary-container/10 active:scale-[0.98]" href="#">
+<span class="material-symbols-outlined">settings</span>
+<span class="font-label-md">Settings</span>
+</a>
+</nav>
+<div class="px-6 mt-auto">
+<button class="w-full py-3 bg-gradient-to-r from-primary-container to-secondary-container text-white rounded-lg font-label-md hover:shadow-[0_0_15px_rgba(76,215,246,0.3)] transition-all">
+                    Start Simulation
+                </button>
+</div>
+</aside>
+<!-- Main Content -->
+<main class="flex-grow px-margin-desktop py-12 md:px-20">
+<div class="mb-12">
+<h1 class="font-display-lg text-display-lg text-on-surface mb-2">Settings</h1>
+<p class="text-on-surface-variant font-body-lg">Refine your elite interview parameters and personal workspace.</p>
+</div>
+<!-- Settings Grid -->
+<div class="grid grid-cols-1 xl:grid-cols-12 gap-gutter">
+<!-- Profile Section (Bento Card) -->
+<section class="xl:col-span-8 glass-card inner-glow p-8 rounded-xl transition-all duration-300 hover:scale-[1.01]">
+<div class="flex items-center justify-between mb-8">
+<h3 class="font-headline-lg text-headline-lg text-primary flex items-center gap-3">
+<span class="material-symbols-outlined">person</span> Profile
+                        </h3>
+<span class="text-label-sm uppercase tracking-widest text-outline">Account Identity</span>
+</div>
+<div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+<div class="space-y-2">
+<label class="font-label-sm text-outline uppercase tracking-wider">Full Name</label>
+<input class="w-full bg-surface-container border border-outline-variant/30 rounded-lg px-4 py-3 text-on-surface focus:outline-none focus:border-secondary focus:ring-2 focus:ring-secondary/20 transition-all font-body-md" type="text" value="Alexander Sterling"/>
+</div>
+<div class="space-y-2">
+<label class="font-label-sm text-outline uppercase tracking-wider">Email Address</label>
+<input class="w-full bg-surface-container border border-outline-variant/30 rounded-lg px-4 py-3 text-on-surface focus:outline-none focus:border-secondary focus:ring-2 focus:ring-secondary/20 transition-all font-body-md" type="email" value="alex.sterling@vanguard.io"/>
+</div>
+<div class="md:col-span-2 space-y-2">
+<label class="font-label-sm text-outline uppercase tracking-wider">Career Focus</label>
+<input class="w-full bg-surface-container border border-outline-variant/30 rounded-lg px-4 py-3 text-on-surface focus:outline-none focus:border-secondary focus:ring-2 focus:ring-secondary/20 transition-all font-body-md" type="text" value="Senior Systems Architect | Quant Finance"/>
+</div>
+</div>
+</section>
+<!-- AI Personality (Interactive Card) -->
+<section class="xl:col-span-4 glass-card inner-glow p-8 rounded-xl bg-gradient-to-br from-surface-container-low to-black transition-all duration-300 hover:scale-[1.02] border-secondary/20 border">
+<div class="flex items-center justify-between mb-6">
+<h3 class="font-headline-lg text-headline-lg text-secondary">Coach AI</h3>
+<span class="material-symbols-outlined text-secondary" style="font-variation-settings: 'FILL' 1;">psychology</span>
+</div>
+<p class="font-body-md text-on-surface-variant mb-8">Current Mode: <span class="text-secondary font-bold">Ruthless Efficiency</span></p>
+<div class="space-y-6">
+<div class="space-y-3">
+<div class="flex justify-between text-label-sm text-outline">
+<span>ASSERTIVENESS</span>
+<span class="text-secondary">85%</span>
+</div>
+<div class="h-1 bg-surface-container-highest rounded-full overflow-hidden">
+<div class="h-full bg-gradient-to-r from-secondary to-primary-container w-[85%] relative">
+<div class="absolute right-0 top-0 bottom-0 w-1 bg-white shadow-[0_0_8px_#fff] animate-pulse"></div>
+</div>
+</div>
+</div>
+<div class="space-y-3">
+<div class="flex justify-between text-label-sm text-outline">
+<span>FEEDBACK DEPTH</span>
+<span class="text-secondary">92%</span>
+</div>
+<div class="h-1 bg-surface-container-highest rounded-full overflow-hidden">
+<div class="h-full bg-gradient-to-r from-secondary to-primary-container w-[92%] relative">
+<div class="absolute right-0 top-0 bottom-0 w-1 bg-white shadow-[0_0_8px_#fff] animate-pulse"></div>
+</div>
+</div>
+</div>
+</div>
+<button class="mt-8 w-full py-2 border border-secondary text-secondary rounded-lg font-label-md hover:bg-secondary/10 transition-all uppercase tracking-widest">
+                        Switch to Mentor Mode
+                    </button>
+</section>
+<!-- Privacy & Preferences (Asymmetric Grid) -->
+<section class="xl:col-span-5 glass-card inner-glow p-8 rounded-xl space-y-8">
+<h3 class="font-headline-lg text-headline-lg text-on-surface">Preferences</h3>
+<div class="space-y-6">
+<div class="flex items-center justify-between">
+<div>
+<h4 class="font-body-md text-on-surface font-semibold">Ghost Mode</h4>
+<p class="text-label-sm text-on-surface-variant">Hide activity from public analytics</p>
+</div>
+<label class="relative inline-flex items-center cursor-pointer">
+<input checked="" class="sr-only peer custom-toggle" type="checkbox"/>
+<div class="w-11 h-6 bg-surface-container-highest rounded-full peer-checked:bg-secondary/20 transition-all"></div>
+<div class="absolute left-1 top-1 w-4 h-4 bg-outline-variant rounded-full transition-all toggle-dot"></div>
+</label>
+</div>
+<div class="flex items-center justify-between">
+<div>
+<h4 class="font-body-md text-on-surface font-semibold">Simulated Pressure</h4>
+<p class="text-label-sm text-on-surface-variant">Enable distractions and timer stress</p>
+</div>
+<label class="relative inline-flex items-center cursor-pointer">
+<input class="sr-only peer custom-toggle" type="checkbox"/>
+<div class="w-11 h-6 bg-surface-container-highest rounded-full peer-checked:bg-secondary/20 transition-all"></div>
+<div class="absolute left-1 top-1 w-4 h-4 bg-outline-variant rounded-full transition-all toggle-dot"></div>
+</label>
+</div>
+</div>
+</section>
+<!-- API & Integration (Glass Card) -->
+<section class="xl:col-span-7 glass-card inner-glow p-8 rounded-xl">
+<div class="flex items-center justify-between mb-8">
+<div>
+<h3 class="font-headline-lg text-headline-lg text-primary">Integration</h3>
+<p class="text-label-sm text-outline">Manage API &amp; External Access</p>
+</div>
+<img class="h-12 w-12 rounded-lg object-cover border border-outline-variant/30" data-alt="A professional close-up shot of a high-tech server rack illuminated by soft neon blue and purple light leaks. The image exudes a modern-cinematic atmosphere with sharp focus on the metallic surfaces and fiber optic cables, matching an elite futuristic command center aesthetic with deep obsidian tones and precision spacing." src="https://lh3.googleusercontent.com/aida-public/AB6AXuDudN69u7-PrXp52iR670XVLELV_gsduvBhYj14CGCMaLrbvA97NLrpkVtINl3OzAUVWUxtv79aEhYX40QKzY3_s85oPdhl7joEi_RrbsMsNca1G_CkcSKsw9QWOHCGSHYoBePGt4W1RdGF9o_p6AEZmZUI6NKU190N-J9MfDnimo22QxEPkQWCFpdFOEA-tmEzFK45LDb9moD5_JSsTrG3JeSJV5h9P76Im0LN_k8JRJeWIEeEBiSlt3ZJVXwPiYoOIhLJ6rbp7jQ"/>
+</div>
+<div class="space-y-4">
+<div class="flex flex-col gap-2">
+<label class="font-label-sm text-outline uppercase tracking-wider">Master API Key</label>
+<div class="flex gap-2">
+<input class="flex-grow bg-surface-container-lowest border border-outline-variant/30 rounded-lg px-4 py-3 text-on-surface font-mono text-sm focus:outline-none" readonly="" type="password" value="pk_live_************************4f2a"/>
+<button class="p-3 bg-surface-container-high rounded-lg text-on-surface hover:text-secondary transition-colors">
+<span class="material-symbols-outlined">content_copy</span>
+</button>
+</div>
+</div>
+<div class="p-4 bg-surface-container-low rounded-lg border border-outline-variant/10">
+<div class="flex items-start gap-4">
+<span class="material-symbols-outlined text-secondary mt-1">info</span>
+<p class="text-label-sm text-on-surface-variant">Your API key provides direct access to the PrepNova Simulation Engine. Keep it secure. Access resets every 30 days.</p>
+</div>
+</div>
+</div>
+</section>
+<!-- Danger Zone -->
+<section class="xl:col-span-12 p-8 rounded-xl border border-error-container/30 bg-error-container/5 mt-8">
+<div class="flex flex-col md:flex-row md:items-center justify-between gap-6">
+<div>
+<h3 class="font-headline-lg text-headline-lg text-error">Danger Zone</h3>
+<p class="text-body-md text-on-surface-variant">Permanently delete your simulation data and account history.</p>
+</div>
+<button class="px-8 py-3 border border-error text-error rounded-lg font-label-md hover:bg-error/10 transition-all uppercase tracking-widest active:scale-95">
+                            Purge Records
+                        </button>
+</div>
+</section>
+</div>
+<!-- Footer Spacing -->
+<div class="h-20"></div>
+</main>
+</div>
+<!-- Background Atmospheric Effect -->
+<div class="fixed inset-0 pointer-events-none z-[-1] overflow-hidden">
+<div class="absolute top-[-10%] right-[-10%] w-[50%] h-[50%] bg-primary/5 blur-[120px] rounded-full"></div>
+<div class="absolute bottom-[-10%] left-[-10%] w-[40%] h-[40%] bg-secondary/5 blur-[120px] rounded-full"></div>
+</div>
+<script>
+        // Micro-interactions for input focus
+        const inputs = document.querySelectorAll('input');
+        inputs.forEach(input => {
+            input.addEventListener('focus', () => {
+                input.parentElement.querySelector('label')?.classList.add('text-secondary');
+            });
+            input.addEventListener('blur', () => {
+                input.parentElement.querySelector('label')?.classList.remove('text-secondary');
+            });
+        });
+
+        // 3D Tilt Effect on Cards (Subtle)
+        const cards = document.querySelectorAll('.glass-card');
+        cards.forEach(card => {
+            card.addEventListener('mousemove', (e) => {
+                const rect = card.getBoundingClientRect();
+                const x = e.clientX - rect.left;
+                const y = e.clientY - rect.top;
+                const xc = rect.width / 2;
+                const yc = rect.height / 2;
+                const dx = x - xc;
+                const dy = y - yc;
+                
+                card.style.transform = `perspective(1000px) rotateX(${-dy / 50}deg) rotateY(${dx / 50}deg) scale(1.01)`;
+            });
+            
+            card.addEventListener('mouseleave', () => {
+                card.style.transform = 'perspective(1000px) rotateX(0) rotateY(0) scale(1)';
+            });
+        });
+    </script>
+</body></html>

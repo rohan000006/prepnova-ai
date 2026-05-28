@@ -1,0 +1,465 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&amp;family=Geist:wght@100;300;400;500;600;700;800;900&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<style>
+        body {
+            background-color: #000000;
+            color: #e2e2e2;
+            font-family: 'Inter', sans-serif;
+            overflow-x: hidden;
+        }
+        .glass-panel {
+            background: rgba(10, 10, 11, 0.6);
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(31, 31, 35, 1);
+            position: relative;
+            overflow: hidden;
+        }
+        .glass-panel::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(135deg, rgba(115, 46, 228, 0.05) 0%, transparent 100%);
+            pointer-events: none;
+        }
+        .inner-glow {
+            box-shadow: inset 1px 1px 0px 0px rgba(76, 215, 246, 0.1);
+        }
+        .cyan-glow-hover:hover {
+            box-shadow: 0 0 20px rgba(76, 215, 246, 0.2);
+            border-color: #4cd7f6;
+        }
+        .progress-pulse {
+            position: relative;
+        }
+        .progress-pulse::after {
+            content: '';
+            position: absolute;
+            right: 0;
+            top: 50%;
+            transform: translateY(-50%);
+            width: 4px;
+            height: 4px;
+            background: #4cd7f6;
+            border-radius: 50%;
+            box-shadow: 0 0 10px #4cd7f6;
+            animation: pulse 1.5s infinite;
+        }
+        @keyframes pulse {
+            0% { transform: translateY(-50%) scale(1); opacity: 1; }
+            100% { transform: translateY(-50%) scale(3); opacity: 0; }
+        }
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+    </style>
+<script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            "colors": {
+                    "error-container": "#93000a",
+                    "surface-bright": "#393939",
+                    "on-primary-fixed": "#25005a",
+                    "on-tertiary-container": "#e7e5e4",
+                    "on-error-container": "#ffdad6",
+                    "surface-dim": "#131313",
+                    "on-tertiary": "#303030",
+                    "tertiary-fixed": "#e5e2e1",
+                    "on-primary": "#3f008e",
+                    "outline": "#958da1",
+                    "surface-container-low": "#1b1b1b",
+                    "primary-container": "#7c3aed",
+                    "on-error": "#690005",
+                    "outline-variant": "#4a4455",
+                    "inverse-surface": "#e2e2e2",
+                    "surface-container-high": "#2a2a2a",
+                    "on-secondary-container": "#00424e",
+                    "on-background": "#e2e2e2",
+                    "on-tertiary-fixed": "#1b1b1c",
+                    "surface-container-lowest": "#0e0e0e",
+                    "secondary": "#4cd7f6",
+                    "on-secondary": "#003640",
+                    "inverse-on-surface": "#303030",
+                    "tertiary-fixed-dim": "#c8c6c5",
+                    "secondary-container": "#03b5d3",
+                    "on-secondary-fixed": "#001f26",
+                    "on-primary-fixed-variant": "#5a00c6",
+                    "surface-container-highest": "#353535",
+                    "background": "#131313",
+                    "tertiary": "#c8c6c5",
+                    "surface-container": "#1f1f1f",
+                    "primary-fixed": "#eaddff",
+                    "secondary-fixed-dim": "#4cd7f6",
+                    "on-secondary-fixed-variant": "#004e5c",
+                    "tertiary-container": "#676666",
+                    "surface-variant": "#353535",
+                    "on-primary-container": "#ede0ff",
+                    "inverse-primary": "#732ee4",
+                    "primary": "#d2bbff",
+                    "primary-fixed-dim": "#d2bbff",
+                    "secondary-fixed": "#acedff",
+                    "error": "#ffb4ab",
+                    "surface": "#131313",
+                    "on-tertiary-fixed-variant": "#474746",
+                    "on-surface-variant": "#ccc3d8",
+                    "surface-tint": "#d2bbff",
+                    "on-surface": "#e2e2e2"
+            },
+            "borderRadius": {
+                    "DEFAULT": "0.25rem",
+                    "lg": "0.5rem",
+                    "xl": "0.75rem",
+                    "full": "9999px"
+            },
+            "spacing": {
+                    "margin-mobile": "20px",
+                    "margin-desktop": "64px",
+                    "gutter": "24px",
+                    "unit": "4px",
+                    "container-max": "1440px"
+            },
+            "fontFamily": {
+                    "headline-lg-mobile": ["Geist"],
+                    "body-lg": ["Inter"],
+                    "label-sm": ["Geist"],
+                    "label-md": ["Geist"],
+                    "display-lg": ["Geist"],
+                    "headline-lg": ["Geist"],
+                    "headline-xl": ["Geist"],
+                    "body-md": ["Inter"]
+            },
+            "fontSize": {
+                    "headline-lg-mobile": ["28px", {"lineHeight": "36px", "letterSpacing": "-0.01em", "fontWeight": "600"}],
+                    "body-lg": ["18px", {"lineHeight": "28px", "letterSpacing": "0em", "fontWeight": "400"}],
+                    "label-sm": ["12px", {"lineHeight": "16px", "letterSpacing": "0.05em", "fontWeight": "500"}],
+                    "label-md": ["14px", {"lineHeight": "20px", "letterSpacing": "0.05em", "fontWeight": "500"}],
+                    "display-lg": ["64px", {"lineHeight": "72px", "letterSpacing": "-0.04em", "fontWeight": "700"}],
+                    "headline-lg": ["32px", {"lineHeight": "40px", "letterSpacing": "-0.02em", "fontWeight": "600"}],
+                    "headline-xl": ["40px", {"lineHeight": "48px", "letterSpacing": "-0.02em", "fontWeight": "600"}],
+                    "body-md": ["16px", {"lineHeight": "24px", "letterSpacing": "0em", "fontWeight": "400"}]
+            }
+          },
+        },
+      }
+    </script>
+</head>
+<body class="bg-surface-container-lowest">
+<!-- SideNavBar -->
+<aside class="h-screen w-64 fixed left-0 top-0 border-r border-outline-variant/20 bg-surface-container-lowest shadow-[40px_0_40px_-20px_rgba(0,0,0,0.4)] z-50 flex flex-col py-8">
+<div class="px-6 mb-10">
+<h1 class="font-headline-xl text-headline-xl font-bold bg-gradient-to-r from-primary to-secondary bg-clip-text text-transparent">PrepNova AI</h1>
+<p class="font-label-md text-label-md text-on-surface-variant uppercase tracking-widest mt-1">Elite Intelligence</p>
+</div>
+<nav class="flex-1 space-y-1">
+<a class="flex items-center gap-3 px-6 py-3 text-on-surface-variant hover:text-on-surface hover:bg-surface-container-high/50 transition-all duration-200" href="#">
+<span class="material-symbols-outlined">dashboard</span>
+<span class="font-label-md text-label-md">Dashboard</span>
+</a>
+<a class="flex items-center gap-3 px-6 py-3 text-on-surface-variant hover:text-on-surface hover:bg-surface-container-high/50 transition-all duration-200" href="#">
+<span class="material-symbols-outlined">library_books</span>
+<span class="font-label-md text-label-md">Library</span>
+</a>
+<a class="flex items-center gap-3 px-6 py-3 text-on-surface-variant hover:text-on-surface hover:bg-surface-container-high/50 transition-all duration-200" href="#">
+<span class="material-symbols-outlined">leaderboard</span>
+<span class="font-label-md text-label-md">Analytics</span>
+</a>
+<a class="flex items-center gap-3 px-6 py-3 text-on-surface-variant hover:text-on-surface hover:bg-surface-container-high/50 transition-all duration-200" href="#">
+<span class="material-symbols-outlined">smart_toy</span>
+<span class="font-label-md text-label-md">AI Coach</span>
+</a>
+<a class="flex items-center gap-3 px-6 py-3 text-on-surface-variant hover:text-on-surface hover:bg-surface-container-high/50 transition-all duration-200" href="#">
+<span class="material-symbols-outlined">history</span>
+<span class="font-label-md text-label-md">History</span>
+</a>
+<!-- Active State Logic: Profile Page maps to Settings (or in this context, the Active Tab) -->
+<a class="flex items-center gap-3 px-6 py-3 bg-primary-container/10 border-l-4 border-secondary text-secondary font-bold" href="#">
+<span class="material-symbols-outlined">settings</span>
+<span class="font-label-md text-label-md">Settings</span>
+</a>
+</nav>
+<div class="px-6 mt-auto">
+<button class="w-full py-4 bg-gradient-to-r from-primary-container to-secondary-container rounded-lg text-white font-bold flex items-center justify-center gap-2 active:scale-95 transition-transform shadow-[0_0_20px_rgba(124,58,237,0.3)]">
+<span class="material-symbols-outlined">bolt</span>
+                Start Simulation
+            </button>
+</div>
+</aside>
+<!-- TopAppBar -->
+<header class="fixed top-0 right-0 w-[calc(100%-16rem)] h-16 bg-surface-container-lowest/80 backdrop-blur-xl border-b border-outline-variant/20 flex justify-between items-center px-margin-desktop z-40">
+<div class="flex items-center flex-1 max-w-xl">
+<div class="relative w-full focus-within:ring-1 focus-within:ring-secondary/50 rounded-lg group">
+<span class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-on-surface-variant">search</span>
+<input class="w-full bg-surface-container-low border border-outline-variant/30 rounded-lg pl-10 pr-4 py-2 text-body-md focus:outline-none transition-all" placeholder="Search simulations, skills, or data..." type="text"/>
+</div>
+</div>
+<div class="flex items-center gap-6">
+<button class="text-on-surface-variant hover:text-secondary transition-colors relative">
+<span class="material-symbols-outlined">notifications</span>
+<span class="absolute top-0 right-0 w-2 h-2 bg-secondary rounded-full"></span>
+</button>
+<div class="flex items-center gap-3 pl-6 border-l border-outline-variant/20">
+<div class="text-right">
+<p class="font-label-md text-label-md text-on-surface font-bold">Alexander Sterling</p>
+<p class="font-label-sm text-label-sm text-secondary">Level 42 Apex</p>
+</div>
+<div class="w-10 h-10 rounded-full border-2 border-secondary overflow-hidden">
+<img class="w-full h-full object-cover" data-alt="A cinematic portrait of a confident male professional with sharp features, lit by dramatic blue and violet accent lights in a dark, high-tech studio environment. The image is crisp and high-resolution, evoking a sense of elite status and advanced intelligence consistent with a futuristic command center aesthetic." src="https://lh3.googleusercontent.com/aida-public/AB6AXuBFsASffPJ3Ohg3un7CUeMRMv66_W328wGEItt_DBzVRVhwFRRzsOn1ujj1olwCCclnmkFd_IKaOWcubI4sMsNYfumhWkYagS0fK0symXRfrM4cX9w9m4dZzAASKnZ0SSLbQC-R8km7J4Ue-cLBZ0CIRaLLVwKy8YEuAa9OgHq1bjYkWieJVJftCCGXR1xTGCKQlIgzsSzpNZCbTGsdUTQon1lohXkC93e3gc71-yqzVrphyQF1vEUmF750QhbMEbIjPwVLKG2u9ms"/>
+</div>
+</div>
+</div>
+</header>
+<!-- Main Content -->
+<main class="ml-64 pt-24 pb-20 px-margin-desktop min-h-screen">
+<div class="max-w-container-max mx-auto">
+<!-- Elite Identity Header -->
+<section class="mb-12">
+<div class="glass-panel inner-glow p-10 rounded-xl flex flex-col md:flex-row items-center gap-10">
+<div class="relative group">
+<div class="absolute -inset-1 bg-gradient-to-r from-primary to-secondary rounded-full blur opacity-25 group-hover:opacity-75 transition duration-1000"></div>
+<div class="relative w-40 h-40 rounded-full border-4 border-surface-container overflow-hidden">
+<img class="w-full h-full object-cover" data-alt="A high-resolution, cinematic portrait of Alexander Sterling, showing a sophisticated man in his 30s with a sharp, intelligent gaze. The background is a dark, tech-infused gradient of obsidian and deep purple, highlighted by subtle light leaks and digital artifacts that suggest a master-level simulation environment." src="https://lh3.googleusercontent.com/aida-public/AB6AXuBWZwfy8zp3nwXtLmt2nymYmaAkBKaB4flxWts7jkiWU0WY8dnZFTIW5F10ItgCUcc8m_QI5kOK5IzN4SFm4oGyFGyHyjf-U58IQBTBw9R5yavopA4EKQH0JOnKFpiTAMKP5KQFnz0NdVYa8GnDz4kL5bRuVhZ_sfpUk3jzqa6B3QpVTBuwZ2xAU6MASEDhJaSFjP25fDxVj7eQII6ZSwGn-cE4iZijTV9OLdYqRgQQR5R7SEhnQ1Qaiz25gxgSGajvRnMSdMern20"/>
+</div>
+<div class="absolute -bottom-2 right-4 bg-secondary text-on-secondary px-3 py-1 rounded-full text-label-sm font-bold shadow-lg">
+                            APEX STATUS
+                        </div>
+</div>
+<div class="flex-1 text-center md:text-left">
+<div class="flex items-center justify-center md:justify-start gap-4 mb-2">
+<h2 class="font-headline-xl text-headline-xl font-extrabold text-on-surface">Alexander Sterling</h2>
+<span class="material-symbols-outlined text-secondary" style="font-variation-settings: 'FILL' 1;">verified</span>
+</div>
+<p class="font-body-lg text-body-lg text-on-surface-variant max-w-2xl">Principal Systems Architect &amp; Performance Lead. Mastering the intersection of Distributed Infrastructure and Artificial Intelligence through high-stakes simulation protocols.</p>
+<div class="flex flex-wrap gap-4 mt-6 justify-center md:justify-start">
+<div class="px-4 py-2 bg-surface-container-high/50 rounded-lg border border-outline-variant/20 flex items-center gap-2">
+<span class="material-symbols-outlined text-primary">location_on</span>
+<span class="font-label-md text-label-md text-on-surface">San Francisco, CA</span>
+</div>
+<div class="px-4 py-2 bg-surface-container-high/50 rounded-lg border border-outline-variant/20 flex items-center gap-2">
+<span class="material-symbols-outlined text-secondary">workspace_premium</span>
+<span class="font-label-md text-label-md text-on-surface">Top 0.1% PrepNova Ranking</span>
+</div>
+</div>
+</div>
+<div class="flex gap-3">
+<button class="px-8 py-3 bg-white text-black font-bold rounded-lg hover:scale-105 transition-all">Edit Profile</button>
+<button class="w-12 h-12 flex items-center justify-center glass-panel border border-outline-variant rounded-lg hover:text-secondary transition-colors">
+<span class="material-symbols-outlined">share</span>
+</button>
+</div>
+</div>
+</section>
+<!-- Stats Grid -->
+<section class="grid grid-cols-1 md:grid-cols-3 gap-gutter mb-12">
+<div class="glass-panel inner-glow p-8 rounded-xl cyan-glow-hover transition-all">
+<p class="font-label-sm text-label-sm text-on-surface-variant uppercase mb-2">Total Training Hours</p>
+<div class="flex items-end gap-2">
+<span class="font-headline-xl text-headline-xl font-bold text-on-surface">1,284</span>
+<span class="font-label-md text-label-md text-secondary mb-2">+12.4% MoM</span>
+</div>
+</div>
+<div class="glass-panel inner-glow p-8 rounded-xl cyan-glow-hover transition-all">
+<p class="font-label-sm text-label-sm text-on-surface-variant uppercase mb-2">Readiness Score</p>
+<div class="flex items-end gap-2">
+<span class="font-headline-xl text-headline-xl font-bold text-on-surface">98.2</span>
+<span class="font-label-md text-label-md text-primary mb-2">/ 100.0</span>
+</div>
+</div>
+<div class="glass-panel inner-glow p-8 rounded-xl cyan-glow-hover transition-all">
+<p class="font-label-sm text-label-sm text-on-surface-variant uppercase mb-2">Simulations Completed</p>
+<div class="flex items-end gap-2">
+<span class="font-headline-xl text-headline-xl font-bold text-on-surface">412</span>
+<span class="font-label-md text-label-md text-on-surface-variant mb-2">Sims</span>
+</div>
+</div>
+</section>
+<div class="grid grid-cols-1 lg:grid-cols-12 gap-gutter">
+<!-- Technical Portfolio (Bento Grid Style) -->
+<div class="lg:col-span-8 space-y-8">
+<div class="glass-panel inner-glow p-8 rounded-xl">
+<div class="flex justify-between items-center mb-8">
+<h3 class="font-headline-lg text-headline-lg font-bold text-on-surface">Technical Portfolio</h3>
+<button class="text-secondary font-label-md text-label-md hover:underline">View Roadmap</button>
+</div>
+<div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+<!-- Skill Card 1 -->
+<div class="p-6 bg-surface-container-low/40 border border-outline-variant/10 rounded-xl">
+<div class="flex justify-between items-center mb-4">
+<div class="flex items-center gap-3">
+<span class="material-symbols-outlined text-secondary">hub</span>
+<span class="font-label-md text-label-md font-bold text-on-surface">Distributed Systems</span>
+</div>
+<span class="text-on-surface-variant font-label-sm">Master</span>
+</div>
+<div class="h-1.5 w-full bg-surface-container-highest rounded-full overflow-hidden">
+<div class="h-full bg-gradient-to-r from-secondary to-primary progress-pulse" style="width: 94%"></div>
+</div>
+</div>
+<!-- Skill Card 2 -->
+<div class="p-6 bg-surface-container-low/40 border border-outline-variant/10 rounded-xl">
+<div class="flex justify-between items-center mb-4">
+<div class="flex items-center gap-3">
+<span class="material-symbols-outlined text-secondary">cloud</span>
+<span class="font-label-md text-label-md font-bold text-on-surface">Cloud Architecture</span>
+</div>
+<span class="text-on-surface-variant font-label-sm">Expert</span>
+</div>
+<div class="h-1.5 w-full bg-surface-container-highest rounded-full overflow-hidden">
+<div class="h-full bg-gradient-to-r from-secondary to-primary" style="width: 88%"></div>
+</div>
+</div>
+<!-- Skill Card 3 -->
+<div class="p-6 bg-surface-container-low/40 border border-outline-variant/10 rounded-xl">
+<div class="flex justify-between items-center mb-4">
+<div class="flex items-center gap-3">
+<span class="material-symbols-outlined text-secondary">terminal</span>
+<span class="font-label-md text-label-md font-bold text-on-surface">Low-Level Optimization</span>
+</div>
+<span class="text-on-surface-variant font-label-sm">Elite</span>
+</div>
+<div class="h-1.5 w-full bg-surface-container-highest rounded-full overflow-hidden">
+<div class="h-full bg-gradient-to-r from-secondary to-primary" style="width: 91%"></div>
+</div>
+</div>
+<!-- Skill Card 4 -->
+<div class="p-6 bg-surface-container-low/40 border border-outline-variant/10 rounded-xl">
+<div class="flex justify-between items-center mb-4">
+<div class="flex items-center gap-3">
+<span class="material-symbols-outlined text-secondary">security</span>
+<span class="font-label-md text-label-md font-bold text-on-surface">Security Protocols</span>
+</div>
+<span class="text-on-surface-variant font-label-sm">Advanced</span>
+</div>
+<div class="h-1.5 w-full bg-surface-container-highest rounded-full overflow-hidden">
+<div class="h-full bg-gradient-to-r from-secondary to-primary" style="width: 76%"></div>
+</div>
+</div>
+</div>
+</div>
+<!-- Verified Achievements -->
+<div class="glass-panel inner-glow p-8 rounded-xl">
+<h3 class="font-headline-lg text-headline-lg font-bold text-on-surface mb-8">Verified Achievements</h3>
+<div class="grid grid-cols-2 sm:grid-cols-4 gap-6">
+<div class="group cursor-pointer">
+<div class="aspect-square glass-panel border-outline-variant/30 rounded-xl flex items-center justify-center mb-3 group-hover:scale-105 transition-all">
+<span class="material-symbols-outlined text-secondary text-5xl" style="font-variation-settings: 'FILL' 1;">military_tech</span>
+</div>
+<p class="font-label-md text-label-md text-center text-on-surface">L7 Architect</p>
+</div>
+<div class="group cursor-pointer">
+<div class="aspect-square glass-panel border-outline-variant/30 rounded-xl flex items-center justify-center mb-3 group-hover:scale-105 transition-all">
+<span class="material-symbols-outlined text-primary text-5xl" style="font-variation-settings: 'FILL' 1;">diamond</span>
+</div>
+<p class="font-label-md text-label-md text-center text-on-surface">Peak Performer</p>
+</div>
+<div class="group cursor-pointer">
+<div class="aspect-square glass-panel border-outline-variant/30 rounded-xl flex items-center justify-center mb-3 group-hover:scale-105 transition-all">
+<span class="material-symbols-outlined text-on-surface-variant text-5xl" style="font-variation-settings: 'FILL' 1;">shield</span>
+</div>
+<p class="font-label-md text-label-md text-center text-on-surface">Bug Hunter</p>
+</div>
+<div class="group cursor-pointer">
+<div class="aspect-square glass-panel border-outline-variant/30 rounded-xl flex items-center justify-center mb-3 group-hover:scale-105 transition-all">
+<span class="material-symbols-outlined text-secondary text-5xl" style="font-variation-settings: 'FILL' 1;">star</span>
+</div>
+<p class="font-label-md text-label-md text-center text-on-surface">Perfect Score</p>
+</div>
+</div>
+</div>
+</div>
+<!-- Career Trajectory -->
+<div class="lg:col-span-4">
+<div class="glass-panel inner-glow p-8 rounded-xl h-full">
+<h3 class="font-headline-lg text-headline-lg font-bold text-on-surface mb-8">Career Trajectory</h3>
+<div class="relative pl-8 space-y-12">
+<!-- Timeline Line -->
+<div class="absolute left-[7px] top-2 bottom-2 w-0.5 bg-outline-variant/20"></div>
+<!-- Step 1 -->
+<div class="relative">
+<div class="absolute -left-[28px] top-1.5 w-4 h-4 rounded-full bg-secondary ring-4 ring-secondary/20"></div>
+<div>
+<p class="font-label-sm text-label-sm text-secondary uppercase font-bold">Current Phase</p>
+<h4 class="font-body-lg text-body-lg text-on-surface font-bold">Staff Software Engineer</h4>
+<p class="text-on-surface-variant text-label-md">Tier-1 Silicon Valley Hub</p>
+</div>
+</div>
+<!-- Step 2 -->
+<div class="relative">
+<div class="absolute -left-[28px] top-1.5 w-4 h-4 rounded-full bg-primary/40"></div>
+<div>
+<p class="font-label-sm text-label-sm text-on-surface-variant uppercase">Target Goal</p>
+<h4 class="font-body-lg text-body-lg text-on-surface font-bold">Principal Architect</h4>
+<p class="text-on-surface-variant text-label-md">Global Platform Strategy</p>
+<div class="mt-4 p-4 bg-surface-container-high/30 rounded-lg border border-primary/20">
+<p class="text-label-sm text-primary mb-2">72% Towards Mastery</p>
+<div class="h-1 w-full bg-surface-container-highest rounded-full">
+<div class="h-full bg-primary" style="width: 72%"></div>
+</div>
+</div>
+</div>
+</div>
+<!-- Step 3 -->
+<div class="relative opacity-40">
+<div class="absolute -left-[28px] top-1.5 w-4 h-4 rounded-full border-2 border-outline-variant bg-transparent"></div>
+<div>
+<p class="font-label-sm text-label-sm text-on-surface-variant uppercase">Long Term</p>
+<h4 class="font-body-lg text-body-lg text-on-surface font-bold">CTO / Technical Fellow</h4>
+<p class="text-on-surface-variant text-label-md">Industry Visionary</p>
+</div>
+</div>
+</div>
+<div class="mt-12 pt-8 border-t border-outline-variant/20">
+<p class="font-label-md text-label-md text-on-surface font-bold mb-4">Recommended Simulations</p>
+<div class="space-y-4">
+<div class="flex items-center gap-4 p-3 bg-surface-container-low rounded-lg group cursor-pointer hover:bg-surface-container-high transition-colors">
+<div class="w-10 h-10 flex items-center justify-center bg-secondary/10 rounded-lg">
+<span class="material-symbols-outlined text-secondary">storage</span>
+</div>
+<div class="flex-1">
+<p class="text-label-md text-on-surface font-bold">Scalability Post-Mortem</p>
+<p class="text-label-sm text-on-surface-variant">L7 Challenge</p>
+</div>
+<span class="material-symbols-outlined text-on-surface-variant group-hover:text-white transition-colors">chevron_right</span>
+</div>
+<div class="flex items-center gap-4 p-3 bg-surface-container-low rounded-lg group cursor-pointer hover:bg-surface-container-high transition-colors">
+<div class="w-10 h-10 flex items-center justify-center bg-primary/10 rounded-lg">
+<span class="material-symbols-outlined text-primary">psychology</span>
+</div>
+<div class="flex-1">
+<p class="text-label-md text-on-surface font-bold">Executive Board Drill</p>
+<p class="text-label-sm text-on-surface-variant">Soft Skills simulation</p>
+</div>
+<span class="material-symbols-outlined text-on-surface-variant group-hover:text-white transition-colors">chevron_right</span>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</main>
+<script>
+        // Micro-interaction for skill bars on load
+        window.addEventListener('DOMContentLoaded', () => {
+            const progressBars = document.querySelectorAll('.progress-pulse');
+            progressBars.forEach(bar => {
+                const width = bar.style.width;
+                bar.style.width = '0%';
+                setTimeout(() => {
+                    bar.style.transition = 'width 1.5s cubic-bezier(0.34, 1.56, 0.64, 1)';
+                    bar.style.width = width;
+                }, 300);
+            });
+        });
+    </script>
+</body></html>

@@ -1,0 +1,425 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Library | PrepNova AI</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Geist:wght@100..900&amp;family=Inter:wght@100..900&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+          darkMode: "class",
+          theme: {
+            extend: {
+              "colors": {
+                      "surface": "#131313",
+                      "error-container": "#93000a",
+                      "on-primary": "#3f008e",
+                      "surface-bright": "#393939",
+                      "on-secondary": "#003640",
+                      "on-error-container": "#ffdad6",
+                      "surface-tint": "#d2bbff",
+                      "on-error": "#690005",
+                      "surface-container-low": "#1b1b1b",
+                      "on-primary-fixed-variant": "#5a00c6",
+                      "on-primary-container": "#ede0ff",
+                      "secondary-fixed-dim": "#4cd7f6",
+                      "outline": "#958da1",
+                      "on-surface-variant": "#ccc3d8",
+                      "inverse-surface": "#e2e2e2",
+                      "surface-container-highest": "#353535",
+                      "on-primary-fixed": "#25005a",
+                      "outline-variant": "#4a4455",
+                      "tertiary-container": "#676666",
+                      "on-tertiary-fixed-variant": "#474746",
+                      "inverse-on-surface": "#303030",
+                      "tertiary": "#c8c6c5",
+                      "surface-container-lowest": "#0e0e0e",
+                      "secondary-fixed": "#acedff",
+                      "on-secondary-fixed-variant": "#004e5c",
+                      "on-secondary-fixed": "#001f26",
+                      "primary-fixed": "#eaddff",
+                      "surface-container-high": "#2a2a2a",
+                      "on-secondary-container": "#00424e",
+                      "on-tertiary-fixed": "#1b1b1c",
+                      "on-background": "#e2e2e2",
+                      "background": "#131313",
+                      "primary-container": "#7c3aed",
+                      "secondary": "#4cd7f6",
+                      "on-tertiary-container": "#e7e5e4",
+                      "surface-container": "#1f1f1f",
+                      "error": "#ffb4ab",
+                      "secondary-container": "#03b5d3",
+                      "tertiary-fixed-dim": "#c8c6c5",
+                      "primary-fixed-dim": "#d2bbff",
+                      "on-surface": "#e2e2e2",
+                      "primary": "#d2bbff",
+                      "tertiary-fixed": "#e5e2e1",
+                      "inverse-primary": "#732ee4",
+                      "on-tertiary": "#303030",
+                      "surface-variant": "#353535",
+                      "surface-dim": "#131313"
+              },
+              "borderRadius": {
+                      "DEFAULT": "0.25rem",
+                      "lg": "0.5rem",
+                      "xl": "0.75rem",
+                      "full": "9999px"
+              },
+              "spacing": {
+                      "margin-mobile": "20px",
+                      "container-max": "1440px",
+                      "margin-desktop": "64px",
+                      "unit": "4px",
+                      "gutter": "24px"
+              },
+              "fontFamily": {
+                      "headline-lg-mobile": ["Geist"],
+                      "label-md": ["Geist"],
+                      "headline-lg": ["Geist"],
+                      "body-lg": ["Inter"],
+                      "headline-xl": ["Geist"],
+                      "body-md": ["Inter"],
+                      "label-sm": ["Geist"],
+                      "display-lg": ["Geist"]
+              },
+              "fontSize": {
+                      "headline-lg-mobile": ["28px", {"lineHeight": "36px", "letterSpacing": "-0.01em", "fontWeight": "600"}],
+                      "label-md": ["14px", {"lineHeight": "20px", "letterSpacing": "0.05em", "fontWeight": "500"}],
+                      "headline-lg": ["32px", {"lineHeight": "40px", "letterSpacing": "-0.02em", "fontWeight": "600"}],
+                      "body-lg": ["18px", {"lineHeight": "28px", "letterSpacing": "0em", "fontWeight": "400"}],
+                      "headline-xl": ["40px", {"lineHeight": "48px", "letterSpacing": "-0.02em", "fontWeight": "600"}],
+                      "body-md": ["16px", {"lineHeight": "24px", "letterSpacing": "0em", "fontWeight": "400"}],
+                      "label-sm": ["12px", {"lineHeight": "16px", "letterSpacing": "0.05em", "fontWeight": "500"}],
+                      "display-lg": ["64px", {"lineHeight": "72px", "letterSpacing": "-0.04em", "fontWeight": "700"}]
+              }
+            },
+          },
+        }
+    </script>
+<style>
+        body {
+            background-color: #000000;
+            color: #e2e2e2;
+            overflow-x: hidden;
+        }
+        .cinematic-glow {
+            box-shadow: 0 0 15px rgba(76, 215, 246, 0.3), inset 0 0 5px rgba(210, 187, 255, 0.1);
+        }
+        .card-inner-glow {
+            border: 1px solid rgba(31, 31, 35, 1);
+            position: relative;
+        }
+        .card-inner-glow::after {
+            content: '';
+            position: absolute;
+            top: 0; left: 0; right: 0; bottom: 0;
+            pointer-events: none;
+            background: linear-gradient(135deg, rgba(76, 215, 246, 0.05) 0%, transparent 40%);
+            border-radius: inherit;
+        }
+        .glass-panel {
+            backdrop-filter: blur(20px);
+            background-color: rgba(10, 10, 11, 0.6);
+        }
+        .progress-pulse {
+            position: relative;
+            overflow: hidden;
+        }
+        .progress-pulse::after {
+            content: '';
+            position: absolute;
+            top: 0; right: 0;
+            width: 8px; height: 100%;
+            background: #ffffff;
+            filter: blur(4px);
+            animation: pulse 2s infinite linear;
+        }
+        @keyframes pulse {
+            0% { left: -10%; opacity: 0; }
+            50% { opacity: 1; }
+            100% { left: 110%; opacity: 0; }
+        }
+        .hover-lift {
+            transition: transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+        }
+        .hover-lift:hover {
+            transform: scale(1.02);
+            border-color: #4cd7f6;
+        }
+    </style>
+</head>
+<body class="bg-background selection:bg-primary-container selection:text-on-primary-container">
+<!-- Sidebar Navigation -->
+<aside class="h-screen w-64 fixed left-0 top-0 bg-surface-container-lowest/80 backdrop-blur-2xl border-r border-outline-variant/20 shadow-[10px_0_30px_rgba(0,0,0,0.5)] z-50 flex flex-col py-8 gap-y-4">
+<div class="px-6 mb-8">
+<h1 class="font-headline-xl text-headline-xl font-black text-primary">PrepNova AI</h1>
+</div>
+<nav class="flex-1 flex flex-col">
+<a class="flex items-center gap-4 px-6 py-3 text-on-surface-variant/70 hover:bg-surface-container-high hover:text-on-surface transition-all group" href="#">
+<span class="material-symbols-outlined">dashboard</span>
+<span class="font-label-md text-label-md">Dashboard</span>
+</a>
+<a class="flex items-center gap-4 px-6 py-3 text-secondary border-r-2 border-secondary bg-secondary-container/10 transition-all group" href="#">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">folder_open</span>
+<span class="font-label-md text-label-md">Library</span>
+</a>
+<a class="flex items-center gap-4 px-6 py-3 text-on-surface-variant/70 hover:bg-surface-container-high hover:text-on-surface transition-all group" href="#">
+<span class="material-symbols-outlined">insights</span>
+<span class="font-label-md text-label-md">Analytics</span>
+</a>
+<a class="flex items-center gap-4 px-6 py-3 text-on-surface-variant/70 hover:bg-surface-container-high hover:text-on-surface transition-all group" href="#">
+<span class="material-symbols-outlined">settings</span>
+<span class="font-label-md text-label-md">Settings</span>
+</a>
+</nav>
+<div class="mt-auto px-4">
+<div class="bg-surface-container rounded-xl p-4 flex flex-col gap-3">
+<div class="flex items-center gap-3">
+<img alt="User Profile" class="w-10 h-10 rounded-full border border-outline-variant/30" src="https://lh3.googleusercontent.com/aida-public/AB6AXuA2jpWi_s28NV4uQLvtX_MkND3cbb1EbgGc9dkqAA1q2RO2ttNvVRcuvZyVQhhG6qlGT2Bcz_PpyqtvKbX0yAcBYhfJ44ShBq75wSHlD37W0d7rkeupfHM6qspJNIK3dR8VPmiYpvjvkmR-A7bMqKzm93wMu16YtkJkDQHk0PSoaSp-jH3bXbrUjiYO6XTmIGsRVNsmse0Op4b1RDCBXsAkys0wGG9DE8eW-rHBuRuM5cLITFrKwKenKgB5WgxC9vz-8GlkUr9tOpY"/>
+<div class="flex flex-col">
+<span class="font-label-md text-label-md text-on-surface">Command Center</span>
+<span class="text-[10px] uppercase tracking-widest text-secondary font-bold">Elite Status</span>
+</div>
+</div>
+<button class="w-full bg-gradient-to-r from-primary-container to-secondary-container text-white py-2 rounded-lg font-label-md text-label-md hover:scale-[1.02] active:scale-[0.98] transition-all cinematic-glow">
+                    Start Simulation
+                </button>
+</div>
+</div>
+</aside>
+<!-- Top App Bar -->
+<header class="w-full top-0 sticky z-40 bg-surface/60 backdrop-blur-xl border-b border-outline-variant/30 shadow-2xl shadow-black/40">
+<div class="ml-64 flex justify-between items-center px-margin-desktop py-4 max-w-container-max mx-auto">
+<div class="flex items-center gap-6">
+<h2 class="font-headline-lg text-headline-lg font-bold bg-clip-text text-transparent bg-gradient-to-r from-primary to-secondary">Library</h2>
+</div>
+<div class="flex items-center gap-4 flex-1 justify-end">
+<div class="relative group max-w-md w-full mr-4">
+<span class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-on-surface-variant/50">search</span>
+<input class="w-full bg-surface-container-lowest border border-outline-variant/30 rounded-full py-2 pl-10 pr-4 font-body-md text-body-md focus:outline-none focus:border-secondary focus:ring-1 focus:ring-secondary transition-all" placeholder="Search simulations, recordings, tips..." type="text"/>
+</div>
+<button class="material-symbols-outlined text-on-surface-variant hover:text-primary transition-colors">notifications</button>
+<button class="material-symbols-outlined text-on-surface-variant hover:text-primary transition-colors">account_circle</button>
+</div>
+</div>
+</header>
+<!-- Main Content -->
+<main class="ml-64 px-margin-desktop py-12 max-w-container-max mx-auto">
+<!-- Filters & Sorting (Bento Sub-Header) -->
+<section class="grid grid-cols-1 md:grid-cols-4 gap- gutter mb-12">
+<div class="col-span-3 flex gap-4 overflow-x-auto pb-2 no-scrollbar">
+<button class="px-6 py-2 rounded-full border border-secondary text-secondary bg-secondary/10 font-label-md text-label-md">All Assets</button>
+<button class="px-6 py-2 rounded-full border border-outline-variant/30 text-on-surface-variant hover:border-primary hover:text-primary transition-all font-label-md text-label-md">Recordings</button>
+<button class="px-6 py-2 rounded-full border border-outline-variant/30 text-on-surface-variant hover:border-primary hover:text-primary transition-all font-label-md text-label-md">Practice Modules</button>
+<button class="px-6 py-2 rounded-full border border-outline-variant/30 text-on-surface-variant hover:border-primary hover:text-primary transition-all font-label-md text-label-md">Saved Tips</button>
+<button class="px-6 py-2 rounded-full border border-outline-variant/30 text-on-surface-variant hover:border-primary hover:text-primary transition-all font-label-md text-label-md">Bookmarked</button>
+</div>
+<div class="col-span-1 flex justify-end">
+<div class="flex items-center gap-2 px-4 py-2 bg-surface-container rounded-lg border border-outline-variant/30 cursor-pointer">
+<span class="material-symbols-outlined text-sm">sort</span>
+<span class="font-label-md text-label-md">Recent Activity</span>
+</div>
+</div>
+</section>
+<!-- Bento Grid Layout -->
+<div class="grid grid-cols-12 gap-gutter">
+<!-- Featured Content (Large Card) -->
+<div class="col-span-12 lg:col-span-8 group relative overflow-hidden rounded-xl bg-surface-container-lowest border border-outline-variant/20 hover-lift h-[400px]">
+<img class="absolute inset-0 w-full h-full object-cover opacity-50 group-hover:scale-105 transition-transform duration-700" data-alt="A futuristic digital interface background showing complex data visualizations, glowing blue circuitry patterns, and translucent nodes floating in a dark obsidian void. The lighting is low-key with intense cyan and purple light leaks that create a high-performance cinematic mood, suitable for an elite AI training simulation environment." src="https://lh3.googleusercontent.com/aida-public/AB6AXuAOmHpHa1Kli8ZuPrLasEIpv4qVUdowyyB4eJAyqa3H-TvLe3wWFsmO4Vx4xALF5VDREAnYLhulkiwx-NqdSTXx6t4QbaUt8dK7Ueoz51ZdTZYFvJm4SM4cmLHKpu6-nv46ArbWYH8wIWW_a6fWn9-pgBl6bLEHIKTp4OCwYjTw3JuPNrMBLdsh_oUozOLSaZHOFu_MBaT3tFdoqL1g-5eYwfY4bqON9fcA9fb6bxGtccaLCeCkZNcR-W7UkfRdVIZ3TZJUPxVvgPw"/>
+<div class="absolute inset-0 bg-gradient-to-t from-background via-background/40 to-transparent"></div>
+<div class="absolute bottom-0 left-0 p-8 w-full">
+<div class="flex items-center gap-2 mb-3">
+<span class="bg-secondary text-on-secondary px-3 py-1 rounded text-[10px] font-bold uppercase tracking-widest">In Progress</span>
+<span class="text-on-surface-variant text-label-sm font-label-sm">Updated 2h ago</span>
+</div>
+<h3 class="font-headline-xl text-headline-xl mb-4">Elite FAANG Systems Simulation</h3>
+<p class="font-body-md text-body-md text-on-surface-variant max-w-lg mb-6">Continue your mock interview with the AI Principal Architect. You've completed 4/10 modules in this high-stakes series.</p>
+<div class="flex items-center gap-6">
+<button class="px-8 py-3 bg-white text-black font-bold rounded-lg hover:bg-secondary transition-colors flex items-center gap-2">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">play_arrow</span>
+                            Resume Training
+                        </button>
+<div class="flex-1 max-w-xs">
+<div class="flex justify-between mb-2">
+<span class="font-label-sm text-label-sm">Progress</span>
+<span class="font-label-sm text-label-sm">45%</span>
+</div>
+<div class="h-2 w-full bg-surface-container-highest rounded-full overflow-hidden progress-pulse">
+<div class="h-full bg-gradient-to-r from-primary to-secondary w-[45%]"></div>
+</div>
+</div>
+</div>
+</div>
+</div>
+<!-- AI Tips (Tall Card) -->
+<div class="col-span-12 lg:col-span-4 bg-surface-container rounded-xl p-6 border border-outline-variant/20 flex flex-col gap-6 glass-panel card-inner-glow hover-lift">
+<div class="flex items-center justify-between">
+<h4 class="font-label-md text-label-md text-primary uppercase tracking-widest">AI Intelligence Nuggets</h4>
+<span class="material-symbols-outlined text-on-surface-variant">auto_awesome</span>
+</div>
+<div class="space-y-4 overflow-y-auto max-h-[280px] custom-scrollbar pr-2">
+<div class="p-4 rounded-lg bg-surface-container-low border border-outline-variant/10 hover:border-secondary/30 transition-all cursor-pointer">
+<span class="font-label-sm text-label-sm text-secondary mb-1 block">Behavioral Strategy</span>
+<p class="font-body-md text-body-md text-on-surface">"Always map your Star Method responses to the company's specific core values. For Google, focus on 'Googlyness'."</p>
+</div>
+<div class="p-4 rounded-lg bg-surface-container-low border border-outline-variant/10 hover:border-secondary/30 transition-all cursor-pointer">
+<span class="font-label-sm text-label-sm text-secondary mb-1 block">Technical Confidence</span>
+<p class="font-body-md text-body-md text-on-surface">"Verbalize your trade-offs before coding. It shows maturity in architecture choices."</p>
+</div>
+<div class="p-4 rounded-lg bg-surface-container-low border border-outline-variant/10 hover:border-secondary/30 transition-all cursor-pointer">
+<span class="font-label-sm text-label-sm text-secondary mb-1 block">Body Language</span>
+<p class="font-body-md text-body-md text-on-surface">"Maintain eye contact with the lens, not the screen. It builds deeper human rapport."</p>
+</div>
+</div>
+<button class="w-full py-2 border border-outline-variant/30 rounded-lg font-label-md text-label-md hover:border-primary hover:text-primary transition-all mt-auto">View All Saved Tips</button>
+</div>
+<!-- Video Recordings Grid -->
+<div class="col-span-12 grid grid-cols-1 md:grid-cols-3 lg:grid-cols-4 gap-gutter mt-4">
+<!-- Recording Item 1 -->
+<div class="flex flex-col gap-4 group cursor-pointer">
+<div class="relative aspect-video rounded-xl overflow-hidden bg-surface-container-highest border border-outline-variant/20 hover-lift">
+<img class="w-full h-full object-cover" data-alt="A high-angle photo of a professional workspace with two sleek monitors displaying code and video conferencing software in a dark, moody room. Neon accent lights reflect off glass surfaces, creating a focused, high-tech cinematic atmosphere. The scene is dominated by deep blacks and cool blue lighting." src="https://lh3.googleusercontent.com/aida-public/AB6AXuCEP1DETkVPFai5-SEl3mZx6DPj0B1YMUOVqul71fJFAO5Ih8ZWuiKZreGgkAjOHmWYkrMsfqeVoQEf0Zj4K0yquOlY0G4SLh-ALj1uzhlUicmTD3CJ2xgXTDhruYur0t4T5MM3pxjZjM67RAtz7hZtzhjApqWSluMFNLhW7Bu3_2kUoKtd3TZBgIEqc54U-MRKOY3onwUm8ueWGg6SN3e25S3QWCRaaYfEsRVHpMc1Ws32R5DHl_srWap04Vn0HaBgRRWmfF9Vsfw"/>
+<div class="absolute inset-0 bg-black/40 group-hover:bg-black/20 transition-all flex items-center justify-center opacity-0 group-hover:opacity-100">
+<span class="material-symbols-outlined text-white text-5xl" style="font-variation-settings: 'FILL' 1;">play_circle</span>
+</div>
+<div class="absolute bottom-2 right-2 px-2 py-1 bg-black/80 rounded text-[10px] font-bold">14:22</div>
+</div>
+<div>
+<h5 class="font-label-md text-label-md text-on-surface mb-1 group-hover:text-secondary transition-colors">Mock Session: Meta Senior PE</h5>
+<div class="flex items-center justify-between">
+<span class="text-on-surface-variant font-label-sm text-label-sm">May 12, 2024</span>
+<span class="text-error font-label-sm text-label-sm">82 Score</span>
+</div>
+</div>
+</div>
+<!-- Recording Item 2 -->
+<div class="flex flex-col gap-4 group cursor-pointer">
+<div class="relative aspect-video rounded-xl overflow-hidden bg-surface-container-highest border border-outline-variant/20 hover-lift">
+<img class="w-full h-full object-cover" data-alt="A focused close-up of a high-end mechanical keyboard glowing with soft purple RGB lighting under the fingers of a user in a dim room. The background is softly blurred, showing ambient light from computer screens. The overall mood is intense, modern, and high-performance, emphasizing technical precision." src="https://lh3.googleusercontent.com/aida-public/AB6AXuDufEzsthC5RW-b1G07kFecVgrrvQqs3IoQfQhRROAHF9R4iPP_TkDKZr9UihYkRhRtEgH4RMkx005uIe9LPuyMUkLwhzVK-aMWUI762v4uI5GR1rf1pwYToWE5pM20uSZtRGG7d6GugYSgg0fINuCN3Y-7VZpRYtFfpIhSLFgHe9djtjnV9ZC7E1LY5eRYW3PJdYmVeiYO7CUVdjruycs7VBGybHCU52qTO64ciQV3rAaDbs--gerCD15Ue-QWER5-42eope5QlKE"/>
+<div class="absolute inset-0 bg-black/40 group-hover:bg-black/20 transition-all flex items-center justify-center opacity-0 group-hover:opacity-100">
+<span class="material-symbols-outlined text-white text-5xl" style="font-variation-settings: 'FILL' 1;">play_circle</span>
+</div>
+<div class="absolute bottom-2 right-2 px-2 py-1 bg-black/80 rounded text-[10px] font-bold">08:45</div>
+</div>
+<div>
+<h5 class="font-label-md text-label-md text-on-surface mb-1 group-hover:text-secondary transition-colors">Behavioral: Team Conflict Resolution</h5>
+<div class="flex items-center justify-between">
+<span class="text-on-surface-variant font-label-sm text-label-sm">May 10, 2024</span>
+<span class="text-primary font-label-sm text-label-sm">94 Score</span>
+</div>
+</div>
+</div>
+<!-- Recording Item 3 -->
+<div class="flex flex-col gap-4 group cursor-pointer">
+<div class="relative aspect-video rounded-xl overflow-hidden bg-surface-container-highest border border-outline-variant/20 hover-lift">
+<img class="w-full h-full object-cover" data-alt="A futuristic server room with rows of blinking lights and glowing circuit patterns on the floor. The lighting is cinematic with a strong purple and cyan color palette, creating a sense of immense processing power and high-stakes data analysis. Deep shadows provide a sharp contrast to the bright neon elements." src="https://lh3.googleusercontent.com/aida-public/AB6AXuAav9l_xe0junV7cDpAM9cjlUqUiu0SKt_PWzceTFF2JOGPggckxwZjrAO5LzDpVWcdSia89A0Nd3yg-ZGGDsqbAFIccT3887D0I7RBSKdy0jXQfBkVXR1-wJ3pHUlgLUNaQ2g80IegsB9FMEapRXhz8Sm41GeT4y6QkmrsH_G1s_j3px6zvodn_bXuNXY4D3EQCa0y0wUml9gtcFUj6daHD0pADRdoRqXFkLNQfhOY4TYEOnjLjnm2-VIDNf2LLK0z0RZUDmeMPQk"/>
+<div class="absolute inset-0 bg-black/40 group-hover:bg-black/20 transition-all flex items-center justify-center opacity-0 group-hover:opacity-100">
+<span class="material-symbols-outlined text-white text-5xl" style="font-variation-settings: 'FILL' 1;">play_circle</span>
+</div>
+<div class="absolute bottom-2 right-2 px-2 py-1 bg-black/80 rounded text-[10px] font-bold">22:10</div>
+</div>
+<div>
+<h5 class="font-label-md text-label-md text-on-surface mb-1 group-hover:text-secondary transition-colors">Full Simulation: Netflix L6</h5>
+<div class="flex items-center justify-between">
+<span class="text-on-surface-variant font-label-sm text-label-sm">May 05, 2024</span>
+<span class="text-secondary font-label-sm text-label-sm">InProgress</span>
+</div>
+</div>
+</div>
+<!-- Recording Item 4 -->
+<div class="flex flex-col gap-4 group cursor-pointer">
+<div class="relative aspect-video rounded-xl overflow-hidden bg-surface-container-highest border border-outline-variant/20 hover-lift">
+<img class="w-full h-full object-cover" data-alt="A sleek minimalist office with floor-to-ceiling windows overlooking a nighttime city skyline. Inside, a workstation is illuminated by the soft glow of a desk lamp and dual monitors showing complex analytical dashboards. The aesthetic is clean, professional, and sophisticated, dominated by dark tones and city lights." src="https://lh3.googleusercontent.com/aida-public/AB6AXuCVVz2zl_eDux4yWs_3ckiCkeYQU7j4Cngzi7j98hwaOZ54ZdY4wj7d8b2f6iPRz1omjjsCMv6psqLAcKzI358jQ1sfF3XjCJvnyepibdun3uTE6OQOvfpp2FNei-SqYeH3MqbfYfW5Mjc7t7RzkjrVrMOg1KJxiiL2H0xRp7u9VoYjMntdETnFf__5DIpeL2sOgJzVTJGtpiWOcGhW5qqk0ogYf1JFQevtT6FYSlB9N9xsWoC7eBQJH4s4-N6dWwkez3fuvMWAGII"/>
+<div class="absolute inset-0 bg-black/40 group-hover:bg-black/20 transition-all flex items-center justify-center opacity-0 group-hover:opacity-100">
+<span class="material-symbols-outlined text-white text-5xl" style="font-variation-settings: 'FILL' 1;">play_circle</span>
+</div>
+<div class="absolute bottom-2 right-2 px-2 py-1 bg-black/80 rounded text-[10px] font-bold">11:05</div>
+</div>
+<div>
+<h5 class="font-label-md text-label-md text-on-surface mb-1 group-hover:text-secondary transition-colors">Technical: Distributed Systems</h5>
+<div class="flex items-center justify-between">
+<span class="text-on-surface-variant font-label-sm text-label-sm">April 28, 2024</span>
+<span class="text-primary font-label-sm text-label-sm">88 Score</span>
+</div>
+</div>
+</div>
+</div>
+<!-- Stats & Quick Actions (Bottom Bento Row) -->
+<div class="col-span-12 md:col-span-6 lg:col-span-4 bg-surface-container rounded-xl p-6 border border-outline-variant/20 card-inner-glow hover-lift">
+<div class="flex flex-col h-full">
+<h4 class="font-label-md text-label-md text-on-surface-variant mb-6 uppercase tracking-wider">Library Insights</h4>
+<div class="flex items-end gap-4 mb-4">
+<span class="text-5xl font-black text-secondary">24</span>
+<span class="font-label-md text-label-md text-on-surface-variant pb-2">Completed Sessions</span>
+</div>
+<div class="space-y-4">
+<div class="flex justify-between items-center p-3 bg-surface-container-low rounded-lg">
+<div class="flex items-center gap-3">
+<span class="material-symbols-outlined text-primary">history</span>
+<span class="font-body-md text-body-md">Last Activity</span>
+</div>
+<span class="font-label-sm text-label-sm text-on-surface-variant">2h ago</span>
+</div>
+<div class="flex justify-between items-center p-3 bg-surface-container-low rounded-lg">
+<div class="flex items-center gap-3">
+<span class="material-symbols-outlined text-secondary">download_for_offline</span>
+<span class="font-body-md text-body-md">Offline Ready</span>
+</div>
+<span class="font-label-sm text-label-sm text-on-surface-variant">1.2 GB</span>
+</div>
+</div>
+</div>
+</div>
+<div class="col-span-12 md:col-span-6 lg:col-span-8 bg-surface-container rounded-xl p-6 border border-outline-variant/20 glass-panel hover-lift relative overflow-hidden">
+<!-- Decorative background pulse -->
+<div class="absolute -right-20 -bottom-20 w-64 h-64 bg-primary/10 blur-[100px] rounded-full"></div>
+<div class="relative z-10 flex flex-col md:flex-row items-center gap-8">
+<div class="flex-1">
+<h4 class="font-headline-lg text-headline-lg mb-2">Sharpen Your Edge</h4>
+<p class="font-body-md text-body-md text-on-surface-variant mb-6">Our latest practice module "Cracking the Staff+ Narrative" is now available for premium members.</p>
+<div class="flex gap-4">
+<button class="bg-primary text-on-primary font-bold px-6 py-2 rounded-lg hover:brightness-110 transition-all">Explore New Modules</button>
+<button class="border border-outline-variant/30 px-6 py-2 rounded-lg hover:bg-surface-container-high transition-all">View Patch Notes</button>
+</div>
+</div>
+<div class="hidden md:block w-48 h-48">
+<div class="w-full h-full rounded-full border-[8px] border-surface-container-highest flex items-center justify-center relative">
+<div class="absolute inset-0 rounded-full border-[8px] border-secondary border-t-transparent border-l-transparent -rotate-45"></div>
+<div class="text-center">
+<span class="block text-3xl font-black">8.4</span>
+<span class="text-[10px] uppercase text-on-surface-variant font-bold">Avg Score</span>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</main>
+<!-- Interactive Layer for Glow Effects -->
+<script>
+        // Micro-interaction: Update glow position based on mouse move on specific cards
+        document.querySelectorAll('.card-inner-glow').forEach(card => {
+            card.addEventListener('mousemove', (e) => {
+                const rect = card.getBoundingClientRect();
+                const x = e.clientX - rect.left;
+                const y = e.clientY - rect.top;
+                card.style.setProperty('--mouse-x', `${x}px`);
+                card.style.setProperty('--mouse-y', `${y}px`);
+            });
+        });
+
+        // Simple tab switching simulation
+        const tabs = document.querySelectorAll('[role="tab"]');
+        if(tabs) {
+            tabs.forEach(tab => {
+                tab.addEventListener('click', () => {
+                    tabs.forEach(t => t.classList.remove('border-secondary', 'text-secondary', 'bg-secondary/10'));
+                    tab.classList.add('border-secondary', 'text-secondary', 'bg-secondary/10');
+                });
+            });
+        }
+    </script>
+</body></html>
